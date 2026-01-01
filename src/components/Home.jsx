@@ -128,7 +128,7 @@ export const Home = () => {
               title="Abstract Data Types"
               description="Stacks, Queues, Linked Lists (Beta)."
               color="bg-slate-900/50 border-emerald-500/30 hover:border-emerald-400"
-              link="/"
+              link="/adt"
               image={adt}
             />
           </motion.div>
@@ -137,4 +137,3 @@ export const Home = () => {
     </div>
   )
 }
-
