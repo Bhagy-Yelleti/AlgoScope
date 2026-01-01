@@ -86,7 +86,7 @@ export default function QueueIV() {
         className="flex-1 flex items-center justify-center pb-10"
         ref={containerRef}
       >
-        <div className="relative min-w-[500px] min-h-[100px] border-t-4 border-b-4 border-slate-600 rounded-lg bg-slate-900/30 backdrop-blur-sm flex items-center px-4 gap-2 overflow-hidden">
+        <div className="relative w-full max-w-[500px] min-h-[100px] border-t-4 border-b-4 border-slate-600 rounded-lg bg-slate-900/30 backdrop-blur-sm flex items-center px-4 gap-2 overflow-hidden">
           {/* Labels */}
           <div className="absolute -top-8 left-0 text-slate-500 font-mono text-xs uppercase tracking-widest">
             Front (Head)
