@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import { animate } from 'animejs'
 
 export default function StackIV() {
@@ -18,6 +18,19 @@ export default function StackIV() {
     // Add to state
     setStack((prev) => [...prev, newItem])
     setInputValue('')
+
+    // Animate after DOM update
+    setTimeout(() => {
+      const el = document.getElementById(`stack-item-${newItem.id}`)
+      if (el) {
+        animate(el, {
+          translateY: [-200, 0],
+          opacity: [0, 1],
+          scale: [0.5, 1],
+          ease: 'spring(1, 80, 10, 0)',
+        })
+      }
+    }, 10)
   }
 
   // Pop Operation
@@ -40,24 +53,6 @@ export default function StackIV() {
       },
     })
   }
-
-  // Anime.js Entry Animation
-  // We use useEffect to detect when a NEW item is added to the DOM
-  useEffect(() => {
-    if (stack.length > 0) {
-      const lastItem = stack[stack.length - 1]
-      const el = document.getElementById(`stack-item-${lastItem.id}`)
-
-      if (el) {
-        animate(el, {
-          translateY: [-200, 0], // Drop from top
-          opacity: [0, 1],
-          scale: [0.5, 1],
-          ease: 'spring(1, 80, 10, 0)', // Bouncy physics
-        })
-      }
-    }
-  }, [stack.length])
 
   return (
     <div className="flex flex-col h-full">
