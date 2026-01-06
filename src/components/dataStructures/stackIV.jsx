@@ -101,6 +101,27 @@ export default function StackIV() {
               <span className="absolute right-2 text-[10px] text-cyan-200/50 font-mono">
                 Idx: {index}
               </span>
+              {index === stack.length - 1 && (
+                <div className="absolute -right-40 top-1/2 -translate-y-1/2 flex items-center gap-3">
+                  <svg
+                    className="w-12 h-12 text-yellow-400 filter drop-shadow-[0_0_8px_rgba(250,204,21,0.6)] animate-pulse"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={3}
+                      d="M7 16l-4-4m0 0l4-4m-4 4h18"
+                    />
+                  </svg>
+                  <span className="text-yellow-400 font-black font-mono text-xl tracking-wider drop-shadow-md whitespace-nowrap">
+                    TOP
+                  </span>
+                </div>
+              )}
             </div>
           ))}
         </div>
