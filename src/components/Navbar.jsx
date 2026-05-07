@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 // 1. Import motion and AnimatePresence
 import { motion, AnimatePresence } from 'framer-motion'
 import githubIcon from '../assets/github-mark-white.svg'
@@ -64,7 +64,7 @@ const Line = ({ variants }) => (
 
 export const Navbar = () => {
   const [open, setOpen] = useState(false)
-  const [active, setActive] = useState('Home')
+ const { pathname } = useLocation()
 
   const links = [
     { name: 'Search', href: '/search' },
@@ -97,7 +97,7 @@ export const Navbar = () => {
                     to={link.href}
                     onClick={() => setActive(link.name)}
                     className={`block rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                      active === link.name
+                      pathname === link.href
                         ? 'bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-500/40 font-semibold' /* Active: added indigo tint + ring for high-contrast visibility (accessibility fix) */
                         : 'text-slate-400 hover:text-white hover:bg-white/5'
                     }`}
@@ -234,11 +234,11 @@ export const Navbar = () => {
                     <Link
                       to={link.href}
                       onClick={() => {
-                        setActive(link.name)
+                        
                         setOpen(false)
                       }}
                       className={`block rounded-xl px-4 py-3 text-base font-medium transition-all ${
-                        active === link.name
+                        pathname === link.href
                           ? 'bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-500/40 font-semibold' /* Added matches desktop contrast style for consistency on mobile */
                           : 'text-slate-400 hover:text-white hover:bg-white/5'
                       }`}
