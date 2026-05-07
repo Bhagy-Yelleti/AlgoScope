@@ -2,6 +2,8 @@
 
 First off, thank you for considering contributing to AlgoScope! It's people like you that make AlgoScope such a great tool for the DSA community.
 
+Join our [Discord Community](https://discord.gg/xxFRGj82xS) to connect with other contributors and the maintainers!
+
 ## 🚀 How Can I Contribute?
 
 ### Reporting Bugs

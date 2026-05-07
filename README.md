@@ -13,6 +13,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](CONTRIBUTING.md)
 [![GSSoC'26](https://img.shields.io/badge/GSSoC-2026-orange?style=flat)](https://gssoc.girlscript.tech/)
 [![Docker Hub](https://img.shields.io/badge/Docker-Hub-2496ED?style=flat&logo=docker&logoColor=white)](https://hub.docker.com/r/bimbok/algoscope-app)
+[![Discord](https://img.shields.io/badge/Discord-7289DA?style=flat&logo=discord&logoColor=white)](https://discord.gg/xxFRGj82xS)
 
 Join our community for updates and support!
 
@@ -283,6 +284,7 @@ _For more detailed guidelines, please refer to our [Contribution Guidelines](CON
 
 If you have any questions or want to discuss a contribution, feel free to reach out:
 
+- **Discord:** [Join our community](https://discord.gg/xxFRGj82xS) (Real-time discussion & support)
 - **Primary Channel:** [GitHub Issues](https://github.com/bim-adi/AlgoScope/issues) (Best for bug reports and feature requests)
 - **Aditya Paul:** [LinkedIn](https://linkedin.com/in/aditya-paul-b8881a31b/)
 - **Bratik Mukherjee:** [LinkedIn](https://linkedin.com/in/bratik-mukherjee)
