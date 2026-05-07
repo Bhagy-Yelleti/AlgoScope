@@ -132,6 +132,33 @@ src/
 2. **Animation Engine:** Framer Motion and Anime.js handle the transitions based on state changes.
 3. **Pseudo-code Sync:** The `CodeDisplay` component highlights lines of code in real-time as the algorithm executes.
 
+### System Data Flow
+```mermaid
+flowchart TD
+    user[User]
+    subgraph UI
+        input_handler((1.0 Manage User Interactions))
+        vis_renderer((4.0 Visualize State Changes))
+    end
+    subgraph Logic
+        algorithm_engine((2.0 Execute Algorithms))
+        state_manager((3.0 Manage System State))
+    end
+
+    %% Data Flows
+    user -- Select Algorithm, Speed, Parameters --> input_handler
+    input_handler -- Start/Stop/Control Commands --> algorithm_engine
+    input_handler -- Initialize/Reset State --> state_manager
+    
+    algorithm_engine -- Read Current State --> state_manager
+    algorithm_engine -- Step-by-Step Updates (Array/Graph) --> state_manager
+    
+    state_manager -- Current State Data --> vis_renderer
+    
+    vis_renderer -- Animated Visual Output & Feedback --> user
+    vis_renderer -- Visualization Completed/Status --> input_handler
+```
+
 ---
 
 ## 🤝 Contributing
