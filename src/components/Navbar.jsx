@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 // 1. Import motion and AnimatePresence
 import { motion, AnimatePresence } from 'framer-motion'
@@ -64,6 +64,7 @@ const Line = ({ variants }) => (
 
 export const Navbar = () => {
   const [open, setOpen] = useState(false)
+  // Derive active state from current URL instead of local state
   const { pathname } = useLocation()
 
   const links = [
@@ -95,10 +96,9 @@ export const Navbar = () => {
                 <li key={link.name}>
                   <Link
                     to={link.href}
-                    onClick={() => setActive(link.name)}
                     className={`block rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 ${
                       pathname === link.href
-                        ? 'bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-500/40 font-semibold' /* Active: added indigo tint + ring for high-contrast visibility (accessibility fix) */
+                        ? 'bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-500/40 font-semibold'
                         : 'text-slate-400 hover:text-white hover:bg-white/5'
                     }`}
                   >
@@ -233,12 +233,10 @@ export const Navbar = () => {
                   <motion.li key={link.name} variants={menuItemVariants}>
                     <Link
                       to={link.href}
-                      onClick={() => {
-                        setOpen(false)
-                      }}
+                      onClick={() => setOpen(false)}
                       className={`block rounded-xl px-4 py-3 text-base font-medium transition-all ${
                         pathname === link.href
-                          ? 'bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-500/40 font-semibold' /* Added matches desktop contrast style for consistency on mobile */
+                          ? 'bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-500/40 font-semibold'
                           : 'text-slate-400 hover:text-white hover:bg-white/5'
                       }`}
                     >
