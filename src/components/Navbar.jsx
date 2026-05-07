@@ -64,7 +64,7 @@ const Line = ({ variants }) => (
 
 export const Navbar = () => {
   const [open, setOpen] = useState(false)
- const { pathname } = useLocation()
+  const { pathname } = useLocation()
 
   const links = [
     { name: 'Search', href: '/search' },
@@ -234,7 +234,6 @@ export const Navbar = () => {
                     <Link
                       to={link.href}
                       onClick={() => {
-                        
                         setOpen(false)
                       }}
                       className={`block rounded-xl px-4 py-3 text-base font-medium transition-all ${
@@ -264,4 +263,3 @@ export const Navbar = () => {
     </header>
   )
 }
- 
