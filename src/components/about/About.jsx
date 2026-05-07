@@ -2,10 +2,10 @@ import React from 'react'
 import AuthorCard from './AuthorCard'
 import FeatureCard from './FeatureCard'
 import { motion } from 'framer-motion'
-import bratik from '../../assets/sukuna.png'
-import aditya from '../../assets/goku.png'
 
 export default function AboutAlgoScope() {
+  const aditya = 'https://github.com/adityapaul26.png'
+  const bratik = 'https://github.com/Bimbok.png'
   const features = [
     {
       icon: (
