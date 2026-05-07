@@ -17,16 +17,6 @@ export const VisualizerPage = () => {
     setSpeed(newValue)
   }
 
-  const handleStart = () => {
-    if (!algorithm || !node) {
-      alert('Please select both an algorithm and a starting node.')
-      return
-    }
-    // This example triggers re-render by passing props,
-    // but you could also manage a "run" state here if needed.
-    console.log(`Starting ${algorithm} from node ${node}`)
-  }
-
   return (
     <>
       <motion.div

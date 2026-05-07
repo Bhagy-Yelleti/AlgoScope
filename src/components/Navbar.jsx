@@ -53,6 +53,15 @@ const menuItemVariants = {
   open: { opacity: 1, y: 0 },
 }
 
+// Helper component for the icon lines
+const Line = ({ variants }) => (
+  <motion.div
+    className="h-0.5 w-5 bg-slate-300"
+    variants={variants}
+    transition={bounceTransition}
+  />
+)
+
 export const Navbar = () => {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState('Home')
@@ -63,15 +72,6 @@ export const Navbar = () => {
     { name: 'Sort', href: '/sort' },
     { name: 'About', href: '/about' },
   ]
-
-  // Helper component for the icon lines
-  const Line = ({ variants }) => (
-    <motion.div
-      className="h-0.5 w-5 bg-slate-300"
-      variants={variants}
-      transition={bounceTransition}
-    />
-  )
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-slate-950/50 backdrop-blur supports-[backdrop-filter]:bg-slate-950/40 rounded-xl shadow-2xl">

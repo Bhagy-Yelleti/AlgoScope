@@ -115,7 +115,7 @@ export default function AboutAlgoScope() {
               <p>
                 AlgoScope is an interactive web application built to help
                 learners visualize algorithms in an intuitive and engaging way.
-                Whether you're a beginner exploring how sorting works or an
+                Whether you&apos;re a beginner exploring how sorting works or an
                 advanced student analyzing graph traversal, AlgoScope transforms
                 abstract code into dynamic, step-by-step animations that make
                 complex logic easier to grasp.
@@ -152,7 +152,7 @@ export default function AboutAlgoScope() {
               </h2>
             </div>
             <p className="text-slate-300 leading-relaxed text-lg font-light">
-              Learning algorithms shouldn't be about memorizing code — it should
+              Learning algorithms shouldn&apos;t be about memorizing code — it should
               be about understanding how they work. AlgoScope bridges that gap
               by turning logic into motion, empowering learners to see the flow
               behind every operation.

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import { animate } from 'animejs'
 
 const MODES = {
@@ -24,13 +24,14 @@ export default function StackIV() {
   const stackRef = useRef([])
 
   // Reset everything when mode changes
-  useEffect(() => {
+  const handleModeChange = (newMode) => {
+    setMode(newMode)
     setStack([])
     stackRef.current = []
     setInputValue('')
     setConsoleOutput('')
     setIsRunning(false)
-  }, [mode])
+  }
 
   // --- Core Operations (Promisified for Sequencing) ---
 
@@ -376,7 +377,7 @@ export default function StackIV() {
         </label>
         <select
           value={mode}
-          onChange={(e) => setMode(e.target.value)}
+          onChange={(e) => handleModeChange(e.target.value)}
           className="bg-slate-900 text-cyan-400 font-mono border border-slate-600 rounded px-3 py-1 outline-none focus:border-cyan-500"
           disabled={isRunning}
         >

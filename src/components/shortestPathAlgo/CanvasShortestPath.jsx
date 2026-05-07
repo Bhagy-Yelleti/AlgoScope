@@ -129,7 +129,7 @@ export const CanvasShortestPath = ({
         return () => {
             network.destroy()
         }
-    }, [])
+    }, [physics])
 
     useEffect(() => {
         if (networkRef.current) {
@@ -161,8 +161,10 @@ export const CanvasShortestPath = ({
     useEffect(() => {
         resetStyles()
         if (!algorithm || !source || !target) {
-            setStatus('Select an algorithm, a source, and a target node.')
-            return
+            const timer = setTimeout(() => {
+                setStatus('Select an algorithm, a source, and a target node.')
+            }, 0)
+            return () => clearTimeout(timer)
         }
 
         if (!nodesRef.current || !edgesRef.current) return

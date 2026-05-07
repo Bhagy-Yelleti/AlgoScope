@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 
 const BinarySearch = () => {
-  const [array, setArray] = useState([
+  const [array] = useState([
     17, 30, 37, 45, 50, 72, 88, 90, 99, 101, 120, 160, 203,
   ])
   const [target, setTarget] = useState(37)

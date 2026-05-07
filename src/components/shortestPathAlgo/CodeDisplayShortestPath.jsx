@@ -396,7 +396,7 @@ function Demo() {
                 : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
             }`}
           >
-            Dijkstra's Algorithm
+            Dijkstra&apos;s Algorithm
           </button>
           <button
             onClick={() => setSelectedAlgorithm('bellmanford')}

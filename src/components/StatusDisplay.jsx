@@ -19,7 +19,8 @@ const StatusDisplay = ({ message }) => {
 
   // This triggers the animation once the component is mounted
   useEffect(() => {
-    setIsVisible(true)
+    const timer = setTimeout(() => setIsVisible(true), 10)
+    return () => clearTimeout(timer)
   }, [])
 
   return (
