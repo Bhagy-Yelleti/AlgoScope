@@ -60,20 +60,21 @@ Learning Data Structures and Algorithms (DSA) is often a daunting task for stude
 
 ## ✨ Features
 
-| Feature | Description |
-|---------|-------------|
-| **Real-time Visualization** | Watch algorithms come alive with smooth, step-by-step animations using Framer Motion and Anime.js. |
-| **Adjustable Speed** | Full control over animation speed and input data to learn at your own pace. |
-| **Algorithm Coverage** | Comprehensive support for Sorting (Quick, Merge, Bubble), Searching (Linear, Binary), and Graph Algorithms (BFS, DFS, Dijkstra). |
-| **Code Insights** | See the actual implementation in multiple programming languages (C++, Java, Python, JS) alongside the visualization. |
-| **Interactive Playground** | Create custom inputs, change array sizes, and interact directly with the canvas. |
-| **Clean UI/UX** | Modern, dark-themed interface built with Tailwind CSS v4 and Flowbite React. |
+| Feature                     | Description                                                                                                                      |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **Real-time Visualization** | Watch algorithms come alive with smooth, step-by-step animations using Framer Motion and Anime.js.                               |
+| **Adjustable Speed**        | Full control over animation speed and input data to learn at your own pace.                                                      |
+| **Algorithm Coverage**      | Comprehensive support for Sorting (Quick, Merge, Bubble), Searching (Linear, Binary), and Graph Algorithms (BFS, DFS, Dijkstra). |
+| **Code Insights**           | See the actual implementation in multiple programming languages (C++, Java, Python, JS) alongside the visualization.             |
+| **Interactive Playground**  | Create custom inputs, change array sizes, and interact directly with the canvas.                                                 |
+| **Clean UI/UX**             | Modern, dark-themed interface built with Tailwind CSS v4 and Flowbite React.                                                     |
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **Framework:** [React 19](https://react.dev/)
 - **Build Tool:** [Vite 7](https://vitejs.dev/)
 - **Styling:** [Tailwind CSS v4](https://tailwindcss.com/), [Material UI](https://mui.com/), [Flowbite React](https://flowbite-react.com/)
@@ -81,6 +82,7 @@ Learning Data Structures and Algorithms (DSA) is often a daunting task for stude
 - **Routing:** [React Router v7](https://reactrouter.com/)
 
 ### Utilities
+
 - **Syntax Highlighting:** [React Syntax Highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter)
 - **Icons:** Lucide React
 
@@ -91,10 +93,12 @@ Learning Data Structures and Algorithms (DSA) is often a daunting task for stude
 Follow these steps to set up AlgoScope locally on a clean machine:
 
 ### Prerequisites
+
 - [Node.js](https://nodejs.org/) (v18.x or higher)
 - [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 
 ### Setup Steps
+
 ```bash
 # 1. Clone the repository
 git clone https://github.com/bim-adi/AlgoScope.git
@@ -128,11 +132,13 @@ src/
 ```
 
 ### How It Works
+
 1. **State Management:** React state tracks the current progress of the algorithm (e.g., current indices being compared).
 2. **Animation Engine:** Framer Motion and Anime.js handle the transitions based on state changes.
 3. **Pseudo-code Sync:** The `CodeDisplay` component highlights lines of code in real-time as the algorithm executes.
 
 ### System Data Flow
+
 ```mermaid
 flowchart TD
     user[User]
@@ -149,23 +155,24 @@ flowchart TD
     user -- Select Algorithm, Speed, Parameters --> input_handler
     input_handler -- Start/Stop/Control Commands --> algorithm_engine
     input_handler -- Initialize/Reset State --> state_manager
-    
+
     algorithm_engine -- Read Current State --> state_manager
     algorithm_engine -- Step-by-Step Updates (Array/Graph) --> state_manager
-    
+
     state_manager -- Current State Data --> vis_renderer
-    
+
     vis_renderer -- Animated Visual Output & Feedback --> user
     vis_renderer -- Visualization Completed/Status --> input_handler
 ```
 
 ### User Workflow & Execution Logic
+
 ```mermaid
 flowchart TD
     %% Node Definitions
     Start((Start))
     End((End))
-    
+
     %% User Actions
     NavCategory["Navigate to Algorithm Category<br>(e.g., Sorting, Graph)"]
     SelectAlgo["Select Specific Algorithm<br>(e.g., Dijkstra, Quick Sort)"]
@@ -174,23 +181,23 @@ flowchart TD
     SetArray["Generate or Input Array Elements"]
     SetSpeed["Adjust Visualization Speed Slider"]
     ClickStart(["Click 'Start' Button"])
-    
+
     %% System Validation & Setup
     ValidateInput{"Are Inputs Valid?<br>(e.g., Nodes selected?)"}
     ShowError["Display Warning / Prompt User"]
     InitState["Initialize Algorithm State<br>(Clear highlights, reset vars)"]
-    
+
     %% Execution Loop
     CheckDone{"Is Algorithm<br>Complete?"}
     ExecStep["Compute Next Algorithmic Step<br>(e.g., Compare, Swap, Traverse)"]
     UpdateState["Update Internal Data State"]
     RenderVis["Render Visual Updates via D3/React<br>(Highlight active elements)"]
-    
+
     %% Playback Control
     CheckPause{"Is Execution<br>Paused?"}
     WaitResume["Wait for User to click Resume"]
     ApplyDelay["Apply Delay based on Speed Slider"]
-    
+
     %% Completion
     ShowFinal["Render Final State<br>(Highlight Shortest Path / Sorted Array)"]
     ShowStats["Update Status Display<br>(Time taken, Steps completed)"]
@@ -199,43 +206,43 @@ flowchart TD
     Start --> NavCategory
     NavCategory --> SelectAlgo
     SelectAlgo --> SetConfig
-    
+
     SetConfig -->|Graph Algorithms| SetNodes
     SetConfig -->|Array Algorithms| SetArray
-    
+
     SetNodes --> SetSpeed
     SetArray --> SetSpeed
     SetSpeed --> ClickStart
-    
+
     ClickStart --> ValidateInput
     ValidateInput -->|No| ShowError
     ShowError --> SetConfig
-    
+
     ValidateInput -->|Yes| InitState
     InitState --> CheckDone
-    
+
     %% The main visualization loop
     CheckDone -->|No| ExecStep
     ExecStep --> UpdateState
     UpdateState --> RenderVis
     RenderVis --> CheckPause
-    
+
     CheckPause -->|Yes| WaitResume
     WaitResume --> CheckPause
-    
+
     CheckPause -->|No| ApplyDelay
     ApplyDelay --> CheckDone
-    
+
     %% Algorithm Finished
     CheckDone -->|Yes| ShowFinal
     ShowFinal --> ShowStats
     ShowStats --> End
-    
+
     %% Styling for clarity
     classDef userAction fill:#2d3748,stroke:#4fd1c5,stroke-width:2px,color:#fff;
     classDef systemAction fill:#1a202c,stroke:#63b3ed,stroke-width:2px,color:#fff;
     classDef decision fill:#2b6cb0,stroke:#90cdf4,stroke-width:2px,color:#fff;
-    
+
     class NavCategory,SelectAlgo,SetNodes,SetArray,SetSpeed,ClickStart,WaitResume userAction;
     class InitState,ExecStep,UpdateState,RenderVis,ApplyDelay,ShowFinal,ShowStats,ShowError systemAction;
     class SetConfig,ValidateInput,CheckDone,CheckPause decision;
@@ -252,13 +259,14 @@ We welcome contributions! Whether it's a bug fix, a new algorithm visualization,
 3. **Commit your changes** with descriptive messages.
 4. **Open a Pull Request** and describe your changes in detail.
 
-*For more detailed guidelines, please refer to our [Contribution Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md).*
+_For more detailed guidelines, please refer to our [Contribution Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md)._
 
 ---
 
 ## 📞 Contact
 
 If you have any questions, feel free to reach out:
+
 - **GitHub Issues:** [Create an issue](https://github.com/bim-adi/AlgoScope/issues)
 - **Aditya Paul:** [LinkedIn](https://linkedin.com/in/aditya-paul-b8881a31b/)
 - **Bratik Mukherjee:** [LinkedIn](https://linkedin.com/in/bratik-mukherjee)

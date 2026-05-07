@@ -5,19 +5,24 @@ First off, thank you for considering contributing to AlgoScope! It's people like
 ## 🚀 How Can I Contribute?
 
 ### Reporting Bugs
+
 If you find a bug, please open an issue on GitHub. Include:
+
 - A clear title and description.
 - Steps to reproduce the bug.
 - Expected vs. actual behavior.
 - Screenshots if applicable.
 
 ### Suggesting Enhancements
+
 We love new ideas! If you have a suggestion for a new visualization or a feature:
+
 1. Check if the enhancement has already been suggested.
 2. Open a new issue with the tag `enhancement`.
 3. Describe the feature and why it would be useful.
 
 ### Pull Requests
+
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature/your-feature-name`).
 3. Make your changes.

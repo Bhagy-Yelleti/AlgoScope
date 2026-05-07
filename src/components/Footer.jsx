@@ -45,9 +45,7 @@ const Footer = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <h4 className="text-lg font-semibold mb-4 text-white">
-              Explore
-            </h4>
+            <h4 className="text-lg font-semibold mb-4 text-white">Explore</h4>
             <ul className="space-y-3 text-sm">
               {['Sorting', 'Searching', 'Graphs'].map((link, i) => (
                 <li key={i}>
@@ -68,19 +66,34 @@ const Footer = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <h4 className="text-lg font-semibold mb-4 text-white">
-              Connect
-            </h4>
+            <h4 className="text-lg font-semibold mb-4 text-white">Connect</h4>
             <div className="flex flex-col space-y-2">
               <motion.a
-                  href="https://github.com/bim-adi/AlgoScope.git"
-                  className="w-9 h-9 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center hover:bg-white/10 hover:border-white/20 transition-all mb-2"
-                  whileHover={{ scale: 1.1 }}
-                >
-                  <img src={githubIcon} alt="GitHub" className="h-5 w-5 opacity-80 hover:opacity-100" />
-                </motion.a>
+                href="https://github.com/bim-adi/AlgoScope.git"
+                className="w-9 h-9 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center hover:bg-white/10 hover:border-white/20 transition-all mb-2"
+                whileHover={{ scale: 1.1 }}
+              >
+                <img
+                  src={githubIcon}
+                  alt="GitHub"
+                  className="h-5 w-5 opacity-80 hover:opacity-100"
+                />
+              </motion.a>
               <div className="text-sm text-slate-400">
-                Maintained by <a className="text-white hover:text-cyan-400 transition-colors" href="https://github.com/Bimbok">bimbok</a> & <a className="text-white hover:text-cyan-400 transition-colors" href="https://github.com/adityapaul26">adityapaul26</a>
+                Maintained by{' '}
+                <a
+                  className="text-white hover:text-cyan-400 transition-colors"
+                  href="https://github.com/Bimbok"
+                >
+                  bimbok
+                </a>{' '}
+                &{' '}
+                <a
+                  className="text-white hover:text-cyan-400 transition-colors"
+                  href="https://github.com/adityapaul26"
+                >
+                  adityapaul26
+                </a>
               </div>
             </div>
           </motion.div>

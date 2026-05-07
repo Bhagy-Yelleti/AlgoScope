@@ -134,7 +134,9 @@ export default function AboutAlgoScope() {
           <div className="mb-16">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-2 h-8 bg-gradient-to-b from-purple-400 to-pink-500 rounded-full"></div>
-              <h2 className="text-3xl font-bold text-white tracking-tight">✨ Features</h2>
+              <h2 className="text-3xl font-bold text-white tracking-tight">
+                ✨ Features
+              </h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {features.map((feature, index) => (
@@ -152,10 +154,10 @@ export default function AboutAlgoScope() {
               </h2>
             </div>
             <p className="text-slate-300 leading-relaxed text-lg font-light">
-              Learning algorithms shouldn&apos;t be about memorizing code — it should
-              be about understanding how they work. AlgoScope bridges that gap
-              by turning logic into motion, empowering learners to see the flow
-              behind every operation.
+              Learning algorithms shouldn&apos;t be about memorizing code — it
+              should be about understanding how they work. AlgoScope bridges
+              that gap by turning logic into motion, empowering learners to see
+              the flow behind every operation.
             </p>
           </div>
 

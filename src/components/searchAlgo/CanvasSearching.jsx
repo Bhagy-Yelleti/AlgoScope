@@ -77,12 +77,12 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1 }) => {
         size: 15,
         color: {
           background: '#06b6d4', // Cyan-500
-          border: '#e2e8f0',     // Slate-200
+          border: '#e2e8f0', // Slate-200
           highlight: { background: '#22d3ee', border: '#ffffff' },
         },
         font: {
           size: 20,
-          color: '#f8fafc',      // Slate-50
+          color: '#f8fafc', // Slate-50
           face: 'Arial',
           bold: true,
         },
@@ -98,8 +98,8 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1 }) => {
       edges: {
         arrows: { to: { enabled: true, scaleFactor: 1.0 } },
         color: {
-          color: '#64748b',      // Slate-500
-          highlight: '#22d3ee',  // Cyan-400
+          color: '#64748b', // Slate-500
+          highlight: '#22d3ee', // Cyan-400
           hover: '#22d3ee',
         },
         width: 3,
@@ -183,7 +183,7 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1 }) => {
         id: n.id,
         color: { background: '#1e293b', border: '#475569' }, // Dark slate for unvisited
         size: 25,
-      }),
+      })
     )
 
     const adjacency = {}
@@ -246,7 +246,7 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1 }) => {
         visit(node, delay)
         setStatusAtDelay(
           `Visiting node ${node}. Queue: [${queue.join(', ')}]`,
-          delay,
+          delay
         )
         delay += 1200 / speed
 
@@ -254,7 +254,7 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1 }) => {
         if (neighbors.length > 0) {
           setStatusAtDelay(
             `Exploring neighbors of ${node}: ${neighbors.join(', ')}`,
-            delay - 600 / speed,
+            delay - 600 / speed
           )
         }
 
@@ -264,18 +264,21 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1 }) => {
             queue.push(n)
             setStatusAtDelay(
               `Adding ${n} to queue. Queue: [${queue.join(', ')}]`,
-              delay,
+              delay
             )
 
             const edge = edges.get().find((e) => e.from === node && e.to === n)
             if (edge) {
-              setTimeout(() => {
-                edges.update({
-                  id: edge.id,
-                  color: { color: '#f43f5e' },
-                  width: 5,
-                })
-              }, delay - 200 / speed)
+              setTimeout(
+                () => {
+                  edges.update({
+                    id: edge.id,
+                    color: { color: '#f43f5e' },
+                    width: 5,
+                  })
+                },
+                delay - 200 / speed
+              )
             }
           }
         })
@@ -300,7 +303,7 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1 }) => {
         if (neighbors.length > 0) {
           setStatusAtDelay(
             `Exploring neighbors of node ${node}: ${neighbors.join(', ')}`,
-            delay - 600 / speed,
+            delay - 600 / speed
           )
         }
 
@@ -310,13 +313,16 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1 }) => {
             hasUnvisitedNeighbors = true
             const edge = edges.get().find((e) => e.from === node && e.to === n)
             if (edge) {
-              setTimeout(() => {
-                edges.update({
-                  id: edge.id,
-                  color: { color: '#f43f5e' },
-                  width: 5,
-                })
-              }, delay - 200 / speed)
+              setTimeout(
+                () => {
+                  edges.update({
+                    id: edge.id,
+                    color: { color: '#f43f5e' },
+                    width: 5,
+                  })
+                },
+                delay - 200 / speed
+              )
             }
             dfs(n)
             setStatusAtDelay(`Backtracking from ${n} to node ${node}`, delay)
@@ -327,13 +333,13 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1 }) => {
         if (!hasUnvisitedNeighbors) {
           setStatusAtDelay(
             `Node ${node} has no unvisited neighbors. Backtracking.`,
-            delay,
+            delay
           )
           delay += 500 / speed
         } else {
           setStatusAtDelay(
             `Finished exploring neighbors of ${node}. Backtracking.`,
-            delay,
+            delay
           )
           delay += 500 / speed
         }

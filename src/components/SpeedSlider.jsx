@@ -86,7 +86,7 @@ export default function SpeedSlider({
           '& .MuiSlider-mark': {
             backgroundColor: '#94a3b8',
             opacity: 0.5,
-          }
+          },
         }}
       />
       {/* 6. Styled text below */}

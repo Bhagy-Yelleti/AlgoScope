@@ -120,4 +120,3 @@ const LinearSearch = () => {
 }
 
 export default LinearSearch
-
