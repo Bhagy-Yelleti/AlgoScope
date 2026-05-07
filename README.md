@@ -1,148 +1,163 @@
-<p align="center">
-  <img src="public/logo.png" alt="AlgoScope Logo" width="300px">
-</p>
+<div align="center">
 
-# AlgoScope — Algorithm Visualizer
+<img src="public/logo.png" alt="AlgoScope Logo" width="300px">
 
-AlgoScope is a modern, interactive web application designed to demystify complex algorithms and data structures through real-time, high-fidelity visualizations. Built with **React 19**, **Framer Motion**, and **Anime.js**, AlgoScope transforms abstract logic into fluid animations, making the learning process intuitive, engaging, and accessible.
+# AlgoScope
+
+**A modern, interactive algorithm visualizer that demystifies complex logic through real-time, high-fidelity animations.**
+
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=white)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-7.x-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind--CSS-4.x-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](CONTRIBUTING.md)
+[![GSSoC'26](https://img.shields.io/badge/GSSoC-2026-orange?style=flat)](https://gssoc.girlscript.tech/)
+
+Join our community for updates and support!
+
+### Core Maintainers
+
+<table>
+       <tr>
+              <td align="center" style="padding: 6px 18px;">
+                     <a href="https://github.com/adityapaul26">
+                            <img src="https://github.com/adityapaul26.png?size=160" width="120" height="120" alt="adityapaul26" style="border-radius: 50%; border: 3px solid #16A34A;" />
+                     </a>
+                     <br />
+                     <a href="https://github.com/adityapaul26"><strong>@adityapaul26</strong></a>
+                     <br />
+                     <a href="https://github.com/adityapaul26">
+                            <img src="https://img.shields.io/badge/Follow-adityapaul26-16A34A?style=for-the-badge&logo=github" alt="Follow adityapaul26" />
+                     </a>
+              </td>
+              <td align="center" style="padding: 6px 18px;">
+                     <a href="https://github.com/Bimbok">
+                            <img src="https://github.com/Bimbok.png?size=160" width="120" height="120" alt="Bimbok" style="border-radius: 50%; border: 3px solid #16A34A;" />
+                     </a>
+                     <br />
+                     <a href="https://github.com/Bimbok"><strong>@Bimbok</strong></a>
+                     <br />
+                     <a href="https://github.com/Bimbok">
+                            <img src="https://img.shields.io/badge/Follow-Bimbok-16A34A?style=for-the-badge&logo=github" alt="Follow Bimbok" />
+                     </a>
+              </td>
+       </tr>
+</table>
+
+<sub>Click a profile or follow badge for updates and to connect with the team.</sub>
+
+</div>
 
 ---
 
-## 💡 Problem Statement
+## 💡 Project Purpose
 
-Learning Data Structures and Algorithms (DSA) is often a daunting task for students and developers. Traditional resources like static pseudocode, textbooks, and static diagrams fail to capture the dynamic nature of algorithms. This lack of visual context makes it difficult to understand:
-- How pointers move during tree traversals.
-- How elements are swapped in real-time during sorting.
-- How paths are expanded in graph-based shortest-path algorithms.
+Learning Data Structures and Algorithms (DSA) is often a daunting task for students and developers. Traditional resources like static pseudocode and textbooks fail to capture the dynamic nature of algorithms.
 
-AlgoScope bridges this gap by providing a hands-on environment where users can watch the flow behind every operation, helping them build a mental model of how algorithms actually work.
+**AlgoScope** bridges this gap by providing a hands-on environment where users can watch the flow behind every operation. By transforming abstract logic into fluid animations, AlgoScope helps users build a mental model of how algorithms actually work, making the learning process intuitive, engaging, and accessible.
 
 ---
 
 ## ✨ Features
 
-- **Real-time Visualization:** Watch algorithms come alive with smooth, step-by-step animations.
-- **Adjustable Control:** Full control over animation speed and input data to learn at your own pace.
-- **Algorithm Coverage:** 
-  - **Sorting:** Bubble Sort, Merge Sort, Quick Sort, and more.
-  - **Searching:** Linear Search and Binary Search on arrays.
-  - **Graph Algorithms:** BFS, DFS, Dijkstra, Floyd-Warshall, and Topological Sort.
-  - **ADTs (Beta):** Stacks, Queues, and Linked Lists.
-- **Code Insights:** See the actual implementation in multiple programming languages alongside the visualization.
-- **Interactive Playground:** Create custom inputs, change array sizes, and interact directly with the canvas.
+| Feature | Description |
+|---------|-------------|
+| **Real-time Visualization** | Watch algorithms come alive with smooth, step-by-step animations using Framer Motion and Anime.js. |
+| **Adjustable Speed** | Full control over animation speed and input data to learn at your own pace. |
+| **Algorithm Coverage** | Comprehensive support for Sorting (Quick, Merge, Bubble), Searching (Linear, Binary), and Graph Algorithms (BFS, DFS, Dijkstra). |
+| **Code Insights** | See the actual implementation in multiple programming languages (C++, Java, Python, JS) alongside the visualization. |
+| **Interactive Playground** | Create custom inputs, change array sizes, and interact directly with the canvas. |
+| **Clean UI/UX** | Modern, dark-themed interface built with Tailwind CSS v4 and Flowbite React. |
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend Library:** [React 19](https://react.dev/)
+### Frontend
+- **Framework:** [React 19](https://react.dev/)
+- **Build Tool:** [Vite 7](https://vitejs.dev/)
 - **Styling:** [Tailwind CSS v4](https://tailwindcss.com/), [Material UI](https://mui.com/), [Flowbite React](https://flowbite-react.com/)
 - **Animations:** [Framer Motion](https://www.framer.com/motion/), [Anime.js](https://animejs.com/)
 - **Routing:** [React Router v7](https://reactrouter.com/)
-- **Build Tool:** [Vite](https://vitejs.dev/)
+
+### Utilities
 - **Syntax Highlighting:** [React Syntax Highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter)
+- **Icons:** Lucide React
 
 ---
 
-## 🚀 Installation
+## 🚀 Quick Start
 
-Follow these steps to set up AlgoScope locally:
+Follow these steps to set up AlgoScope locally on a clean machine:
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/bim-adi/AlgoScope.git
-   cd AlgoScope
-   ```
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v18.x or higher)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
+### Setup Steps
+```bash
+# 1. Clone the repository
+git clone https://github.com/bim-adi/AlgoScope.git
+cd AlgoScope
 
-3. **Start the development server:**
-   ```bash
-   npm run dev
-   ```
+# 2. Install dependencies
+npm install
 
-4. **View in Browser:**
-   Open `http://localhost:5173` to see AlgoScope in action.
-
----
-
-## 📖 Usage
-
-1. **Landing Page:** Explore the various categories of algorithms (Sorting, Searching, Graphs, etc.).
-2. **Select Category:** Click on a card (e.g., "Sorting") to enter the specialized visualizer page.
-3. **Configure:** Use the top menu or sidebar to select a specific algorithm (e.g., "Quick Sort").
-4. **Interact:**
-   - Adjust the **Speed Slider** to slow down or speed up the visualization.
-   - Use the **Input Controls** to generate random data or provide your own.
-   - Click **Start** to begin the visualization and watch the algorithm in action!
-
----
-
-## 📂 Project Structure
-
-```text
-AlgoScope/
-├── src/
-│   ├── components/            # Reusable UI components
-│   │   ├── sortingAlgo/       # Sorting visualizer logic & components
-│   │   ├── searchAlgo/        # Graph searching (BFS/DFS) logic
-│   │   ├── arraySearch/       # Linear/Binary search logic
-│   │   ├── shortestPathAlgo/  # Dijkstra/Floyd-Warshall logic
-│   │   ├── dataStructures/    # Stacks, Queues, and Trees (ADT)
-│   │   └── about/             # About page and author profiles
-│   ├── assets/                # Images, icons, and static assets
-│   ├── lib/                   # Utility functions
-│   ├── App.jsx                # Main routing and entry component
-│   └── main.jsx               # React DOM rendering
-├── public/                    # Static public assets (Logo, etc.)
-├── vite.config.js             # Vite configuration
-└── tailwind.config.js         # Tailwind CSS configuration
+# 3. Start the development server
+npm run dev
 ```
 
+Open `http://localhost:5173/` in your browser to start exploring.
+
 ---
 
-## 🔮 Future Improvements
+## 🏗️ Architecture
 
-- [ ] **Advanced Data Structures:** Add visualizations for AVL Trees, Red-Black Trees, and Heaps.
-- [ ] **Complex Graphs:** Implement visualizations for Minimum Spanning Trees (Prim’s, Kruskal’s).
-- [ ] **Complexity Analysis:** Display real-time Time and Space complexity metrics for each algorithm.
-- [ ] **Quiz Mode:** Interactive challenges to test user knowledge of algorithm steps.
-- [ ] **Dark/Light Mode:** Full theming support for comfortable viewing in any environment.
+AlgoScope uses a component-based architecture where each algorithm category has its own specialized visualizer:
+
+```text
+src/
+├── components/
+│   ├── sortingAlgo/       # Sorting visualizer logic & animation controllers
+│   ├── searchAlgo/        # Graph searching (BFS/DFS) and canvas management
+│   ├── arraySearch/       # Linear/Binary search logic
+│   ├── shortestPathAlgo/  # Dijkstra/Floyd-Warshall pathfinding
+│   └── dataStructures/    # Stacks, Queues, and Tree visualizers
+├── lib/                   # Shared utility functions and algorithm implementations
+└── App.jsx                # Main routing and global state management
+```
+
+### How It Works
+1. **State Management:** React state tracks the current progress of the algorithm (e.g., current indices being compared).
+2. **Animation Engine:** Framer Motion and Anime.js handle the transitions based on state changes.
+3. **Pseudo-code Sync:** The `CodeDisplay` component highlights lines of code in real-time as the algorithm executes.
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! If you have ideas for new visualizations or improvements, please follow these steps:
+We welcome contributions! Whether it's a bug fix, a new algorithm visualization, or a UI improvement, your help is appreciated.
 
-1. Fork the Project.
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the Branch (`git push origin feature/AmazingFeature`).
-5. Open a Pull Request.
+1. **Fork the repo** and create your branch from `main`.
+2. **Setup locally** following the [Quick Start](#-quick-start) guide.
+3. **Commit your changes** with descriptive messages.
+4. **Open a Pull Request** and describe your changes in detail.
+
+*For more detailed guidelines, please refer to our [Contribution Guidelines](CONTRIBUTING.md).*
+
+---
+
+## 📞 Contact
+
+If you have any questions, feel free to reach out:
+- **GitHub Issues:** [Create an issue](https://github.com/bim-adi/AlgoScope/issues)
+- **Aditya Paul:** [LinkedIn](https://linkedin.com/in/aditya-paul-b8881a31b/)
+- **Bratik Mukherjee:** [LinkedIn](https://linkedin.com/in/bratik-mukherjee)
 
 ---
 
 ## 📄 License
 
-Distributed under the **MIT License**. See `LICENSE` for more information (or assume standard open-source terms).
+Released under the [MIT License](LICENSE).
 
----
-
-## 👨‍💻 Authors
-
-**Aditya Paul**  
-- GitHub: [@adityapaul26](https://github.com/adityapaul26)  
-- LinkedIn: [aditya-paul-b8881a31b](https://linkedin.com/in/aditya-paul-b8881a31b/)
-
-**Bratik Mukherjee**  
-- GitHub: [@Bimbok](https://github.com/Bimbok)  
-- LinkedIn: [bratik-mukherjee](https://linkedin.com/in/bratik-mukherjee)
-
----
 <p align="center">Made with ❤️ for the DSA community.</p>
