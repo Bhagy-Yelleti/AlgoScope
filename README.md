@@ -252,7 +252,7 @@ We welcome contributions! Whether it's a bug fix, a new algorithm visualization,
 3. **Commit your changes** with descriptive messages.
 4. **Open a Pull Request** and describe your changes in detail.
 
-*For more detailed guidelines, please refer to our [Contribution Guidelines](CONTRIBUTING.md).*
+*For more detailed guidelines, please refer to our [Contribution Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md).*
 
 ---
 

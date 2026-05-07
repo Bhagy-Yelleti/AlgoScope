@@ -32,7 +32,7 @@ Refer to the [Quick Start](README.md#-quick-start) section in the README for loc
 
 ## 📜 Code of Conduct
 
-Please be respectful and professional in all interactions. We aim to foster a welcoming and inclusive community.
+Please be respectful and professional in all interactions. We aim to foster a welcoming and inclusive community. For more details, see our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## ⚖️ License
 
