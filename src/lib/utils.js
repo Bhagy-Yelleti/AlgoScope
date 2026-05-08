@@ -5,6 +5,7 @@
 
 /**
  * Calculates delay based on speed value.
+ *
  * @param {number} speed - Speed slider value.
  * @returns {number} Delay in milliseconds.
  */
@@ -14,6 +15,7 @@ export function getDelay(speed) {
 
 /**
  * Clamps a number between min and max values.
+ *
  * @param {number} value - Input number.
  * @param {number} min - Minimum limit.
  * @param {number} max - Maximum limit.
