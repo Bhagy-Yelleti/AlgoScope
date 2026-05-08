@@ -129,7 +129,7 @@ export const CanvasShortestPath = ({
     return () => {
       network.destroy()
     }
-  }, [physics])
+  }, [])
 
   useEffect(() => {
     if (networkRef.current) {
