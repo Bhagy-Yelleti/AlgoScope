@@ -55,7 +55,7 @@ export const CanvasShortestPath = ({
 
     const options = {
       physics: {
-        enabled: physics,
+        enabled: false,
         stabilization: {
           enabled: true,
           iterations: 100,
