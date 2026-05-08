@@ -65,7 +65,7 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1 }) => {
 
     const options = {
       physics: {
-        enabled: physics,
+        enabled: false,
         stabilization: {
           enabled: true,
           iterations: 100,
@@ -130,7 +130,7 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1 }) => {
     return () => {
       network.destroy()
     }
-  })
+  }, [])
 
   useEffect(() => {
     if (networkRef.current) {
