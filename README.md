@@ -279,7 +279,17 @@ We welcome contributions! Whether it's a bug fix, a new algorithm visualization,
 3. **Commit your changes** with descriptive messages.
 4. **Open a Pull Request** and describe your changes in detail.
 
-_For more detailed guidelines, please refer to our [Contribution Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md)._
+## _For more detailed guidelines, please refer to our [Contribution Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md)._
+
+---
+
+## ✨ Contributors
+
+Thanks goes to these wonderful people who have contributed to AlgoScope:
+
+<a href="https://github.com/algoscope-hq/AlgoScope/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=algoscope-hq/AlgoScope" alt="AlgoScope Contributors" />
+</a>
 
 ---
 
