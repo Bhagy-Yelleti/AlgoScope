@@ -108,7 +108,7 @@ export const Navbar = () => {
               ))}
             </ul>
             <Link
-              to="https://github.com/bim-adi/AlgoScope"
+              to="https://github.com/algoscope-hq/AlgoScope"
               className="inline-flex items-center rounded-xl bg-white px-5 py-2 text-sm font-bold text-black shadow-lg hover:bg-slate-200 transition-all duration-200 active:scale-95"
             >
               <img
@@ -247,7 +247,7 @@ export const Navbar = () => {
               </ul>
               <motion.div variants={menuItemVariants} className="mt-6">
                 <Link
-                  to="https://github.com/bim-adi/AlgoScope"
+                  to="https://github.com/algoscope-hq/AlgoScope"
                   onClick={() => setOpen(false)}
                   className="block w-full text-center rounded-xl bg-white px-4 py-3 text-base font-bold text-black shadow-lg hover:bg-slate-200 transition-all"
                 >

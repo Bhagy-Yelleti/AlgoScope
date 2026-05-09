@@ -107,7 +107,7 @@ Follow these steps to set up AlgoScope locally on a clean machine:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/bim-adi/AlgoScope.git
+git clone https://github.com/algoscope-hq/AlgoScope.git
 cd AlgoScope
 
 # 2. Install dependencies
@@ -288,7 +288,7 @@ _For more detailed guidelines, please refer to our [Contribution Guidelines](CON
 If you have any questions or want to discuss a contribution, feel free to reach out:
 
 - **Discord:** [Join our community](https://discord.gg/xxFRGj82xS) (Real-time discussion & support)
-- **Primary Channel:** [GitHub Issues](https://github.com/bim-adi/AlgoScope/issues) (Best for bug reports and feature requests)
+- **Primary Channel:** [GitHub Issues](https://github.com/algoscope-hq/AlgoScope/issues) (Best for bug reports and feature requests)
 - **Aditya Paul:** [LinkedIn](https://linkedin.com/in/aditya-paul-b8881a31b/)
 - **Bratik Mukherjee:** [LinkedIn](https://linkedin.com/in/bratik-mukherjee)
 

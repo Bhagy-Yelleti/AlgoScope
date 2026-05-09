@@ -70,7 +70,7 @@ const Footer = () => {
             <div className="flex flex-col space-y-3">
               <div className="flex items-center space-x-2">
                 <motion.a
-                  href="https://github.com/bim-adi/AlgoScope.git"
+                  href="https://github.com/algoscope-hq/AlgoScope.git"
                   className="w-9 h-9 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center hover:bg-white/10 hover:border-white/20 transition-all"
                   whileHover={{ scale: 1.1 }}
                 >
