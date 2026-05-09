@@ -125,7 +125,8 @@ const Footer = () => {
           transition={{ delay: 0.8 }}
         >
           <div className="container mx-auto px-6 py-6 text-center text-xs text-slate-500">
-            © 2025 AlgoScope — Open Source Algorithm Visualizer
+            © {new Date().getFullYear()} AlgoScope — Open Source Algorithm
+            Visualizer
           </div>
         </motion.div>
       </div>
