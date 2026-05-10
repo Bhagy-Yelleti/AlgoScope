@@ -81,8 +81,15 @@ export const ShortestPathPage = () => {
         </div>
         <div className="w-full">
           <CodePanel
-            title={algorithm ? `${getAlgorithmName(algorithm)} Implementation` : 'Code Viewer'}
-            code={currentSource || '// Select an algorithm and nodes to see implementation'}
+            title={
+              algorithm
+                ? `${getAlgorithmName(algorithm)} Implementation`
+                : 'Code Viewer'
+            }
+            code={
+              currentSource ||
+              '// Select an algorithm and nodes to see implementation'
+            }
             language={language}
           />
         </div>

@@ -22,7 +22,9 @@ const createArray = (type) => {
 export default function Visualizer({ algorithm }) {
   // Use a key on this component in the parent to handle resets on algorithm change
   const [baseArray, setBaseArray] = useState(() => createArray(algorithm))
-  const [target, setTarget] = useState(() => (algorithm === 'binarySearch' ? 37 : 30))
+  const [target, setTarget] = useState(() =>
+    algorithm === 'binarySearch' ? 37 : 30
+  )
   const [speed, setSpeed] = useState(1)
   const [language, setLanguage] = useState('javascript')
 
@@ -80,17 +82,17 @@ export default function Visualizer({ algorithm }) {
   const getStateClass = (index) => {
     if (!hasSteps) return ''
     if (index === foundIndex) return 'found'
-    
+
     if (algorithm === 'linearSearch') {
-        if (activeIndices.includes(index)) {
-            return currentStep?.type === 'found' ? 'found' : 'active'
-        }
+      if (activeIndices.includes(index)) {
+        return currentStep?.type === 'found' ? 'found' : 'active'
+      }
     } else if (algorithm === 'binarySearch') {
-        const [mid, low, high] = activeIndices
-        if (index === mid) return 'active'
-        if (index === low) return 'left'
-        if (index === high) return 'right'
-        if (index < low || index > high) return 'inactive'
+      const [mid, low, high] = activeIndices
+      if (index === mid) return 'active'
+      if (index === low) return 'left'
+      if (index === high) return 'right'
+      if (index < low || index > high) return 'inactive'
     }
     return ''
   }
@@ -117,13 +119,13 @@ export default function Visualizer({ algorithm }) {
       }
     }
     if (stateClass === 'left') {
-        return { background: '#06b6d4', color: '#fff', borderColor: '#22d3ee' }
+      return { background: '#06b6d4', color: '#fff', borderColor: '#22d3ee' }
     }
     if (stateClass === 'right') {
-        return { background: '#f43f5e', color: '#fff', borderColor: '#fb7185' }
+      return { background: '#f43f5e', color: '#fff', borderColor: '#fb7185' }
     }
     if (stateClass === 'inactive') {
-        return { opacity: 0.3, transform: 'scale(0.9)' }
+      return { opacity: 0.3, transform: 'scale(0.9)' }
     }
     return undefined
   }
@@ -183,7 +185,13 @@ export default function Visualizer({ algorithm }) {
                         Status
                       </p>
                       <p className="mt-1 sm:mt-2 font-mono text-base sm:text-lg text-slate-100">
-                        {foundIndex !== null ? `Found at ${foundIndex}` : isComplete ? 'Not Found' : isPlaying ? 'Searching...' : 'Ready'}
+                        {foundIndex !== null
+                          ? `Found at ${foundIndex}`
+                          : isComplete
+                            ? 'Not Found'
+                            : isPlaying
+                              ? 'Searching...'
+                              : 'Ready'}
                       </p>
                     </div>
                     <div className="rounded-xl border border-slate-700 bg-slate-950/70 p-3 sm:p-4 lg:col-span-1">
@@ -204,7 +212,10 @@ export default function Visualizer({ algorithm }) {
                 <div className="min-w-0">
                   <CodePanel
                     title={`${algorithm.replace('Search', ' Search').charAt(0).toUpperCase() + algorithm.replace('Search', ' Search').slice(1)}`}
-                    code={currentAlgoSource?.code ?? '// Select algorithm to see code'}
+                    code={
+                      currentAlgoSource?.code ??
+                      '// Select algorithm to see code'
+                    }
                     language={language}
                     activeLine={activeLine}
                   />
@@ -219,7 +230,9 @@ export default function Visualizer({ algorithm }) {
                 </h3>
                 <div className="mt-4 space-y-4">
                   <div className="flex flex-col gap-2">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Target Value</label>
+                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                      Target Value
+                    </label>
                     <input
                       type="number"
                       value={target}
@@ -249,8 +262,8 @@ export default function Visualizer({ algorithm }) {
                       {isRunning
                         ? 'Searching...'
                         : hasSteps
-                        ? 'Restart Search'
-                        : 'Start Search'}
+                          ? 'Restart Search'
+                          : 'Start Search'}
                     </button>
                     <button
                       onClick={handleReset}
@@ -294,8 +307,8 @@ export default function Visualizer({ algorithm }) {
                       {isPlaying
                         ? 'Searching'
                         : isComplete
-                        ? 'Complete'
-                        : 'Paused'}
+                          ? 'Complete'
+                          : 'Paused'}
                     </div>
                   </div>
 

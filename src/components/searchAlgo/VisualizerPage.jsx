@@ -41,7 +41,7 @@ export const VisualizerPage = () => {
           />
           <MenuSelectNodeSearch setNode={setNode} />
           <SpeedSlider value={speed} onChange={handleSpeedChange} />
-          
+
           <div className="pt-4 border-t border-white/5">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
               Code Language
@@ -69,8 +69,15 @@ export const VisualizerPage = () => {
           </div>
           <div className="w-full">
             <CodePanel
-              title={algorithm ? `${algorithm.toUpperCase()} Implementation` : 'Code Viewer'}
-              code={currentSource || '// Select an algorithm and node to see implementation'}
+              title={
+                algorithm
+                  ? `${algorithm.toUpperCase()} Implementation`
+                  : 'Code Viewer'
+              }
+              code={
+                currentSource ||
+                '// Select an algorithm and node to see implementation'
+              }
               language={language}
             />
           </div>

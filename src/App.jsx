@@ -3,12 +3,30 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import AppLayout from './components/AppLayout'
 
 // Lazy load pages for better performance
-const Home = lazy(() => import('./components/Home').then(module => ({ default: module.Home })))
-const SortingVisualizerPage = lazy(() => import('./components/sortingAlgo/VisualizerPage'))
-const VisualizerPage = lazy(() => import('./components/searchAlgo/VisualizerPage').then(module => ({ default: module.VisualizerPage })))
-const ShortestPathPage = lazy(() => import('./components/shortestPathAlgo/ShortestPathPage').then(module => ({ default: module.ShortestPathPage })))
-const DSLayout = lazy(() => import('./components/dataStructures/DSLayout').then(module => ({ default: module.DSLayout })))
-const ArrayVisualizerPage = lazy(() => import('./components/arraySearch/VisualizerPage'))
+const Home = lazy(() =>
+  import('./components/Home').then((module) => ({ default: module.Home }))
+)
+const SortingVisualizerPage = lazy(
+  () => import('./components/sortingAlgo/VisualizerPage')
+)
+const VisualizerPage = lazy(() =>
+  import('./components/searchAlgo/VisualizerPage').then((module) => ({
+    default: module.VisualizerPage,
+  }))
+)
+const ShortestPathPage = lazy(() =>
+  import('./components/shortestPathAlgo/ShortestPathPage').then((module) => ({
+    default: module.ShortestPathPage,
+  }))
+)
+const DSLayout = lazy(() =>
+  import('./components/dataStructures/DSLayout').then((module) => ({
+    default: module.DSLayout,
+  }))
+)
+const ArrayVisualizerPage = lazy(
+  () => import('./components/arraySearch/VisualizerPage')
+)
 const AboutAlgoScope = lazy(() => import('./components/about/About'))
 const NotFound = lazy(() => import('./components/PageNotFound'))
 
