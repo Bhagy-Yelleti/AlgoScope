@@ -519,6 +519,100 @@ export default function Visualizer({ algorithmType }) {
     return ''
   }
 
+  const getBubbleBarStyle = (index, value) => {
+    const stateClass = getBubbleStateClass(index)
+    const baseStyle = {
+      height: `${value}px`,
+      background: 'rgba(6, 182, 212, 0.8)',
+    }
+
+    if (!isBubbleSelected) {
+      return baseStyle
+    }
+
+    if (stateClass === 'compare') {
+      return {
+        ...baseStyle,
+        background: '#2563eb',
+        borderColor: '#60a5fa',
+        boxShadow: '0 0 18px rgba(59, 130, 246, 0.55)',
+        transform: 'translateY(-4px)',
+      }
+    }
+
+    if (stateClass === 'swap') {
+      return {
+        ...baseStyle,
+        background: '#f59e0b',
+        borderColor: '#d97706',
+        boxShadow: '0 0 15px rgba(245, 158, 11, 0.45)',
+      }
+    }
+
+    if (stateClass === 'sorted') {
+      return {
+        ...baseStyle,
+        background: '#0891b2',
+        borderColor: '#06b6d4',
+        boxShadow: '0 0 15px rgba(6, 182, 212, 0.45)',
+      }
+    }
+
+    if (stateClass === 'active') {
+      return {
+        ...baseStyle,
+        background: '#10b981',
+        borderColor: '#059669',
+        boxShadow: '0 0 15px rgba(16, 185, 129, 0.5)',
+      }
+    }
+
+    return baseStyle
+  }
+
+  const getBubbleElementStyle = (index) => {
+    const stateClass = getBubbleStateClass(index)
+
+    if (stateClass === 'compare') {
+      return {
+        background: '#2563eb',
+        color: '#fff',
+        borderColor: '#60a5fa',
+        transform: 'scale(1.12)',
+        boxShadow:
+          '0 0 0 1px rgba(147, 197, 253, 0.55), 0 0 18px rgba(59, 130, 246, 0.35)',
+      }
+    }
+
+    if (stateClass === 'swap') {
+      return {
+        background: '#f59e0b',
+        color: '#fff',
+        borderColor: '#d97706',
+        transform: 'scale(1.1)',
+      }
+    }
+
+    if (stateClass === 'sorted') {
+      return {
+        background: '#0891b2',
+        color: '#fff',
+        borderColor: '#06b6d4',
+      }
+    }
+
+    if (stateClass === 'active') {
+      return {
+        background: '#10b981',
+        color: '#fff',
+        borderColor: '#059669',
+        transform: 'scale(1.1)',
+      }
+    }
+
+    return undefined
+  }
+
   const handleAlgorithmChange = (event) => {
     const nextAlgorithm = event.target.value
 
@@ -532,260 +626,369 @@ export default function Visualizer({ algorithmType }) {
   }
 
   return (
-    <div className="flex flex-col p-6">
+    <div className="flex flex-col p-4 lg:p-5">
       <div className="w-full">
         <div className="flex flex-col items-center">
-          <h1 className="text-3xl font-bold mb-6 text-white tracking-tight">
+          <h1 className="mb-4 text-center text-2xl font-bold tracking-tight text-white lg:text-3xl">
             {`${algorithmType.charAt(0).toUpperCase() + algorithmType.slice(1)} Sorting`}
           </h1>
 
-          <div className="flex flex-col items-center w-full max-w-4xl">
-            <h3 className="text-lg font-semibold text-slate-300 mb-3">Array</h3>
-            <div
-              id="container"
-              className="flex gap-2 items-end h-[300px] p-6 rounded-2xl border border-slate-700 shadow-xl w-full justify-center backdrop-blur-sm"
-              style={{ background: 'rgba(30, 41, 59, 0.4)' }}
-            >
-              {visualArray.map((val, idx) => (
-                <div
-                  key={idx}
-                  className={`bar rounded-t-md transition-all duration-500 border border-cyan-900/50 shadow-[0_0_10px_rgba(6,182,212,0.2)] ${getBubbleStateClass(
-                    idx
-                  )}`}
-                  style={{
-                    height: `${val}px`,
-                    width: '30px',
-                    background: 'rgba(6, 182, 212, 0.8)',
-                  }}
-                >
-                  <div className="bar-val">{val}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+          {isBubbleSelected ? (
+            <div className="grid w-full gap-4 xl:grid-cols-[minmax(0,1.3fr)_minmax(340px,0.7fr)]">
+              <div className="flex min-h-0 flex-col gap-4">
+                <div className="rounded-2xl border border-slate-700/80 bg-slate-900/55 p-4 shadow-xl">
+                  <div className="mb-3 flex items-center justify-between gap-3">
+                    <h3 className="text-base font-semibold text-slate-200">
+                      Array
+                    </h3>
+                    <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-200">
+                      {bubbleStep?.type
+                        ? bubbleStep.type.replace('-', ' ')
+                        : 'Ready'}
+                    </div>
+                  </div>
 
-          <div
-            id="dynamic-containers"
-            className="flex justify-center items-start gap-8 mt-6"
-          >
-            {countArray.length > 0 && (
-              <CountArrayDisplay
-                title="Count Array"
-                data={countArray}
-                barWidth={20}
-              />
-            )}
-            {radixCountArray.length > 0 && (
-              <CountArrayDisplay
-                title={`Digit ${currentRadixDigit}s Count`}
-                data={radixCountArray}
-                barWidth={25}
-              />
-            )}
-          </div>
-
-          <div className="next p-6 flex flex-wrap gap-2 justify-center">
-            {visualArray.map((item, idx) => (
-              <span
-                key={idx}
-                className={`array-ele rounded-lg transition-all duration-300 font-mono text-sm bg-slate-800 text-cyan-400 border border-slate-600 px-3 py-2 shadow-sm ${getBubbleStateClass(
-                  idx
-                )}`}
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-
-          <div className="mt-8 space-y-4 w-full max-w-md">
-            <h3 className="text-lg font-semibold text-slate-300 text-center">
-              Controls
-            </h3>
-            <div className="m-auto space-y-4">
-              <div className="w-full">
-                <div className="relative">
-                  <select
-                    value={selectedAlgorithm}
-                    onChange={handleAlgorithmChange}
-                    disabled={isRunning}
-                    className="w-full bg-slate-900/80 text-white text-sm border border-slate-700 rounded-xl pl-4 pr-10 py-3 transition duration-300 focus:outline-none focus:border-cyan-500 hover:border-slate-600 shadow-lg appearance-none cursor-pointer disabled:opacity-50"
+                  <div
+                    id="container"
+                    className="flex h-[220px] items-end justify-center gap-2 overflow-hidden rounded-2xl border border-slate-700 p-4 backdrop-blur-sm lg:h-[250px]"
+                    style={{ background: 'rgba(30, 41, 59, 0.4)' }}
                   >
-                    <option value="">Choose Algorithm</option>
-                    {algorithmOptions[algorithmType].map((alg) => (
-                      <option key={alg} value={alg}>
-                        {`${alg.charAt(0).toUpperCase() + alg.slice(1)} Sort`}
-                      </option>
+                    {visualArray.map((val, idx) => (
+                      <div
+                        key={idx}
+                        className={`bar flex-1 max-w-[42px] rounded-t-md transition-all duration-500 border border-cyan-900/50 shadow-[0_0_10px_rgba(6,182,212,0.2)] ${getBubbleStateClass(
+                          idx
+                        )}`}
+                        style={getBubbleBarStyle(idx, val)}
+                      >
+                        <div className="bar-val">{val}</div>
+                      </div>
                     ))}
+                  </div>
+
+                  <div className="next mt-4 flex flex-wrap justify-center gap-2">
+                    {visualArray.map((item, idx) => (
+                      <span
+                        key={idx}
+                        className={`array-ele rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 font-mono text-sm text-cyan-400 shadow-sm transition-all duration-300 ${getBubbleStateClass(
+                          idx
+                        )}`}
+                        style={getBubbleElementStyle(idx)}
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid gap-4 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+                  <div className="rounded-2xl border border-slate-700/80 bg-slate-900/70 p-5 shadow-xl">
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-400/80">
+                      Step Insight
+                    </p>
+                    <h3 className="mt-2 text-xl font-semibold text-slate-100">
+                      {bubbleStep?.message ??
+                        'Generate Bubble Sort steps to start playback.'}
+                    </h3>
+
+                    <div className="mt-4 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                      <div className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                          Active Indices
+                        </p>
+                        <p className="mt-2 font-mono text-lg text-slate-100">
+                          {activeBubbleIndices.length > 0
+                            ? activeBubbleIndices.join(', ')
+                            : 'None'}
+                        </p>
+                      </div>
+                      <div className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                          Sorted Count
+                        </p>
+                        <p className="mt-2 font-mono text-lg text-slate-100">
+                          {sortedBubbleIndices.length}
+                        </p>
+                      </div>
+                      <div className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
+                        <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                          Variables
+                        </p>
+                        <p className="mt-2 font-mono text-sm text-slate-100">
+                          {bubbleStep?.variables
+                            ? Object.entries(bubbleStep.variables)
+                                .map(([key, value]) => `${key}: ${value}`)
+                                .join('  ')
+                            : 'n/a'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <CodePanel
+                    title="Bubble Sort"
+                    code={bubbleSource.code}
+                    language={bubbleLanguage}
+                    activeLine={activeBubbleLine}
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4 shadow-xl">
+                  <h3 className="text-base font-semibold text-slate-300">
+                    Controls
+                  </h3>
+                  <div className="mt-4 space-y-4">
+                    <select
+                      value={selectedAlgorithm}
+                      onChange={handleAlgorithmChange}
+                      disabled={isRunning}
+                      className="w-full appearance-none rounded-xl border border-slate-700 bg-slate-900/80 py-3 pl-4 pr-10 text-sm text-white shadow-lg transition duration-300 hover:border-slate-600 focus:border-cyan-500 focus:outline-none disabled:opacity-50"
+                    >
+                      <option value="">Choose Algorithm</option>
+                      {algorithmOptions[algorithmType].map((alg) => (
+                        <option key={alg} value={alg}>
+                          {`${alg.charAt(0).toUpperCase() + alg.slice(1)} Sort`}
+                        </option>
+                      ))}
+                    </select>
+
+                    <div className="rounded-xl border border-slate-700/50 bg-slate-900/50 px-3 py-2">
+                      <SpeedSlider
+                        value={speed}
+                        onChange={(e, v) => setSpeed(v)}
+                        min={0.25}
+                        max={3}
+                        step={0.05}
+                      />
+                    </div>
+
+                    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
+                      <button
+                        onClick={handleSort}
+                        disabled={isRunning || !selectedAlgorithm}
+                        className="text-sm font-bold rounded-xl bg-cyan-600 px-6 py-3 text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-cyan-500 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        {isRunning
+                          ? 'Sorting...'
+                          : isBubbleSelected
+                            ? 'Run Bubble Sort'
+                            : 'Start Sort'}
+                      </button>
+                      <button
+                        onClick={handleReset}
+                        disabled={isRunning}
+                        className="text-sm font-bold rounded-xl bg-slate-700 px-6 py-3 text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-600 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        Generate New Array
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {hasBubbleSteps && (
+                  <div className="rounded-2xl border border-cyan-500/20 bg-slate-900/60 p-4">
+                    <div className="mb-3 flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
+                          Playback
+                        </p>
+                        <p className="text-sm text-slate-300">
+                          Step {bubbleStepIndex + 1} of {bubbleSteps.length}
+                        </p>
+                      </div>
+                      <div className="rounded-full border border-slate-700 bg-slate-950/60 px-3 py-1 text-xs font-medium text-slate-200">
+                        {isBubblePlaying
+                          ? 'Playing'
+                          : isBubbleComplete
+                            ? 'Complete'
+                            : 'Paused'}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-3">
+                      <button
+                        type="button"
+                        onClick={
+                          isBubblePlaying
+                            ? pauseBubblePlayback
+                            : playBubblePlayback
+                        }
+                        disabled={isBubbleComplete && !isBubblePlaying}
+                        className="rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-500 hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        {isBubblePlaying ? 'Pause' : 'Play'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={stepBubbleForward}
+                        disabled={isBubblePlaying || isBubbleComplete}
+                        className="rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-500 hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        Step
+                      </button>
+                      <button
+                        type="button"
+                        onClick={replayBubblePlayback}
+                        className="rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-500 hover:text-cyan-200"
+                      >
+                        Replay
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <div className="rounded-2xl border border-slate-700/70 bg-slate-900/60 p-4">
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
+                    Code Language
+                  </p>
+                  <select
+                    value={bubbleLanguage}
+                    onChange={(event) => setBubbleLanguage(event.target.value)}
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 transition focus:border-cyan-500 focus:outline-none"
+                  >
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="java">Java</option>
+                    <option value="cpp">C++</option>
                   </select>
                 </div>
-              </div>
-            </div>
-            <div className="mt-4 px-4 py-2 bg-slate-900/50 rounded-xl border border-slate-700/50">
-              <SpeedSlider
-                value={speed}
-                onChange={(e, v) => setSpeed(v)}
-                min={0.25}
-                max={3}
-                step={0.05}
-              />
-            </div>
-            <div className="mt-6 gap-4 flex flex-col sm:flex-row">
-              <button
-                onClick={handleSort}
-                disabled={isRunning || !selectedAlgorithm}
-                className="flex-1 text-sm font-bold py-3 px-6 rounded-xl transition-all duration-300 bg-cyan-600 text-white hover:bg-cyan-500 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-0.5"
-              >
-                {isRunning
-                  ? 'Sorting...'
-                  : isBubbleSelected
-                    ? 'Run Bubble Sort'
-                    : 'Start Sort'}
-              </button>
-              <button
-                onClick={handleReset}
-                disabled={isRunning}
-                className="flex-1 text-sm font-bold py-3 px-6 rounded-xl transition-all duration-300 bg-slate-700 text-white hover:bg-slate-600 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-0.5"
-              >
-                Generate New Array
-              </button>
-            </div>
 
-            {isBubbleSelected && hasBubbleSteps && (
-              <div className="rounded-2xl border border-cyan-500/20 bg-slate-900/60 p-4">
-                <div className="mb-3 flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
-                      Playback
-                    </p>
-                    <p className="text-sm text-slate-300">
-                      Step {bubbleStepIndex + 1} of {bubbleSteps.length}
-                    </p>
-                  </div>
-                  <div className="rounded-full border border-slate-700 bg-slate-950/60 px-3 py-1 text-xs font-medium text-slate-200">
-                    {isBubblePlaying
-                      ? 'Playing'
-                      : isBubbleComplete
-                        ? 'Complete'
-                        : 'Paused'}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-3">
-                  <button
-                    type="button"
-                    onClick={
-                      isBubblePlaying ? pauseBubblePlayback : playBubblePlayback
-                    }
-                    disabled={isBubbleComplete && !isBubblePlaying}
-                    className="rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-500 hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    {isBubblePlaying ? 'Pause' : 'Play'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={stepBubbleForward}
-                    disabled={isBubblePlaying || isBubbleComplete}
-                    className="rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-500 hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    Step
-                  </button>
-                  <button
-                    type="button"
-                    onClick={replayBubblePlayback}
-                    className="rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-500 hover:text-cyan-200"
-                  >
-                    Replay
-                  </button>
+                <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                    Synchronization
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">
+                    The chart and code viewer render from the same playback
+                    step, so array state, active indices, explanation text, and
+                    highlighted source line stay aligned.
+                  </p>
                 </div>
               </div>
-            )}
-
-            {isBubbleSelected && (
-              <div className="rounded-2xl border border-slate-700/70 bg-slate-900/60 p-4">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
-                  Code Language
-                </p>
-                <select
-                  value={bubbleLanguage}
-                  onChange={(event) => setBubbleLanguage(event.target.value)}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 transition focus:border-cyan-500 focus:outline-none"
+            </div>
+          ) : (
+            <>
+              <div className="flex flex-col items-center w-full max-w-4xl">
+                <h3 className="text-lg font-semibold text-slate-300 mb-3">
+                  Array
+                </h3>
+                <div
+                  id="container"
+                  className="flex gap-2 items-end h-[300px] p-6 rounded-2xl border border-slate-700 shadow-xl w-full justify-center backdrop-blur-sm"
+                  style={{ background: 'rgba(30, 41, 59, 0.4)' }}
                 >
-                  <option value="javascript">JavaScript</option>
-                  <option value="python">Python</option>
-                  <option value="java">Java</option>
-                  <option value="cpp">C++</option>
-                </select>
+                  {visualArray.map((val, idx) => (
+                    <div
+                      key={idx}
+                      className={`bar rounded-t-md transition-all duration-500 border border-cyan-900/50 shadow-[0_0_10px_rgba(6,182,212,0.2)] ${getBubbleStateClass(
+                        idx
+                      )}`}
+                      style={{
+                        height: `${val}px`,
+                        width: '30px',
+                        background: 'rgba(6, 182, 212, 0.8)',
+                      }}
+                    >
+                      <div className="bar-val">{val}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            )}
-          </div>
+
+              <div
+                id="dynamic-containers"
+                className="mt-6 flex items-start justify-center gap-8"
+              >
+                {countArray.length > 0 && (
+                  <CountArrayDisplay
+                    title="Count Array"
+                    data={countArray}
+                    barWidth={20}
+                  />
+                )}
+                {radixCountArray.length > 0 && (
+                  <CountArrayDisplay
+                    title={`Digit ${currentRadixDigit}s Count`}
+                    data={radixCountArray}
+                    barWidth={25}
+                  />
+                )}
+              </div>
+
+              <div className="next p-6 flex flex-wrap gap-2 justify-center">
+                {visualArray.map((item, idx) => (
+                  <span
+                    key={idx}
+                    className={`array-ele rounded-lg transition-all duration-300 font-mono text-sm bg-slate-800 text-cyan-400 border border-slate-600 px-3 py-2 shadow-sm ${getBubbleStateClass(
+                      idx
+                    )}`}
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-8 space-y-4 w-full max-w-md">
+                <h3 className="text-lg font-semibold text-slate-300 text-center">
+                  Controls
+                </h3>
+                <div className="m-auto space-y-4">
+                  <div className="w-full">
+                    <div className="relative">
+                      <select
+                        value={selectedAlgorithm}
+                        onChange={handleAlgorithmChange}
+                        disabled={isRunning}
+                        className="w-full bg-slate-900/80 text-white text-sm border border-slate-700 rounded-xl pl-4 pr-10 py-3 transition duration-300 focus:outline-none focus:border-cyan-500 hover:border-slate-600 shadow-lg appearance-none cursor-pointer disabled:opacity-50"
+                      >
+                        <option value="">Choose Algorithm</option>
+                        {algorithmOptions[algorithmType].map((alg) => (
+                          <option key={alg} value={alg}>
+                            {`${alg.charAt(0).toUpperCase() + alg.slice(1)} Sort`}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4 px-4 py-2 bg-slate-900/50 rounded-xl border border-slate-700/50">
+                  <SpeedSlider
+                    value={speed}
+                    onChange={(e, v) => setSpeed(v)}
+                    min={0.25}
+                    max={3}
+                    step={0.05}
+                  />
+                </div>
+                <div className="mt-6 gap-4 flex flex-col sm:flex-row">
+                  <button
+                    onClick={handleSort}
+                    disabled={isRunning || !selectedAlgorithm}
+                    className="flex-1 text-sm font-bold py-3 px-6 rounded-xl transition-all duration-300 bg-cyan-600 text-white hover:bg-cyan-500 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-0.5"
+                  >
+                    {isRunning
+                      ? 'Sorting...'
+                      : isBubbleSelected
+                        ? 'Run Bubble Sort'
+                        : 'Start Sort'}
+                  </button>
+                  <button
+                    onClick={handleReset}
+                    disabled={isRunning}
+                    className="flex-1 text-sm font-bold py-3 px-6 rounded-xl transition-all duration-300 bg-slate-700 text-white hover:bg-slate-600 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-0.5"
+                  >
+                    Generate New Array
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
       <div className="w-full mt-8">
-        {isBubbleSelected ? (
-          <div className="grid gap-6 xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
-            <div className="rounded-2xl border border-slate-700/80 bg-slate-900/70 p-6 shadow-xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-400/80">
-                Step Insight
-              </p>
-              <h3 className="mt-2 text-2xl font-semibold text-slate-100">
-                {bubbleStep?.message ?? 'Generate Bubble Sort steps to start playback.'}
-              </h3>
-
-              <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-                    Active Indices
-                  </p>
-                  <p className="mt-2 font-mono text-lg text-slate-100">
-                    {activeBubbleIndices.length > 0
-                      ? activeBubbleIndices.join(', ')
-                      : 'None'}
-                  </p>
-                </div>
-                <div className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-                    Sorted Count
-                  </p>
-                  <p className="mt-2 font-mono text-lg text-slate-100">
-                    {sortedBubbleIndices.length}
-                  </p>
-                </div>
-                <div className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-                    Variables
-                  </p>
-                  <p className="mt-2 font-mono text-sm text-slate-100">
-                    {bubbleStep?.variables
-                      ? Object.entries(bubbleStep.variables)
-                          .map(([key, value]) => `${key}: ${value}`)
-                          .join('  ')
-                      : 'n/a'}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-6 rounded-xl border border-slate-800 bg-slate-950/60 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-                  Synchronization
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-300">
-                  Each playback step owns the array snapshot, active indices,
-                  explanation text, and source line. The chart and code panel
-                  both render from that same step object, so they stay aligned
-                  by construction.
-                </p>
-              </div>
-            </div>
-
-            <CodePanel
-              title="Bubble Sort"
-              code={bubbleSource.code}
-              language={bubbleLanguage}
-              activeLine={activeBubbleLine}
-            />
-          </div>
-        ) : (
+        {!isBubbleSelected && (
           <CodeDisplay algorithm={selectedAlgorithm} />
         )}
       </div>
