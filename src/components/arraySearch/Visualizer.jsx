@@ -267,6 +267,22 @@ export default function Visualizer({ algorithm }) {
                 </div>
               </div>
 
+              <div className="rounded-2xl border border-slate-700/70 bg-slate-900/60 p-4">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
+                  Code Language
+                </p>
+                <select
+                  value={language}
+                  onChange={(event) => setLanguage(event.target.value)}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 transition focus:border-cyan-500 focus:outline-none"
+                >
+                  <option value="javascript">JavaScript</option>
+                  <option value="python">Python</option>
+                  <option value="java">Java</option>
+                  <option value="cpp">C++</option>
+                </select>
+              </div>
+
               {hasSteps && (
                 <div className="rounded-2xl border border-cyan-500/20 bg-slate-900/60 p-4">
                   <div className="mb-3 flex items-center justify-between gap-3">
