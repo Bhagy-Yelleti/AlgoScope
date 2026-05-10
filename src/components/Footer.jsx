@@ -48,9 +48,9 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4 text-white">Explore</h4>
             <ul className="space-y-3 text-sm">
               {[
-                {name:'Sorting', path:'/sort'},
-                {name:'Searching', path:'/search'},
-                {name:'Graphs', path:'/spath'}
+                { name: 'Sorting', path: '/sort' },
+                { name: 'Searching', path: '/search' },
+                { name: 'Graphs', path: '/spath' },
               ].map((link, i) => (
                 <li key={i}>
                   <Link
