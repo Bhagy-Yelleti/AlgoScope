@@ -162,9 +162,7 @@ export function resolveHeapSortLine(language, lineKey) {
   }
 
   const source = getHeapSortSource(language)
-  return (
-    source.lineMap[lineKey] ?? heapSortSources.javascript.lineMap[lineKey]
-  )
+  return source.lineMap[lineKey] ?? heapSortSources.javascript.lineMap[lineKey]
 }
 
 export function generateHeapSortSteps(inputArray) {

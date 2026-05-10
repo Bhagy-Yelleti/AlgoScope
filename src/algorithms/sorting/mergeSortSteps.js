@@ -186,9 +186,7 @@ export function resolveMergeSortLine(language, lineKey) {
   }
 
   const source = getMergeSortSource(language)
-  return (
-    source.lineMap[lineKey] ?? mergeSortSources.javascript.lineMap[lineKey]
-  )
+  return source.lineMap[lineKey] ?? mergeSortSources.javascript.lineMap[lineKey]
 }
 
 export function generateMergeSortSteps(inputArray) {

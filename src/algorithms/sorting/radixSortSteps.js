@@ -176,9 +176,7 @@ export function resolveRadixSortLine(language, lineKey) {
   }
 
   const source = getRadixSortSource(language)
-  return (
-    source.lineMap[lineKey] ?? radixSortSources.javascript.lineMap[lineKey]
-  )
+  return source.lineMap[lineKey] ?? radixSortSources.javascript.lineMap[lineKey]
 }
 
 export function generateRadixSortSteps(inputArray) {

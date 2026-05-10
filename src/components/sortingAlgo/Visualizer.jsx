@@ -88,7 +88,11 @@ export default function Visualizer({ algorithmType }) {
   }, [selectedAlgorithm, language])
 
   const activeLine = useMemo(() => {
-    if (!selectedAlgorithm || !currentStep?.lineKey || !algoMap[selectedAlgorithm])
+    if (
+      !selectedAlgorithm ||
+      !currentStep?.lineKey ||
+      !algoMap[selectedAlgorithm]
+    )
       return undefined
     const resolveLine =
       algoMap[selectedAlgorithm][
@@ -336,7 +340,10 @@ export default function Visualizer({ algorithmType }) {
                 <div className="min-w-0">
                   <CodePanel
                     title={`${selectedAlgorithm ? selectedAlgorithm.charAt(0).toUpperCase() + selectedAlgorithm.slice(1) : ''} Sort`}
-                    code={currentAlgoSource?.code ?? '// Select algorithm to see code'}
+                    code={
+                      currentAlgoSource?.code ??
+                      '// Select algorithm to see code'
+                    }
                     language={language}
                     activeLine={activeLine}
                   />
@@ -383,8 +390,8 @@ export default function Visualizer({ algorithmType }) {
                       {isRunning
                         ? 'Playing...'
                         : hasSteps
-                        ? 'Restart Sort'
-                        : 'Start Sort'}
+                          ? 'Restart Sort'
+                          : 'Start Sort'}
                     </button>
                     <button
                       onClick={handleReset}
@@ -412,8 +419,8 @@ export default function Visualizer({ algorithmType }) {
                       {isPlaying
                         ? 'Playing'
                         : isComplete
-                        ? 'Complete'
-                        : 'Paused'}
+                          ? 'Complete'
+                          : 'Paused'}
                     </div>
                   </div>
 
@@ -466,8 +473,8 @@ export default function Visualizer({ algorithmType }) {
                   Synchronization
                 </p>
                 <p className="mt-2 text-sm leading-6 text-slate-300">
-                  The chart and code viewer render from the same playback
-                  step, so array state, active indices, explanation text, and
+                  The chart and code viewer render from the same playback step,
+                  so array state, active indices, explanation text, and
                   highlighted source line stay aligned.
                 </p>
               </div>

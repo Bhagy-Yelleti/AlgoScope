@@ -162,9 +162,7 @@ export function resolveQuickSortLine(language, lineKey) {
   }
 
   const source = getQuickSortSource(language)
-  return (
-    source.lineMap[lineKey] ?? quickSortSources.javascript.lineMap[lineKey]
-  )
+  return source.lineMap[lineKey] ?? quickSortSources.javascript.lineMap[lineKey]
 }
 
 export function generateQuickSortSteps(inputArray) {
