@@ -132,10 +132,6 @@ export default function Visualizer({ algorithm }) {
     <div className="flex flex-col p-2 sm:p-4 lg:p-5">
       <div className="w-full">
         <div className="flex flex-col items-center">
-          <h1 className="mb-4 text-center text-2xl font-bold tracking-tight text-white lg:text-3xl">
-            {`${algorithm.replace('Search', ' Search').charAt(0).toUpperCase() + algorithm.replace('Search', ' Search').slice(1)} Visualizer`}
-          </h1>
-
           <div className="grid w-full gap-4 xl:grid-cols-[minmax(0,1.3fr)_minmax(340px,0.7fr)] overflow-hidden">
             <div className="flex min-w-0 min-h-0 flex-col gap-4">
               <div className="rounded-2xl border border-slate-700/80 bg-slate-900/55 p-3 sm:p-6 shadow-xl">
@@ -330,22 +326,6 @@ export default function Visualizer({ algorithm }) {
                   </div>
                 </div>
               )}
-
-              <div className="rounded-2xl border border-slate-700/70 bg-slate-900/60 p-4">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
-                  Code Language
-                </p>
-                <select
-                  value={language}
-                  onChange={(event) => setLanguage(event.target.value)}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 transition focus:border-cyan-500 focus:outline-none"
-                >
-                  <option value="javascript">JavaScript</option>
-                  <option value="python">Python</option>
-                  <option value="java">Java</option>
-                  <option value="cpp">C++</option>
-                </select>
-              </div>
             </div>
           </div>
         </div>

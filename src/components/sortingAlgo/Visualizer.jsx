@@ -242,10 +242,6 @@ export default function Visualizer({ algorithmType }) {
     <div className="flex flex-col p-2 sm:p-4 lg:p-5">
       <div className="w-full">
         <div className="flex flex-col items-center">
-          <h1 className="mb-4 text-center text-2xl font-bold tracking-tight text-white lg:text-3xl">
-            {`${algorithmType.charAt(0).toUpperCase() + algorithmType.slice(1)} Sorting`}
-          </h1>
-
           <div className="grid w-full gap-4 xl:grid-cols-[minmax(0,1.3fr)_minmax(340px,0.7fr)] overflow-hidden">
             <div className="flex min-w-0 min-h-0 flex-col gap-4">
               <div className="rounded-2xl border border-slate-700/80 bg-slate-900/55 p-3 sm:p-4 shadow-xl">
