@@ -1,7 +1,5 @@
 import { useState } from 'react'
-import LinearSearch from './LinearSearch'
-import BinarySearch from './BinarySearch'
-import { CodeDisplay } from './CodeDisplay'
+import Visualizer from './Visualizer'
 import { motion } from 'framer-motion'
 
 const ArrayVisualizerPage = () => {
@@ -13,12 +11,12 @@ const ArrayVisualizerPage = () => {
 
   return (
     <motion.div
-      className="lg:w-full w-auto lg:flex-row p-6 bg-slate-950/50 min-h-screen shadow-2xl rounded-2xl border border-white/10 backdrop-blur-xl"
+      className="lg:w-full w-auto p-4 sm:p-6 bg-slate-950/50 min-h-screen shadow-2xl rounded-2xl border border-white/10 backdrop-blur-xl"
       initial={{ opacity: 0, y: 20 }} // Start: invisible and 20px down
       animate={{ opacity: 1, y: 0 }} // End: fully visible at original position
       transition={{ duration: 1, ease: 'easeInOut' }} // Animation settings
     >
-      <div className="flex justify-center mb-10 border-b border-white/5 pb-6">
+      <div className="flex justify-center mb-6 border-b border-white/5 pb-6">
         <select
           value={algorithm}
           onChange={handleAlgorithmChange}
@@ -28,11 +26,7 @@ const ArrayVisualizerPage = () => {
           <option value="binarySearch">Binary Search</option>
         </select>
       </div>
-      <div className="w-full h-full m-auto max-w-7xl space-y-8">
-        {algorithm === 'linearSearch' && <LinearSearch />}
-        {algorithm === 'binarySearch' && <BinarySearch />}
-        <CodeDisplay algorithm={algorithm} />
-      </div>
+      <Visualizer key={algorithm} algorithm={algorithm} />
     </motion.div>
   )
 }
