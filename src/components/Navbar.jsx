@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import githubIcon from '../assets/github-mark-white.svg'
 import logo from '../assets/logo2.png'
+import SearchBar from './SearchBar'
 
 // 2. Define the bounce transition
 const bounceTransition = {
@@ -89,6 +90,11 @@ export const Navbar = () => {
               AlgoScope
             </span>
           </Link>
+
+          {/* Desktop Search */}
+          <div className="hidden lg:flex flex-1 justify-center max-w-sm mx-8">
+            <SearchBar />
+          </div>
 
           <div className="hidden md:flex items-center gap-6">
             <ul className="flex items-center gap-1">
@@ -227,6 +233,10 @@ export const Navbar = () => {
             exit="closed"
           >
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+              {/* Mobile Search */}
+              <div className="mb-6 lg:hidden">
+                <SearchBar />
+              </div>
               <ul className="space-y-2">
                 {links.map((link) => (
                   // Animate each link
