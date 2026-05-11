@@ -27,7 +27,7 @@ const Footer = () => {
           >
             <div className="flex items-center mb-4">
               <div className="w-8 h-8 bg-white/10 rounded flex items-center justify-center mr-3 backdrop-blur-sm border border-white/10">
-                <img src={logo} alt="" className="w-5 h-5" />
+                <img src="/logo3.png" alt="" className="w-5 h-5" />
               </div>
               <h3 className="text-2xl font-bold text-white tracking-tight">
                 AlgoScope
