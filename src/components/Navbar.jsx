@@ -84,7 +84,7 @@ export const Navbar = () => {
             className="flex flex-row text-xl font-semibold tracking-tight group"
           >
             <div className="w-10 h-10 m-auto rounded flex items-center justify-center mr-3 transition-transform group-hover:scale-110">
-              <img src={logo} alt="" className="w-8 h-8" />
+              <img src={logo} alt="AlgoScope Logo" className="w-8 h-8" />
             </div>
             <span className="mt-1 text-2xl text-white font-bold tracking-tighter">
               AlgoScope
@@ -119,7 +119,7 @@ export const Navbar = () => {
             >
               <img
                 src={githubIcon}
-                alt="github"
+                alt="Github Repository Link"
                 className="w-7 h-5 pr-2 invert"
               />
               <span>Github</span>
