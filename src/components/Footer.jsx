@@ -1,6 +1,5 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import logo from '../assets/logo2.png'
 import githubIcon from '../assets/github-mark-white.svg'
 import { Link } from 'react-router-dom'
 const Footer = () => {
