@@ -54,13 +54,6 @@ const ALGORITHMS = [
     link: '/adt',
     image: adt,
   },
-  {
-    title: 'Practice Code',
-    description: 'Practice writing algorithms in multiple languages.',
-    color: 'bg-slate-900/50 border-indigo-500/30 hover:border-indigo-400',
-    link: '/practice',
-    image: LinearSearchImg,
-  },
 ]
 
 export const Home = () => {
