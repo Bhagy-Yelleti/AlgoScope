@@ -240,13 +240,21 @@ const PracticePage = () => {
                 <li className="flex gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 mt-1.5 shrink-0 shadow-[0_0_8px_rgba(6,182,212,0.6)]"></div>
                   <span>
-                    Editor supports syntax highlighting and autocompletion.
+                    Professional editor with syntax highlighting, IntelliSense,
+                    and ligatures.
+                  </span>
+                </li>
+                <li className="flex gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 mt-1.5 shrink-0 shadow-[0_0_8px_rgba(6,182,212,0.6)]"></div>
+                  <span>
+                    Execute JavaScript directly and see results in the real-time
+                    console below.
                   </span>
                 </li>
                 <li className="flex gap-3">
                   <div className="w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 shrink-0"></div>
                   <span className="text-slate-500 italic">
-                    (Coming Soon) Execute code directly in-browser.
+                    (Coming Soon) Native execution for Python, Java, and C++.
                   </span>
                 </li>
               </ul>
