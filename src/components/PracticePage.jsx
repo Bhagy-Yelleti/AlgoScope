@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import CodeEditor from './CodeEditor'
 import { motion } from 'framer-motion'
 
-const Terminal = ({ logs, onClear }) => {
+const Terminal = React.forwardRef(function Terminal({ logs, onClear }, ref) {
   const scrollRef = useRef(null)
 
   useEffect(() => {
@@ -12,7 +12,10 @@ const Terminal = ({ logs, onClear }) => {
   }, [logs])
 
   return (
-    <div className="mt-8 flex flex-col w-full bg-slate-950 border border-slate-700/50 rounded-2xl overflow-hidden shadow-2xl">
+    <div
+      ref={ref}
+      className="mt-8 flex flex-col w-full scroll-mt-24 bg-slate-950 border border-slate-700/50 rounded-2xl overflow-hidden shadow-2xl"
+    >
       <div className="flex items-center justify-between px-5 py-3 bg-slate-900/80 border-b border-slate-800">
         <div className="flex items-center gap-2">
           <svg
@@ -66,9 +69,10 @@ const Terminal = ({ logs, onClear }) => {
       </div>
     </div>
   )
-}
+})
 
 const PracticePage = () => {
+  const consoleRef = useRef(null)
   const [language, setLanguage] = useState('javascript')
   const [code, setCode] = useState(
     '// Write your algorithm here...\nconsole.log("Hello from AlgoScope!");\n'
@@ -109,6 +113,21 @@ const PracticePage = () => {
 
   const handleCodeChange = (newCode) => {
     setCode(newCode)
+  }
+
+  const scrollConsoleIntoView = () => {
+    // Defer until after this tick so layout / React commit can settle (helps with
+    // tall editor + sticky navbar + scrollIntoView).
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (consoleRef.current) {
+          consoleRef.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          })
+        }
+      })
+    })
   }
 
   const handleRunCode = (userCode) => {
@@ -152,6 +171,7 @@ const PracticePage = () => {
     console.log = originalLog
     console.error = originalError
     setLogs((prev) => [...prev, ...newLogs])
+    scrollConsoleIntoView()
   }
 
   return (
@@ -270,7 +290,11 @@ const PracticePage = () => {
               onRun={handleRunCode}
               key={language}
             />
-            <Terminal logs={logs} onClear={() => setLogs([])} />
+            <Terminal
+              ref={consoleRef}
+              logs={logs}
+              onClear={() => setLogs([])}
+            />
           </div>
         </div>
       </div>
