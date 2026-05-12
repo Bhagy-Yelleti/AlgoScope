@@ -83,7 +83,7 @@ export const Home = () => {
         >
           <div className="inline-flex items-center justify-center px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 backdrop-blur-sm mb-4">
             <span className="text-xs font-mono text-cyan-400 tracking-wider uppercase">
-              v1.0 Public Beta
+              v1.2.0
             </span>
           </div>
 
