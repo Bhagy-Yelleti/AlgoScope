@@ -57,7 +57,9 @@ const Terminal = ({ logs, onClear }) => {
               <span className="text-slate-600 shrink-0 text-xs">
                 [{new Date().toLocaleTimeString([], { hour12: false })}]
               </span>
-              <span className="break-all whitespace-pre-wrap">{log.content}</span>
+              <span className="break-all whitespace-pre-wrap">
+                {log.content}
+              </span>
             </div>
           ))
         )}
