@@ -290,7 +290,11 @@ const PracticePage = () => {
               onRun={handleRunCode}
               key={language}
             />
-            <Terminal ref={consoleRef} logs={logs} onClear={() => setLogs([])} />
+            <Terminal
+              ref={consoleRef}
+              logs={logs}
+              onClear={() => setLogs([])}
+            />
           </div>
         </div>
       </div>
