@@ -1,16 +1,84 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import CodeEditor from './CodeEditor'
 import { motion } from 'framer-motion'
 
+const Terminal = ({ logs, onClear }) => {
+  const scrollRef = useRef(null)
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    }
+  }, [logs])
+
+  return (
+    <div className="mt-8 flex flex-col w-full bg-slate-950 border border-slate-700/50 rounded-2xl overflow-hidden shadow-2xl">
+      <div className="flex items-center justify-between px-5 py-3 bg-slate-900/80 border-b border-slate-800">
+        <div className="flex items-center gap-2">
+          <svg
+            className="w-4 h-4 text-cyan-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
+          </svg>
+          <span className="text-xs font-bold uppercase tracking-widest text-slate-400">
+            Output Console
+          </span>
+        </div>
+        <button
+          onClick={onClear}
+          className="text-[10px] font-bold uppercase tracking-wider text-slate-500 hover:text-cyan-400 transition-colors"
+        >
+          Clear Logs
+        </button>
+      </div>
+      <div
+        ref={scrollRef}
+        className="p-5 h-48 overflow-y-auto font-mono text-sm space-y-2 custom-scrollbar"
+      >
+        {logs.length === 0 ? (
+          <p className="text-slate-600 italic text-xs">
+            No output yet. Click &quot;Run Code&quot; to execute your
+            JavaScript.
+          </p>
+        ) : (
+          logs.map((log, i) => (
+            <div
+              key={i}
+              className={`flex gap-3 ${log.type === 'error' ? 'text-red-400' : 'text-slate-300'}`}
+            >
+              <span className="text-slate-600 shrink-0 text-xs">
+                [{new Date().toLocaleTimeString([], { hour12: false })}]
+              </span>
+              <span className="break-all whitespace-pre-wrap">{log.content}</span>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  )
+}
+
 const PracticePage = () => {
   const [language, setLanguage] = useState('javascript')
-  const [code, setCode] = useState('// Write your algorithm here...\n')
+  const [code, setCode] = useState(
+    '// Write your algorithm here...\nconsole.log("Hello from AlgoScope!");\n'
+  )
+  const [logs, setLogs] = useState([])
 
   const languages = [
     {
       label: 'JavaScript',
       value: 'javascript',
-      default: '// Write your algorithm here...\n',
+      default:
+        '// Write your algorithm here...\nconsole.log("Hello from AlgoScope!");\n',
     },
     {
       label: 'Python',
@@ -39,6 +107,49 @@ const PracticePage = () => {
 
   const handleCodeChange = (newCode) => {
     setCode(newCode)
+  }
+
+  const handleRunCode = (userCode) => {
+    const newLogs = []
+
+    // 1. Capture original console.log
+    const originalLog = console.log
+    const originalError = console.error
+
+    // 2. Override console.log for this execution
+    console.log = (...args) => {
+      const content = args
+        .map((arg) =>
+          typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+        )
+        .join(' ')
+      newLogs.push({ type: 'info', content })
+      originalLog.apply(console, args)
+    }
+
+    console.error = (...args) => {
+      const content = args
+        .map((arg) =>
+          typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+        )
+        .join(' ')
+      newLogs.push({ type: 'error', content })
+      originalError.apply(console, args)
+    }
+
+    // 3. Execute code safely
+    try {
+      // Use new Function instead of eval for better scoping and safety
+      const run = new Function(userCode)
+      run()
+    } catch (err) {
+      newLogs.push({ type: 'error', content: `Runtime Error: ${err.message}` })
+    }
+
+    // 4. Restore original console and update state
+    console.log = originalLog
+    console.error = originalError
+    setLogs((prev) => [...prev, ...newLogs])
   }
 
   return (
@@ -146,8 +257,10 @@ const PracticePage = () => {
               language={language}
               defaultCode={code}
               onCodeChange={handleCodeChange}
+              onRun={handleRunCode}
               key={language}
             />
+            <Terminal logs={logs} onClear={() => setLogs([])} />
           </div>
         </div>
       </div>

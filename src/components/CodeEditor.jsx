@@ -5,6 +5,7 @@ const CodeEditor = ({
   language = 'javascript',
   defaultCode = '// Write your algorithm here...\n',
   onCodeChange,
+  onRun,
 }) => {
   const [value, setValue] = useState(defaultCode)
 
@@ -14,6 +15,8 @@ const CodeEditor = ({
       onCodeChange(newValue)
     }
   }
+
+  const isJavaScript = language === 'javascript'
 
   return (
     <div className="flex flex-col w-full h-[700px] border border-slate-700/80 rounded-2xl overflow-hidden bg-slate-950/90 shadow-[0_24px_80px_rgba(15,23,42,0.45)] backdrop-blur-xl">
@@ -35,8 +38,16 @@ const CodeEditor = ({
           </div>
         </div>
 
-        <button className="px-6 py-2 text-sm font-bold text-white transition-all duration-300 bg-cyan-600 rounded-xl hover:bg-cyan-500 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] active:scale-95 transform hover:-translate-y-0.5">
-          Run Code
+        <button
+          onClick={() => isJavaScript && onRun && onRun(value)}
+          disabled={!isJavaScript}
+          className={`px-6 py-2 text-sm font-bold text-white transition-all duration-300 rounded-xl active:scale-95 transform hover:-translate-y-0.5 ${
+            isJavaScript
+              ? 'bg-cyan-600 hover:bg-cyan-500 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)]'
+              : 'bg-slate-800 text-slate-500 cursor-not-allowed opacity-50'
+          }`}
+        >
+          {isJavaScript ? 'Run Code' : 'Coming Soon'}
         </button>
       </div>
 
