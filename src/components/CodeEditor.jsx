@@ -8,53 +8,58 @@ const CodeEditor = ({
 }) => {
   const [value, setValue] = useState(defaultCode)
 
-  // This runs every time the user types in the editor
   const handleEditorChange = (newValue) => {
     setValue(newValue)
-    // Pass the code up to the parent component so we can execute it later
     if (onCodeChange) {
       onCodeChange(newValue)
     }
   }
 
   return (
-    <div className="flex flex-col w-full h-[700px] border border-gray-700 rounded-lg overflow-hidden bg-[#1e1e1e]">
+    <div className="flex flex-col w-full h-[700px] border border-slate-700/80 rounded-2xl overflow-hidden bg-slate-950/90 shadow-[0_24px_80px_rgba(15,23,42,0.45)] backdrop-blur-xl">
       {/* Editor Header / Toolbar */}
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-          <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          <span className="ml-2 text-sm font-semibold text-gray-400">
-            {language === 'javascript' ? 'main.js' : `main.${language}`}
-          </span>
+      <div className="flex items-center justify-between px-5 py-4 bg-slate-900/60 border-b border-slate-800">
+        <div className="flex items-center gap-4">
+          <div className="flex gap-1.5">
+            <div className="w-2.5 h-2.5 bg-red-500/80 rounded-full"></div>
+            <div className="w-2.5 h-2.5 bg-yellow-500/80 rounded-full"></div>
+            <div className="w-2.5 h-2.5 bg-green-500/80 rounded-full"></div>
+          </div>
+          <div className="flex flex-col">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-cyan-400/80">
+              Terminal
+            </p>
+            <span className="text-sm font-semibold text-slate-200">
+              {language === 'javascript' ? 'main.js' : `main.${language}`}
+            </span>
+          </div>
         </div>
 
-        {/* Placeholder for the Run Button */}
-        <button className="px-4 py-1 text-sm font-bold text-white transition-colors bg-green-600 rounded hover:bg-green-500">
+        <button className="px-6 py-2 text-sm font-bold text-white transition-all duration-300 bg-cyan-600 rounded-xl hover:bg-cyan-500 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] active:scale-95 transform hover:-translate-y-0.5">
           Run Code
         </button>
       </div>
 
       {/* The Actual Monaco Editor */}
-      <div className="flex-grow pt-2">
+      <div className="flex-grow bg-[#1e1e1e]/50">
         <Editor
           height="100%"
           language={language}
-          theme="vs-dark" /* Classic VS Code Dark Theme */
+          theme="vs-dark"
           value={value}
           onChange={handleEditorChange}
           options={{
-            minimap: {
-              enabled: false,
-            } /* Hides the right-side minimap to save space */,
+            minimap: { enabled: false },
             fontSize: 14,
-            fontFamily:
-              "'JetBrains Mono', monospace" /* Uses the font we discussed earlier! */,
+            fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
             wordWrap: 'on',
             scrollBeyondLastLine: false,
             automaticLayout: true,
-            padding: { top: 10 },
+            padding: { top: 20 },
+            backgroundColor: 'transparent',
+            lineNumbersMinChars: 3,
+            cursorSmoothCaretAnimation: 'on',
+            smoothScrolling: true,
           }}
         />
       </div>
