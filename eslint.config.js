@@ -40,4 +40,12 @@ export default [
       },
     },
   },
+  {
+    files: ['api/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
 ]

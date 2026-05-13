@@ -1,6 +1,6 @@
-const express = require('express')
-const cors = require('cors')
-require('dotenv').config()
+import express from 'express'
+import cors from 'cors'
+import 'dotenv/config'
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -14,7 +14,7 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'AlgoScope Backend is running!' })
 })
 
-module.exports = app
+export default app
 // app.listen(PORT, () => {
 //   console.log(`Server is running on http://localhost:${PORT}`)
 // })
