@@ -2,6 +2,7 @@ import React from 'react'
 import { Navbar } from './Navbar'
 import Footer from './Footer'
 import { motion } from 'framer-motion'
+import SeoHead from './SeoHead'
 
 const Background = () => (
   <div className="absolute inset-0 z-0 pointer-events-none fixed">
@@ -19,6 +20,7 @@ export default function AppLayout({ children, showBackground = true }) {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
+      <SeoHead />
       {showBackground && <Background />}
       <div className="flex-1 flex flex-col gap-4 p-2 sm:p-4 z-10">
         <Navbar />

@@ -271,7 +271,7 @@ export default function AboutAlgoScope() {
             <motion.div variants={itemVariants}>
               <AuthorCard
                 name="Bratik Mukherjee"
-                role="Product Designer & Lead"
+                role="SYSTEM ARCHITECT & MAINTAINER"
                 image={bratik}
                 github="https://github.com/Bimbok"
                 linkedin="https://linkedin.com/in/bratik-mukherjee"

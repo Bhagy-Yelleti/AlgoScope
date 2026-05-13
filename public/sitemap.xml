@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://algo-scope-virid.vercel.app/</loc>
+  </url>
+  <url>
+    <loc>https://algo-scope-virid.vercel.app/sort</loc>
+  </url>
+  <url>
+    <loc>https://algo-scope-virid.vercel.app/search</loc>
+  </url>
+  <url>
+    <loc>https://algo-scope-virid.vercel.app/spath</loc>
+  </url>
+  <url>
+    <loc>https://algo-scope-virid.vercel.app/ldssearch</loc>
+  </url>
+  <url>
+    <loc>https://algo-scope-virid.vercel.app/adt</loc>
+  </url>
+  <url>
+    <loc>https://algo-scope-virid.vercel.app/practice</loc>
+  </url>
+  <url>
+    <loc>https://algo-scope-virid.vercel.app/about</loc>
+  </url>
+</urlset>
