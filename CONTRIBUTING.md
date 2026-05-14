@@ -23,6 +23,18 @@ We love new ideas! If you have a suggestion for a new visualization or a feature
 2. Open a new issue with the tag `feature`.
 3. Describe the feature and why it would be useful.
 
+## 📋 Issue Claiming Policy
+
+To ensure fair contribution opportunities for everyone, please follow these guidelines before claiming issues:
+
+- Contributors may claim only **1 active issue at a time**.
+- A new issue can be claimed only after the previous PR is merged or closed.
+- If no meaningful progress/update is provided within **2–3 days**, maintainers may unassign the issue.
+- Avoid claiming issues without the intention to actively work on them.
+- Maintainers reserve the right to reassign issues in case of inactivity or rule violations.
+
+These rules help maintain smooth collaboration and give all contributors a fair chance to participate in the project.
+
 ## 📥 Pull Request Guidelines
 
 To maintain code quality and consistency, please follow these requirements for all Pull Requests:
