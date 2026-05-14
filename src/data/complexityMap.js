@@ -11,7 +11,7 @@ export const complexityMap = {
 
   floydwarshall: {
     time: 'O(V^3)',
-    space: 'O(V^3)',
+    space: 'O(V^2)',
   },
 
   bfs: {
