@@ -17,7 +17,7 @@ const SpeedSlider = memo(function SpeedSlider({
 }) {
   const handleChange = (event, newValue) => {
     audio.currentTime = 0
-    audio.play()
+    audio.play().catch(() => {})
     onChange(event, newValue)
   }
   return (
