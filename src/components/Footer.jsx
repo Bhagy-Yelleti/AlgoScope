@@ -25,8 +25,12 @@ const Footer = () => {
             transition={{ delay: 0.2 }}
           >
             <div className="flex items-center mb-4">
-              <div className="w-8 h-8 bg-white/10 rounded flex items-center justify-center mr-3 backdrop-blur-sm border border-white/10">
-                <img src="/logo3.png" alt="" className="w-5 h-5" />
+              <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mr-3 backdrop-blur-sm border border-white/10 overflow-hidden p-1">
+                <img
+                  src="/logo3.png"
+                  alt=""
+                  className="w-full h-full object-contain rounded-lg"
+                />
               </div>
               <h3 className="text-2xl font-bold text-white tracking-tight">
                 AlgoScope
