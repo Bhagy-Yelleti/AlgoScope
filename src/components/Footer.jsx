@@ -29,7 +29,7 @@ const Footer = () => {
                 <img
                   src="/logo3.png"
                   alt=""
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain rounded-lg"
                 />
               </div>
               <h3 className="text-2xl font-bold text-white tracking-tight">
