@@ -1,6 +1,9 @@
 import React, { memo } from 'react'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
+import clickSound from '../assets/click.wav'
+const audio = new Audio(clickSound)
+audio.volume = 0.2
 
 // Define the gradient
 const sliderGradient = 'linear-gradient(to right, #22d3ee, #3b82f6)' // cyan-400 to blue-500
@@ -12,6 +15,11 @@ const SpeedSlider = memo(function SpeedSlider({
   max = 3,
   step = 0.1,
 }) {
+  const handleChange = (event, newValue) => {
+    audio.currentTime = 0
+    audio.play()
+    onChange(event, newValue)
+  }
   return (
     <Box
       sx={{
@@ -27,7 +35,7 @@ const SpeedSlider = memo(function SpeedSlider({
     >
       <Slider
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
         valueLabelDisplay="auto"
         step={step}
         marks
