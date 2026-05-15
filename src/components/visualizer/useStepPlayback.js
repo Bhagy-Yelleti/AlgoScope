@@ -1,6 +1,5 @@
 import { startTransition, useEffect, useRef, useState } from 'react'
-
-const MIN_DELAY = 120
+import { calculateStepDelay } from '../../lib/utils'
 
 export function useStepPlayback({ speed = 1 }) {
   const [steps, setSteps] = useState([])
@@ -25,10 +24,8 @@ export function useStepPlayback({ speed = 1 }) {
       return undefined
     }
 
-    const delay = Math.max(
-      MIN_DELAY,
-      Math.round((currentStep?.duration ?? 700) / Math.max(speed, 0.1))
-    )
+    // Now using the centralized utility function for calculation
+    const delay = calculateStepDelay(currentStep?.duration, speed)
 
     timeoutRef.current = window.setTimeout(() => {
       startTransition(() => {
