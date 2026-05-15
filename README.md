@@ -7,6 +7,7 @@
 **A modern, interactive algorithm visualizer that demystifies complex logic through real-time, high-fidelity animations.**
 
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=white)](https://react.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.x-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind--CSS-4.x-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat)](LICENSE)
@@ -87,6 +88,11 @@ Learning Data Structures and Algorithms (DSA) is often a daunting task for stude
 - **Animations:** [Framer Motion](https://www.framer.com/motion/), [Anime.js](https://animejs.com/)
 - **Routing:** [React Router v7](https://reactrouter.com/)
 
+### Backend
+
+- **Runtime:** [Node.js](https://nodejs.org/)
+- **Framework:** [Express](https://expressjs.com/)
+
 ### Utilities
 
 - **Syntax Highlighting:** [React Syntax Highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter)
@@ -140,6 +146,9 @@ Access the app at `http://localhost:8080`.
 AlgoScope uses a component-based architecture where each algorithm category has its own specialized visualizer:
 
 ```text
+api/
+├── index.js               # Backend entry point (Express)
+└── vercel.json            # Vercel deployment configuration
 src/
 ├── algorithms/
 │   ├── searching/         # Search and shortest-path step generators/source data
