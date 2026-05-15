@@ -74,13 +74,13 @@ export const Navbar = () => {
   // Derive active state from current URL instead of local state
   const { pathname } = useLocation()
 
-  const links = [
+  const algorithmLinks = [
     { name: 'Search', href: '/search' },
     { name: 'Shortest Path', href: '/spath' },
     { name: 'Sort', href: '/sort' },
-    { name: 'Practice', href: '/practice' },
-    { name: 'About', href: '/about' },
   ]
+
+  const navLinks = [{ name: 'Practice', href: '/practice' }]
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-slate-950/50 backdrop-blur supports-[backdrop-filter]:bg-slate-950/40 rounded-xl shadow-2xl">
@@ -105,7 +105,28 @@ export const Navbar = () => {
 
           <div className="hidden md:flex items-center gap-6">
             <ul className="flex items-center gap-1">
-              {links.map((link) => (
+              <li className="relative group">
+                <button className="rounded-lg px-4 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-200">
+                  Explore
+                </button>
+
+                <div className="absolute left-0 top-12 py-2 invisible opacity-0 translate-y-2 min-w-[220px] rounded-xl border border-white/10 bg-slate-900/95 p-2 shadow-2xl backdrop-blur-xl transition-all duration-200 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 z-50">
+                  {algorithmLinks.map((link) => (
+                    <Link
+                      key={link.name}
+                      to={link.href}
+                      className={`block rounded-lg px-4 py-2 text-sm transition-all ${
+                        pathname === link.href
+                          ? 'bg-indigo-500/20 text-indigo-300'
+                          : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                      }`}
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
+                </div>
+              </li>
+              {navLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     to={link.href}
@@ -200,7 +221,7 @@ export const Navbar = () => {
                 <SearchBar />
               </div>
               <ul className="space-y-2">
-                {links.map((link) => (
+                {[...algorithmLinks, ...navLinks].map((link) => (
                   // Animate each link
                   <motion.li key={link.name} variants={menuItemVariants}>
                     <Link
