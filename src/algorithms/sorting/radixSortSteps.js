@@ -1,30 +1,32 @@
+import { createStep } from '../../lib/utils';
+
 export const radixSortSources = {
   javascript: {
     code: `function radixSort(arr) {
-  let max = Math.max(...arr)
+  let max = Math.max(...arr);
   for (let exp = 1; Math.floor(max / exp) > 0; exp *= 10) {
-    countingSortForRadix(arr, exp)
+    countingSortForRadix(arr, exp);
   }
 }
 
 function countingSortForRadix(arr, exp) {
-  let n = arr.length
-  let output = new Array(n)
-  let count = new Array(10).fill(0)
+  let n = arr.length;
+  let output = new Array(n);
+  let count = new Array(10).fill(0);
   for (let i = 0; i < n; i++) {
-    let digit = Math.floor(arr[i] / exp) % 10
-    count[digit]++
+    let digit = Math.floor(arr[i] / exp) % 10;
+    count[digit]++;
   }
   for (let i = 1; i < 10; i++) {
-    count[i] += count[i - 1]
+    count[i] += count[i - 1];
   }
   for (let i = n - 1; i >= 0; i--) {
-    let digit = Math.floor(arr[i] / exp) % 10
-    output[count[digit] - 1] = arr[i]
-    count[digit]--
+    let digit = Math.floor(arr[i] / exp) % 10;
+    output[count[digit] - 1] = arr[i];
+    count[digit]--;
   }
   for (let i = 0; i < n; i++) {
-    arr[i] = output[i]
+    arr[i] = output[i];
   }
 }`,
     lineMap: {
@@ -144,46 +146,23 @@ void countingSortForRadix(vector<int>& arr, int exp) {
       complete: 22,
     },
   },
-}
-
-const createStep = ({
-  lineKey,
-  type,
-  array,
-  indices = [],
-  sortedIndices = [],
-  message = '',
-  variables = {},
-  duration,
-}) => ({
-  lineKey,
-  type,
-  array: [...array],
-  indices,
-  sortedIndices,
-  message,
-  variables,
-  duration,
-})
+};
 
 export function getRadixSortSource(language = 'javascript') {
-  return radixSortSources[language] ?? radixSortSources.javascript
+  return radixSortSources[language] ?? radixSortSources.javascript;
 }
 
 export function resolveRadixSortLine(language, lineKey) {
-  if (!lineKey) {
-    return undefined
-  }
-
-  const source = getRadixSortSource(language)
-  return source.lineMap[lineKey] ?? radixSortSources.javascript.lineMap[lineKey]
+  if (!lineKey) return undefined;
+  const source = getRadixSortSource(language);
+  return source.lineMap[lineKey] ?? radixSortSources.javascript.lineMap[lineKey];
 }
 
 export function generateRadixSortSteps(inputArray) {
-  const arr = [...inputArray]
-  const steps = []
-  const n = arr.length
-  const max = Math.max(...arr)
+  const arr = [...inputArray];
+  const steps = [];
+  const n = arr.length;
+  const max = Math.max(...arr);
 
   steps.push(
     createStep({
@@ -194,7 +173,7 @@ export function generateRadixSortSteps(inputArray) {
       variables: { n, max },
       duration: 700,
     })
-  )
+  );
 
   for (let exp = 1; Math.floor(max / exp) > 0; exp *= 10) {
     steps.push(
@@ -202,64 +181,64 @@ export function generateRadixSortSteps(inputArray) {
         lineKey: 'outerLoop',
         type: 'outer-loop',
         array: arr,
-        message: `Processing digit at place ${exp}.`,
+        message: `Processing digit at place \${exp}.`,
         variables: { exp, max },
         duration: 600,
       })
-    )
+    );
 
     steps.push(
       createStep({
         lineKey: 'countingSortCall',
         type: 'setup',
         array: arr,
-        message: `Applying counting sort for digit place ${exp}.`,
+        message: `Applying counting sort for digit place \${exp}.`,
         variables: { exp },
         duration: 500,
       })
-    )
+    );
 
-    const output = new Array(n)
-    const count = new Array(10).fill(0)
+    const output = new Array(n);
+    const count = new Array(10).fill(0);
 
     // Count Digits
     for (let i = 0; i < n; i++) {
-      const digit = Math.floor(arr[i] / exp) % 10
-      count[digit]++
+      const digit = Math.floor(arr[i] / exp) % 10;
+      count[digit]++;
       steps.push(
         createStep({
           lineKey: 'countDigits',
           type: 'active',
           array: arr,
           indices: [i],
-          message: `Value ${arr[i]} has digit ${digit} at place ${exp}. Increment count[${digit}].`,
+          message: `Value \${arr[i]} has digit \${digit} at place \${exp}. Increment count[\${digit}].`,
           variables: { i, val: arr[i], digit, exp, countAtDigit: count[digit] },
           duration: 350,
         })
-      )
+      );
     }
 
     // Prefix Sum
     for (let i = 1; i < 10; i++) {
-      count[i] += count[i - 1]
+      count[i] += count[i - 1];
       steps.push(
         createStep({
           lineKey: 'prefixSum',
           type: 'outer-loop',
           array: arr,
-          message: `Compute prefix sum for count array: count[${i}] = ${count[i]}.`,
+          message: `Compute prefix sum for count array: count[\${i}] = \${count[i]}.`,
           variables: { i, prefixSum: count[i] },
           duration: 250,
         })
-      )
+      );
     }
 
     // Place Elements
     for (let i = n - 1; i >= 0; i--) {
-      const digit = Math.floor(arr[i] / exp) % 10
-      const pos = count[digit] - 1
-      output[pos] = arr[i]
-      count[digit]--
+      const digit = Math.floor(arr[i] / exp) % 10;
+      const pos = count[digit] - 1;
+      output[pos] = arr[i];
+      count[digit]--;
 
       steps.push(
         createStep({
@@ -267,27 +246,27 @@ export function generateRadixSortSteps(inputArray) {
           type: 'insert',
           array: arr,
           indices: [i],
-          message: `Place ${arr[i]} at output index ${pos} based on digit ${digit}.`,
+          message: `Place \${arr[i]} at output index \${pos} based on digit \${digit}.`,
           variables: { i, val: arr[i], digit, pos, newCount: count[digit] },
           duration: 500,
         })
-      )
+      );
     }
 
     // Copy Back
     for (let i = 0; i < n; i++) {
-      arr[i] = output[i]
+      arr[i] = output[i];
       steps.push(
         createStep({
           lineKey: 'copyBack',
           type: 'insert',
           array: arr,
           indices: [i],
-          message: `Update array with elements sorted by digit place ${exp}.`,
+          message: `Update array with elements sorted by digit place \${exp}.`,
           variables: { i, val: arr[i], exp },
           duration: 350,
         })
-      )
+      );
     }
   }
 
@@ -301,7 +280,7 @@ export function generateRadixSortSteps(inputArray) {
       variables: { n },
       duration: 900,
     })
-  )
+  );
 
-  return steps
+  return steps;
 }

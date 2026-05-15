@@ -1,24 +1,26 @@
+import { createStep } from '../../lib/utils';
+
 export const quickSortSources = {
   javascript: {
     code: `function quickSort(arr, low, high) {
   if (low < high) {
-    let pi = partition(arr, low, high)
-    quickSort(arr, low, pi - 1)
-    quickSort(arr, pi + 1, high)
+    let pi = partition(arr, low, high);
+    quickSort(arr, low, pi - 1);
+    quickSort(arr, pi + 1, high);
   }
 }
 
 function partition(arr, low, high) {
-  let pivot = arr[high]
-  let i = low - 1
+  let pivot = arr[high];
+  let i = low - 1;
   for (let j = low; j < high; j++) {
     if (arr[j] < pivot) {
-      i++
-      [arr[i], arr[j]] = [arr[j], arr[i]]
+      i++;
+      [arr[i], arr[j]] = [arr[j], arr[i]];
     }
   }
-  [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]]
-  return i + 1
+  [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+  return i + 1;
 }`,
     lineMap: {
       function: 1,
@@ -130,46 +132,23 @@ int partition(int arr[], int low, int high) {
       complete: 19,
     },
   },
-}
-
-const createStep = ({
-  lineKey,
-  type,
-  array,
-  indices = [],
-  sortedIndices = [],
-  message = '',
-  variables = {},
-  duration,
-}) => ({
-  lineKey,
-  type,
-  array: [...array],
-  indices,
-  sortedIndices,
-  message,
-  variables,
-  duration,
-})
+};
 
 export function getQuickSortSource(language = 'javascript') {
-  return quickSortSources[language] ?? quickSortSources.javascript
+  return quickSortSources[language] ?? quickSortSources.javascript;
 }
 
 export function resolveQuickSortLine(language, lineKey) {
-  if (!lineKey) {
-    return undefined
-  }
-
-  const source = getQuickSortSource(language)
-  return source.lineMap[lineKey] ?? quickSortSources.javascript.lineMap[lineKey]
+  if (!lineKey) return undefined;
+  const source = getQuickSortSource(language);
+  return source.lineMap[lineKey] ?? quickSortSources.javascript.lineMap[lineKey];
 }
 
 export function generateQuickSortSteps(inputArray) {
-  const arr = [...inputArray]
-  const steps = []
-  const n = arr.length
-  const sortedIndices = []
+  const arr = [...inputArray];
+  const steps = [];
+  const n = arr.length;
+  const sortedIndices = [];
 
   const performQuickSort = (low, high) => {
     steps.push(
@@ -179,24 +158,24 @@ export function generateQuickSortSteps(inputArray) {
         array: arr,
         indices: [low, high],
         sortedIndices: [...sortedIndices],
-        message: `Quick Sort on range [${low}, ${high}].`,
+        message: `Quick Sort on range [\${low}, \${high}].`,
         variables: { low, high },
         duration: 500,
       })
-    )
+    );
 
     if (low < high) {
-      const pi = performPartition(low, high)
-      sortedIndices.push(pi)
-      performQuickSort(low, pi - 1)
-      performQuickSort(pi + 1, high)
+      const pi = performPartition(low, high);
+      sortedIndices.push(pi);
+      performQuickSort(low, pi - 1);
+      performQuickSort(pi + 1, high);
     } else if (low === high) {
-      if (!sortedIndices.includes(low)) sortedIndices.push(low)
+      if (!sortedIndices.includes(low)) sortedIndices.push(low);
     }
-  }
+  };
 
   const performPartition = (low, high) => {
-    let pivot = arr[high]
+    let pivot = arr[high];
     steps.push(
       createStep({
         lineKey: 'pivotSelect',
@@ -204,13 +183,13 @@ export function generateQuickSortSteps(inputArray) {
         array: arr,
         indices: [high],
         sortedIndices: [...sortedIndices],
-        message: `Selected pivot ${pivot} at index ${high}.`,
+        message: `Selected pivot \${pivot} at index \${high}.`,
         variables: { low, high, pivot },
         duration: 600,
       })
-    )
+    );
 
-    let i = low - 1
+    let i = low - 1;
     for (let j = low; j < high; j++) {
       steps.push(
         createStep({
@@ -219,16 +198,16 @@ export function generateQuickSortSteps(inputArray) {
           array: arr,
           indices: [j, high],
           sortedIndices: [...sortedIndices],
-          message: `Compare ${arr[j]} with pivot ${pivot}.`,
+          message: `Compare \${arr[j]} with pivot \${pivot}.`,
           variables: { low, high, pivot, i, j },
           duration: 400,
         })
-      )
+      );
 
       if (arr[j] < pivot) {
-        i++
+        i++;
         if (i !== j) {
-          ;[arr[i], arr[j]] = [arr[j], arr[i]]
+          [arr[i], arr[j]] = [arr[j], arr[i]];
           steps.push(
             createStep({
               lineKey: 'swap',
@@ -236,16 +215,16 @@ export function generateQuickSortSteps(inputArray) {
               array: arr,
               indices: [i, j],
               sortedIndices: [...sortedIndices],
-              message: `${arr[j]} is smaller than pivot, move it to index ${i}.`,
+              message: `\${arr[j]} is smaller than pivot, move it to index \${i}.`,
               variables: { low, high, pivot, i, j },
               duration: 600,
             })
-          )
+          );
         }
       }
     }
 
-    ;[arr[i + 1], arr[high]] = [arr[high], arr[i + 1]]
+    [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
     steps.push(
       createStep({
         lineKey: 'finalSwap',
@@ -253,14 +232,14 @@ export function generateQuickSortSteps(inputArray) {
         array: arr,
         indices: [i + 1, high],
         sortedIndices: [...sortedIndices],
-        message: `Place pivot ${pivot} in its correct position at index ${i + 1}.`,
+        message: `Place pivot \${pivot} in its correct position at index \${i + 1}.`,
         variables: { low, high, pivot, pi: i + 1 },
         duration: 700,
       })
-    )
+    );
 
-    return i + 1
-  }
+    return i + 1;
+  };
 
   steps.push(
     createStep({
@@ -272,9 +251,9 @@ export function generateQuickSortSteps(inputArray) {
       variables: { n },
       duration: 700,
     })
-  )
+  );
 
-  performQuickSort(0, n - 1)
+  performQuickSort(0, n - 1);
 
   steps.push(
     createStep({
@@ -286,7 +265,7 @@ export function generateQuickSortSteps(inputArray) {
       variables: { n },
       duration: 900,
     })
-  )
+  );
 
-  return steps
+  return steps;
 }

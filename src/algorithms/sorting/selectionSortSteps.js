@@ -1,16 +1,18 @@
+import { createStep } from '../../lib/utils';
+
 export const selectionSortSources = {
   javascript: {
     code: `function selectionSort(arr) {
-  const n = arr.length
+  const n = arr.length;
   for (let i = 0; i < n - 1; i++) {
-    let minIdx = i
+    let minIdx = i;
     for (let j = i + 1; j < n; j++) {
       if (arr[j] < arr[minIdx]) {
-        minIdx = j
+        minIdx = j;
       }
     }
     if (minIdx !== i) {
-      swap(arr[i], arr[minIdx])
+      [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
     }
   }
 }`,
@@ -104,48 +106,23 @@ export const selectionSortSources = {
       complete: 14,
     },
   },
-}
-
-const createStep = ({
-  lineKey,
-  type,
-  array,
-  indices = [],
-  sortedIndices = [],
-  message = '',
-  variables = {},
-  duration,
-}) => ({
-  lineKey,
-  type,
-  array: [...array],
-  indices,
-  sortedIndices,
-  message,
-  variables,
-  duration,
-})
+};
 
 export function getSelectionSortSource(language = 'javascript') {
-  return selectionSortSources[language] ?? selectionSortSources.javascript
+  return selectionSortSources[language] ?? selectionSortSources.javascript;
 }
 
 export function resolveSelectionSortLine(language, lineKey) {
-  if (!lineKey) {
-    return undefined
-  }
-
-  const source = getSelectionSortSource(language)
-  return (
-    source.lineMap[lineKey] ?? selectionSortSources.javascript.lineMap[lineKey]
-  )
+  if (!lineKey) return undefined;
+  const source = getSelectionSortSource(language);
+  return source.lineMap[lineKey] ?? selectionSortSources.javascript.lineMap[lineKey];
 }
 
 export function generateSelectionSortSteps(inputArray) {
-  const arr = [...inputArray]
-  const steps = []
-  const n = arr.length
-  const sortedIndices = []
+  const arr = [...inputArray];
+  const steps = [];
+  const n = arr.length;
+  const sortedIndices = [];
 
   steps.push(
     createStep({
@@ -157,7 +134,7 @@ export function generateSelectionSortSteps(inputArray) {
       variables: { n },
       duration: 700,
     })
-  )
+  );
 
   for (let i = 0; i < n; i++) {
     steps.push(
@@ -166,26 +143,26 @@ export function generateSelectionSortSteps(inputArray) {
         type: 'outer-loop',
         array: arr,
         indices: [i],
-        sortedIndices,
-        message: `Finding the minimum element for index ${i}.`,
+        sortedIndices: [...sortedIndices],
+        message: `Finding the minimum element for index \${i}.`,
         variables: { i, n },
         duration: 600,
       })
-    )
+    );
 
-    let minIdx = i
+    let minIdx = i;
     steps.push(
       createStep({
         lineKey: 'initMin',
         type: 'init-min',
         array: arr,
         indices: [i],
-        sortedIndices,
-        message: `Assume index ${i} (value ${arr[i]}) is the current minimum.`,
+        sortedIndices: [...sortedIndices],
+        message: `Assume index \${i} (value \${arr[i]}) is the current minimum.`,
         variables: { i, minIdx, n },
         duration: 500,
       })
-    )
+    );
 
     for (let j = i + 1; j < n; j++) {
       steps.push(
@@ -194,12 +171,12 @@ export function generateSelectionSortSteps(inputArray) {
           type: 'inner-loop',
           array: arr,
           indices: [j, minIdx],
-          sortedIndices,
-          message: `Check index ${j} against current minimum at index ${minIdx}.`,
+          sortedIndices: [...sortedIndices],
+          message: `Check index \${j} against current minimum at index \${minIdx}.`,
           variables: { i, j, minIdx, n },
           duration: 400,
         })
-      )
+      );
 
       steps.push(
         createStep({
@@ -207,27 +184,27 @@ export function generateSelectionSortSteps(inputArray) {
           type: 'compare',
           array: arr,
           indices: [j, minIdx],
-          sortedIndices,
-          message: `Compare ${arr[j]} and ${arr[minIdx]}.`,
+          sortedIndices: [...sortedIndices],
+          message: `Compare \${arr[j]} and \${arr[minIdx]}.`,
           variables: { i, j, minIdx, n },
           duration: 600,
         })
-      )
+      );
 
       if (arr[j] < arr[minIdx]) {
-        minIdx = j
+        minIdx = j;
         steps.push(
           createStep({
             lineKey: 'updateMin',
             type: 'min',
             array: arr,
             indices: [minIdx],
-            sortedIndices,
-            message: `Found a smaller element! New minimum is ${arr[minIdx]} at index ${minIdx}.`,
+            sortedIndices: [...sortedIndices],
+            message: `Found a smaller element! New minimum is \${arr[minIdx]} at index \${minIdx}.`,
             variables: { i, j, minIdx, n },
             duration: 700,
           })
-        )
+        );
       }
     }
 
@@ -238,27 +215,27 @@ export function generateSelectionSortSteps(inputArray) {
           type: 'swap',
           array: arr,
           indices: [i, minIdx],
-          sortedIndices,
-          message: `Swap the minimum element (${arr[minIdx]}) with the element at index ${i} (${arr[i]}).`,
+          sortedIndices: [...sortedIndices],
+          message: `Swap the minimum element (\${arr[minIdx]}) with the element at index \${i} (\${arr[i]}).`,
           variables: { i, minIdx, n },
           duration: 850,
         })
-      )
-      ;[arr[i], arr[minIdx]] = [arr[minIdx], arr[i]]
+      );
+      [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
     }
 
-    sortedIndices.push(i)
+    sortedIndices.push(i);
     steps.push(
       createStep({
         lineKey: 'outerLoop',
         type: 'pass-complete',
         array: arr,
-        sortedIndices,
-        message: `Pass ${i + 1} complete. Index ${i} is now sorted.`,
+        sortedIndices: [...sortedIndices],
+        message: `Pass \${i + 1} complete. Index \${i} is now sorted.`,
         variables: { i, n },
         duration: 550,
       })
-    )
+    );
   }
 
   steps.push(
@@ -271,7 +248,7 @@ export function generateSelectionSortSteps(inputArray) {
       variables: { n },
       duration: 900,
     })
-  )
+  );
 
-  return steps
+  return steps;
 }

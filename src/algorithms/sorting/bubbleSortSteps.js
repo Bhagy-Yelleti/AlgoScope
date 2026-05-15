@@ -1,3 +1,5 @@
+import { createStep } from '../../lib/utils'
+
 export const bubbleSortSources = {
   javascript: {
     code: `function bubbleSort(arr) {
@@ -82,26 +84,6 @@ export const bubbleSortSources = {
     },
   },
 }
-
-const createStep = ({
-  lineKey,
-  type,
-  array,
-  indices = [],
-  sortedIndices = [],
-  message = '',
-  variables = {},
-  duration,
-}) => ({
-  lineKey,
-  type,
-  array: [...array],
-  indices,
-  sortedIndices,
-  message,
-  variables,
-  duration,
-})
 
 export function getBubbleSortSource(language = 'javascript') {
   return bubbleSortSources[language] ?? bubbleSortSources.javascript
