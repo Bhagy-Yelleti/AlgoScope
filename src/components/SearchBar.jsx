@@ -300,7 +300,7 @@ const SearchBar = () => {
                   </ul>
                 ) : query ? (
                   <div className="p-8 text-center text-slate-500">
-                    No results found for "{query}"
+                    No results found for &quot;{query}&quot;
                   </div>
                 ) : (
                   <div className="p-8 text-center text-slate-500">
