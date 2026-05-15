@@ -193,7 +193,9 @@ const SearchBar = () => {
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
           />
         </svg>
-        <span className="text-xs hidden lg:inline font-medium text-slate-500 group-hover:text-cyan-400/70">Search...</span>
+        <span className="text-xs hidden lg:inline font-medium text-slate-500 group-hover:text-cyan-400/70">
+          Search...
+        </span>
         <div className="ml-auto hidden lg:flex items-center gap-1 opacity-40 group-hover:opacity-100 transition-opacity">
           <kbd className="text-[10px] font-sans">⌘</kbd>
           <kbd className="text-[10px] font-sans">K</kbd>
