@@ -88,6 +88,61 @@ void dijkstra(const vector<vector<pair<int, int>>>& adj, int startNode) {
     // 'dist' vector now holds the shortest distances
 }`,
     },
+    java: {
+      code: `import java.util.*;
+
+public class Dijkstra {
+    static class Edge {
+        int node, weight;
+        Edge(int node, int weight) {
+            this.node = node;
+            this.weight = weight;
+        }
+    }
+    
+    static class Node implements Comparable<Node> {
+        int id, distance;
+        Node(int id, int distance) {
+            this.id = id;
+            this.distance = distance;
+        }
+        
+        public int compareTo(Node other) {
+            return Integer.compare(this.distance, other.distance);
+        }
+    }
+    
+    public static Map<Integer, Integer> dijkstra(
+            Map<Integer, List<Edge>> graph, int startNode) {
+        Map<Integer, Integer> distances = new HashMap<>();
+        Set<Integer> visited = new HashSet<>();
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        
+        // Initialize distances
+        for (int node : graph.keySet()) {
+            distances.put(node, Integer.MAX_VALUE);
+        }
+        distances.put(startNode, 0);
+        pq.add(new Node(startNode, 0));
+        
+        while (!pq.isEmpty()) {
+            Node current = pq.poll();
+            
+            if (visited.contains(current.id)) continue;
+            visited.add(current.id);
+            
+            for (Edge edge : graph.getOrDefault(current.id, new ArrayList<>())) {
+                int newDist = distances.get(current.id) + edge.weight;
+                if (newDist < distances.get(edge.node)) {
+                    distances.put(edge.node, newDist);
+                    pq.add(new Node(edge.node, newDist));
+                }
+            }
+        }
+        return distances;
+    }
+}`,
+    },
   },
   bellmanford: {
     javascript: {
@@ -162,6 +217,54 @@ void bellmanFord(const std::vector<Edge>& edges, int numVertices, int startNode)
         }
     }
     // 'dist' vector holds the shortest distances
+}`,
+    },
+    java: {
+      code: `import java.util.*;
+
+public class BellmanFord {
+    static class Edge {
+        int from, to, weight;
+        Edge(int from, int to, int weight) {
+            this.from = from;
+            this.to = to;
+            this.weight = weight;
+        }
+    }
+    
+    public static Map<Integer, Integer> bellmanFord(
+            List<Edge> edges, int numVertices, int startNode) {
+        Map<Integer, Integer> distances = new HashMap<>();
+        
+        // Initialize distances
+        for (int i = 1; i <= numVertices; i++) {
+            distances.put(i, Integer.MAX_VALUE);
+        }
+        distances.put(startNode, 0);
+        
+        // Relax edges numVertices - 1 times
+        for (int i = 0; i < numVertices - 1; i++) {
+            for (Edge edge : edges) {
+                int fromDist = distances.get(edge.from);
+                if (fromDist != Integer.MAX_VALUE && 
+                    fromDist + edge.weight < distances.get(edge.to)) {
+                    distances.put(edge.to, fromDist + edge.weight);
+                }
+            }
+        }
+        
+        // Check for negative weight cycles
+        for (Edge edge : edges) {
+            int fromDist = distances.get(edge.from);
+            if (fromDist != Integer.MAX_VALUE && 
+                fromDist + edge.weight < distances.get(edge.to)) {
+                System.err.println("Graph contains negative weight cycle");
+                return null;
+            }
+        }
+        
+        return distances;
+    }
 }`,
     },
   },
@@ -243,6 +346,60 @@ std::vector<std::vector<int>> floydWarshall(const std::vector<std::vector<std::p
         }
     }
     return dist;
+}`,
+    },
+    java: {
+      code: `public class FloydWarshall {
+    static final int INF = (int) 1e9;
+    
+    public static int[][] floydWarshall(int numVertices) {
+        int[][] dist = new int[numVertices + 1][numVertices + 1];
+        
+        // Initialize distances
+        for (int i = 0; i <= numVertices; i++) {
+            for (int j = 0; j <= numVertices; j++) {
+                if (i == j) {
+                    dist[i][j] = 0;
+                } else {
+                    dist[i][j] = INF;
+                }
+            }
+        }
+        
+        // Add edges to distance matrix
+        // Example: dist[1][2] = 5; dist[2][3] = 3; etc.
+        
+        // Floyd-Warshall algorithm
+        for (int k = 1; k <= numVertices; k++) {
+            for (int i = 1; i <= numVertices; i++) {
+                for (int j = 1; j <= numVertices; j++) {
+                    if (dist[i][k] != INF && dist[k][j] != INF) {
+                        dist[i][j] = Math.min(dist[i][j], 
+                                            dist[i][k] + dist[k][j]);
+                    }
+                }
+            }
+        }
+        
+        return dist;
+    }
+    
+    public static void main(String[] args) {
+        int n = 5;
+        int[][] result = floydWarshall(n);
+        
+        System.out.println("Shortest distances between all pairs:");
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (result[i][j] == INF) {
+                    System.out.print("INF ");
+                } else {
+                    System.out.print(result[i][j] + " ");
+                }
+            }
+            System.out.println();
+        }
+    }
 }`,
     },
   },

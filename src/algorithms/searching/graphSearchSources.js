@@ -80,6 +80,45 @@ void bfs(const std::map<int, std::vector<int>>& graph, int startNode) {
     }
 }`,
     },
+    java: {
+      code: `import java.util.*;
+
+public class BFS {
+    static Map<Integer, List<Integer>> graph = new HashMap<>();
+    
+    static {
+        graph.put(1, Arrays.asList(2, 5, 6));
+        graph.put(2, Arrays.asList(1, 3, 7));
+        graph.put(3, Arrays.asList(2, 4, 6));
+        graph.put(4, Arrays.asList(3, 5, 6));
+        graph.put(5, Arrays.asList(1, 4, 6, 9));
+        graph.put(6, Arrays.asList(1, 3, 4, 5));
+        graph.put(7, Arrays.asList(2, 8, 9));
+        graph.put(8, Arrays.asList(7, 9));
+        graph.put(9, Arrays.asList(5, 7, 8));
+    }
+    
+    public static void bfs(int startNode) {
+        Set<Integer> visited = new HashSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+        
+        visited.add(startNode);
+        queue.add(startNode);
+        
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            System.out.print(node + " "); // Process current node
+            
+            for (int neighbor : graph.getOrDefault(node, new ArrayList<>())) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    queue.add(neighbor);
+                }
+            }
+        }
+    }
+}`,
+    },
   },
   dfs: {
     javascript: {
@@ -151,6 +190,42 @@ void dfs_recursive(const std::map<int, std::vector<int>>& graph, int node, std::
 void dfs(const std::map<int, std::vector<int>>& graph, int startNode) {
     std::set<int> visited;
     dfs_recursive(graph, startNode, visited);
+}`,
+    },
+    java: {
+      code: `import java.util.*;
+
+public class DFS {
+    static Map<Integer, List<Integer>> graph = new HashMap<>();
+    static Set<Integer> visited = new HashSet<>();
+    
+    static {
+        graph.put(1, Arrays.asList(2, 5, 6));
+        graph.put(2, Arrays.asList(1, 3, 7));
+        graph.put(3, Arrays.asList(2, 4, 6));
+        graph.put(4, Arrays.asList(3, 5, 6));
+        graph.put(5, Arrays.asList(1, 4, 6, 9));
+        graph.put(6, Arrays.asList(1, 3, 4, 5));
+        graph.put(7, Arrays.asList(2, 8, 9));
+        graph.put(8, Arrays.asList(7, 9));
+        graph.put(9, Arrays.asList(5, 7, 8));
+    }
+    
+    public static void dfs(int startNode) {
+        traverse(startNode);
+    }
+    
+    private static void traverse(int node) {
+        if (visited.contains(node)) {
+            return;
+        }
+        visited.add(node);
+        System.out.print(node + " "); // Process current node
+        
+        for (int neighbor : graph.getOrDefault(node, new ArrayList<>())) {
+            traverse(neighbor);
+        }
+    }
 }`,
     },
   },

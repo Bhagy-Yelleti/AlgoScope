@@ -1,25 +1,27 @@
+import { createStep } from '../../lib/utils'
+
 export const heapSortSources = {
   javascript: {
     code: `function heapSort(arr) {
-  let n = arr.length
+  let n = arr.length;
   for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
-    heapify(arr, n, i)
+    heapify(arr, n, i);
   }
   for (let i = n - 1; i > 0; i--) {
-    [arr[0], arr[i]] = [arr[i], arr[0]]
-    heapify(arr, i, 0)
+    [arr[0], arr[i]] = [arr[i], arr[0]];
+    heapify(arr, i, 0);
   }
 }
 
 function heapify(arr, n, i) {
-  let largest = i
-  let l = 2 * i + 1
-  let r = 2 * i + 2
-  if (l < n && arr[l] > arr[largest]) largest = l
-  if (r < n && arr[r] > arr[largest]) largest = r
+  let largest = i;
+  let l = 2 * i + 1;
+  let r = 2 * i + 2;
+  if (l < n && arr[l] > arr[largest]) largest = l;
+  if (r < n && arr[r] > arr[largest]) largest = r;
   if (largest !== i) {
-    [arr[i], arr[largest]] = [arr[largest], arr[i]]
-    heapify(arr, n, largest)
+    [arr[i], arr[largest]] = [arr[largest], arr[i]];
+    heapify(arr, n, largest);
   }
 }`,
     lineMap: {
@@ -132,35 +134,12 @@ void heapify(int arr[], int n, int i) {
   },
 }
 
-const createStep = ({
-  lineKey,
-  type,
-  array,
-  indices = [],
-  sortedIndices = [],
-  message = '',
-  variables = {},
-  duration,
-}) => ({
-  lineKey,
-  type,
-  array: [...array],
-  indices,
-  sortedIndices,
-  message,
-  variables,
-  duration,
-})
-
 export function getHeapSortSource(language = 'javascript') {
   return heapSortSources[language] ?? heapSortSources.javascript
 }
 
 export function resolveHeapSortLine(language, lineKey) {
-  if (!lineKey) {
-    return undefined
-  }
-
+  if (!lineKey) return undefined
   const source = getHeapSortSource(language)
   return source.lineMap[lineKey] ?? heapSortSources.javascript.lineMap[lineKey]
 }
@@ -183,7 +162,7 @@ export function generateHeapSortSteps(inputArray) {
         array: arr,
         indices: [i],
         sortedIndices: [...sortedIndices],
-        message: `Heapifying node at index ${i}.`,
+        message: `Heapifying node at index \${i}.`,
         variables: { n: currentN, i, largest },
         duration: 400,
       })
@@ -197,7 +176,7 @@ export function generateHeapSortSteps(inputArray) {
           array: arr,
           indices: [l, largest],
           sortedIndices: [...sortedIndices],
-          message: `Compare left child ${arr[l]} with parent ${arr[largest]}.`,
+          message: `Compare left child \${arr[l]} with parent \${arr[largest]}.`,
           variables: { n: currentN, i, largest, l },
           duration: 350,
         })
@@ -213,7 +192,7 @@ export function generateHeapSortSteps(inputArray) {
           array: arr,
           indices: [r, largest],
           sortedIndices: [...sortedIndices],
-          message: `Compare right child ${arr[r]} with largest so far ${arr[largest]}.`,
+          message: `Compare right child \${arr[r]} with largest so far \${arr[largest]}.`,
           variables: { n: currentN, i, largest, r },
           duration: 350,
         })
@@ -229,7 +208,7 @@ export function generateHeapSortSteps(inputArray) {
           array: arr,
           indices: [i, largest],
           sortedIndices: [...sortedIndices],
-          message: `Swap parent ${arr[i]} with largest child ${arr[largest]}.`,
+          message: `Swap parent \${arr[i]} with largest child \${arr[largest]}.`,
           variables: { n: currentN, i, largest },
           duration: 600,
         })
@@ -250,7 +229,6 @@ export function generateHeapSortSteps(inputArray) {
     })
   )
 
-  // Build Max Heap
   for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
     steps.push(
       createStep({
@@ -258,7 +236,7 @@ export function generateHeapSortSteps(inputArray) {
         type: 'outer-loop',
         array: arr,
         indices: [i],
-        message: `Building max heap: processing index ${i}.`,
+        message: `Building max heap: processing index \${i}.`,
         variables: { i, n },
         duration: 500,
       })
@@ -266,7 +244,6 @@ export function generateHeapSortSteps(inputArray) {
     performHeapify(n, i, 'buildHeap')
   }
 
-  // Extract elements from heap
   for (let i = n - 1; i > 0; i--) {
     steps.push(
       createStep({
@@ -275,7 +252,7 @@ export function generateHeapSortSteps(inputArray) {
         array: arr,
         indices: [0, i],
         sortedIndices: [...sortedIndices],
-        message: `Swap max element ${arr[0]} with last element ${arr[i]}.`,
+        message: `Swap max element \${arr[0]} with last element \${arr[i]}.`,
         variables: { i, n },
         duration: 700,
       })
@@ -290,7 +267,7 @@ export function generateHeapSortSteps(inputArray) {
         array: arr,
         indices: [0],
         sortedIndices: [...sortedIndices],
-        message: `Restoring heap property for remaining ${i} elements.`,
+        message: `Restoring heap property for remaining \${i} elements.`,
         variables: { i, n },
         duration: 500,
       })
