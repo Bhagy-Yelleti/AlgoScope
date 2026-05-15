@@ -69,7 +69,6 @@ export const Navbar = () => {
   const { pathname } = useLocation()
 
   const links = [
-    { name: 'Search', href: '/search' },
     { name: 'Shortest Path', href: '/spath' },
     { name: 'Sort', href: '/sort' },
     { name: 'Practice', href: '/practice' },
@@ -93,7 +92,7 @@ export const Navbar = () => {
           </Link>
 
           {/* Desktop Search */}
-          <div className="hidden lg:flex flex-1 justify-center max-w-sm mx-8">
+          <div className="hidden md:flex flex-1 justify-center max-w-xs mx-4">
             <SearchBar />
           </div>
 
