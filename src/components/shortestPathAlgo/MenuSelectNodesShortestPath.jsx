@@ -1,12 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-export const MenuSelectNodesShortestPath = ({ setSource, setTarget }) => {
-  const handleChangeSource = (e) => setSource(e.target.value)
-  const handleChangeTarget = (e) => setTarget(e.target.value)
+export const MenuSelectNodesShortestPath = ({
+  setSource,
+  setTarget,
+  onReset,
+}) => {
+  const [sourceValue, setSourceValue] = useState('')
+  const [targetValue, setTargetValue] = useState('')
+
+  const handleChangeSource = (e) => {
+    setSourceValue(e.target.value)
+    setSource(e.target.value)
+  }
+
+  const handleChangeTarget = (e) => {
+    setTargetValue(e.target.value)
+    setTarget(e.target.value)
+  }
 
   const handleReset = () => {
+    setSourceValue('')
+    setTargetValue('')
     setSource(null)
     setTarget(null)
+    if (onReset) onReset()
   }
 
   return (
@@ -18,6 +35,7 @@ export const MenuSelectNodesShortestPath = ({ setSource, setTarget }) => {
         <div className="w-full max-w-sm min-w-[200px]">
           <div className="relative">
             <select
+              value={sourceValue}
               onChange={handleChangeSource}
               className="w-full bg-slate-800 placeholder:text-slate-500 text-white text-sm border border-slate-700 rounded-xl pl-4 pr-10 py-3 transition duration-300 focus:outline-none focus:border-cyan-500 hover:border-slate-500 shadow-sm focus:shadow-md appearance-none cursor-pointer"
             >
@@ -48,6 +66,7 @@ export const MenuSelectNodesShortestPath = ({ setSource, setTarget }) => {
         <div className="w-full max-w-sm min-w-[200px]">
           <div className="relative">
             <select
+              value={targetValue}
               onChange={handleChangeTarget}
               className="w-full bg-slate-800 placeholder:text-slate-500 text-white text-sm border border-slate-700 rounded-xl pl-4 pr-10 py-3 transition duration-300 focus:outline-none focus:border-cyan-500 hover:border-slate-500 shadow-sm focus:shadow-md appearance-none cursor-pointer"
             >

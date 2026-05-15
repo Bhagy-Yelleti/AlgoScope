@@ -19,6 +19,11 @@ export const ShortestPathPage = () => {
     setSpeed(newValue)
   }
 
+  const handleResetNodes = () => {
+    setSource(null)
+    setTarget(null)
+  }
+
   const currentSource = useMemo(() => {
     if (!algorithm || !shortestPathSources[algorithm]) return null
     return shortestPathSources[algorithm][language]?.code ?? ''
@@ -49,6 +54,7 @@ export const ShortestPathPage = () => {
         <MenuSelectNodesShortestPath
           setSource={setSource}
           setTarget={setTarget}
+          onReset={handleResetNodes}
         />
         <div className="m-auto w-full">
           <SpeedSlider value={speed} onChange={handleSpeedChange} />
