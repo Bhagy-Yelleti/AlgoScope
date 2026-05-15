@@ -74,6 +74,9 @@ const Terminal = React.forwardRef(function Terminal({ logs, onClear }, ref) {
 const PracticePage = () => {
   const consoleRef = useRef(null)
   const [language, setLanguage] = useState('javascript')
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem('practiceEditorTheme') || 'vs-dark'
+  )
   const [code, setCode] = useState(
     '// Write your algorithm here...\nconsole.log("Hello from AlgoScope!");\n'
   )
@@ -105,10 +108,21 @@ const PracticePage = () => {
     },
   ]
 
+  const themes = [
+    { label: 'Dark', value: 'vs-dark' },
+    { label: 'Light', value: 'light' },
+    { label: 'High Contrast', value: 'hc-black' },
+  ]
+
   const handleLanguageChange = (e) => {
     const selectedLang = languages.find((lang) => lang.value === e.target.value)
     setLanguage(selectedLang.value)
     setCode(selectedLang.default)
+  }
+
+  const handleThemeChange = (e) => {
+    setTheme(e.target.value)
+    localStorage.setItem('practiceEditorTheme', e.target.value)
   }
 
   const handleCodeChange = (newCode) => {
@@ -235,6 +249,40 @@ const PracticePage = () => {
               </div>
             </div>
 
+            <div className="bg-slate-900/40 backdrop-blur-xl border border-white/10 p-6 rounded-[2rem] shadow-xl">
+              <label className="block text-xs font-bold uppercase tracking-widest text-cyan-400/80 mb-4">
+                Select Theme
+              </label>
+              <div className="relative">
+                <select
+                  value={theme}
+                  onChange={handleThemeChange}
+                  className="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50 transition-all appearance-none cursor-pointer"
+                >
+                  {themes.map((editorTheme) => (
+                    <option key={editorTheme.value} value={editorTheme.value}>
+                      {editorTheme.label}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
             <div className="bg-slate-900/40 backdrop-blur-xl border border-white/10 p-8 rounded-[2rem] shadow-xl">
               <h3 className="text-sm font-bold uppercase tracking-widest text-cyan-400/80 mb-6 flex items-center gap-2">
                 <svg
@@ -285,6 +333,7 @@ const PracticePage = () => {
           <div className="w-full min-w-0">
             <CodeEditor
               language={language}
+              theme={theme}
               defaultCode={code}
               onCodeChange={handleCodeChange}
               onRun={handleRunCode}

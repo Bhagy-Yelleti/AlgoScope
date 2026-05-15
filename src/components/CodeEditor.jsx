@@ -4,6 +4,7 @@ import Editor from '@monaco-editor/react'
 const CodeEditor = ({
   language = 'javascript',
   defaultCode = '// Write your algorithm here...\n',
+  theme = 'vs-dark',
   onCodeChange,
   onRun,
 }) => {
@@ -56,7 +57,7 @@ const CodeEditor = ({
         <Editor
           height="100%"
           language={language}
-          theme="vs-dark"
+          theme={theme}
           value={value}
           onChange={handleEditorChange}
           options={{
