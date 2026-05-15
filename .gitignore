@@ -26,3 +26,5 @@ GEMINI.md
 AGENTS.md
 .flowbite-react
 src/output.css
+
+.env
