@@ -1,12 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 export const MenuSetAlgoShortestPath = ({ setAlgorithm }) => {
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  useEffect(() => {
+    const algoFromUrl = searchParams.get('algo')
+    const validAlgos = ['dijkstra', 'bellmanford', 'floydwarshall']
+
+    if (algoFromUrl && validAlgos.includes(algoFromUrl)) {
+      setAlgorithm(algoFromUrl)
+    }
+  }, [searchParams, setAlgorithm])
+
   const handleChange = (e) => {
-    setAlgorithm(e.target.value)
+    const selected = e.target.value
+    setAlgorithm(selected)
+    if (selected) {
+      setSearchParams({ algo: selected })
+    } else {
+      setSearchParams({})
+    }
   }
 
   const handleReset = () => {
     setAlgorithm(null)
+    setSearchParams({})
   }
 
   return (
@@ -18,6 +37,7 @@ export const MenuSetAlgoShortestPath = ({ setAlgorithm }) => {
         <div className="w-full max-w-sm min-w-[200px]">
           <div className="relative">
             <select
+              value={searchParams.get('algo') || ''}
               onChange={handleChange}
               className="w-full bg-slate-800 placeholder:text-slate-500 text-white text-sm border border-slate-700 rounded-xl pl-4 pr-10 py-3 transition duration-300 focus:outline-none focus:border-cyan-500 hover:border-slate-500 shadow-sm focus:shadow-md appearance-none cursor-pointer"
             >

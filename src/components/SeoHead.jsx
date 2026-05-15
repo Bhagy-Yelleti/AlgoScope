@@ -75,27 +75,59 @@ function setLink(selector, rel, href) {
 }
 
 export default function SeoHead() {
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
 
   useEffect(() => {
-    const metadata = pageMetadata[pathname] ?? {
+    const searchParams = new URLSearchParams(search)
+    const algo = searchParams.get('algo')
+    const type = searchParams.get('type')
+
+    const baseMetadata = pageMetadata[pathname] ?? {
       title: 'Page Not Found | AlgoScope',
       description:
         'The requested AlgoScope page could not be found. Explore algorithm visualizations, code walkthroughs, and learning tools from the homepage.',
       noIndex: true,
     }
 
-    const canonicalUrl = `${SITE_URL}${pathname === '/' ? '/' : pathname}`
-    const robotsContent = metadata.noIndex
+    let { title, description } = baseMetadata
+
+    // Algorithm-specific logic
+    if (algo) {
+      const formattedAlgo = algo
+        .split('-')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+
+      if (pathname === '/sort') {
+        title = `${formattedAlgo} Sort Visualizer | AlgoScope`
+        description = `Interactive ${formattedAlgo} sort visualization. Watch how ${formattedAlgo} sort organizes data step-by-step with real-time animations and synchronized code.`
+      } else if (pathname === '/search') {
+        title = `${formattedAlgo} Graph Search | AlgoScope`
+        description = `Visualize ${formattedAlgo} graph search algorithm. Explore nodes and edges in real-time to understand how ${formattedAlgo} traverses complex graph structures.`
+      } else if (pathname === '/spath') {
+        title = `${formattedAlgo} Shortest Path | AlgoScope`
+        description = `Discover paths using ${formattedAlgo} shortest path algorithm. Interactive visualization showing how ${formattedAlgo} finds the most efficient route through a graph.`
+      } else if (pathname === '/ldssearch') {
+        title = `${formattedAlgo} Search Visualizer | AlgoScope`
+        description = `Watch ${formattedAlgo} search in action. A step-by-step interactive visualization of ${formattedAlgo} search on arrays with index tracking and performance metrics.`
+      }
+    } else if (type && pathname === '/adt') {
+      const formattedType = type.charAt(0).toUpperCase() + type.slice(1)
+      title = `${formattedType} Visualization | AlgoScope`
+      description = `Deep dive into the ${formattedType} data structure. Interactive visualization of ${formattedType} operations, storage patterns, and behavior.`
+    }
+
+    const canonicalUrl = `${SITE_URL}${pathname === '/' ? '/' : pathname}${search}`
+    const robotsContent = baseMetadata.noIndex
       ? 'noindex, nofollow'
       : 'index, follow'
 
-    document.title = metadata.title
+    document.title = title
     setLink('link[rel="canonical"]', 'canonical', canonicalUrl)
-    setMeta('meta[name="description"]', 'name', metadata.description)
+    setMeta('meta[name="description"]', 'name', description)
     setMeta('meta[name="robots"]', 'name', robotsContent)
-    setMeta('meta[property="og:title"]', 'property', metadata.title)
-    setMeta('meta[property="og:description"]', 'property', metadata.description)
+    setMeta('meta[property="og:title"]', 'property', title)
+    setMeta('meta[property="og:description"]', 'property', description)
     setMeta('meta[property="og:url"]', 'property', canonicalUrl)
     setMeta('meta[property="og:image"]', 'property', DEFAULT_IMAGE)
     setMeta(
@@ -103,16 +135,15 @@ export default function SeoHead() {
       'property',
       'AlgoScope interface preview showing algorithm visualizations'
     )
-    setMeta('meta[property="twitter:title"]', 'property', metadata.title)
+
+    // Twitter-specific tags (use 'name' attribute)
+    setMeta('meta[name="twitter:card"]', 'name', 'summary_large_image')
+    setMeta('meta[name="twitter:title"]', 'name', title)
+    setMeta('meta[name="twitter:description"]', 'name', description)
+    setMeta('meta[name="twitter:image"]', 'name', DEFAULT_IMAGE)
     setMeta(
-      'meta[property="twitter:description"]',
-      'property',
-      metadata.description
-    )
-    setMeta('meta[property="twitter:image"]', 'property', DEFAULT_IMAGE)
-    setMeta(
-      'meta[property="twitter:image:alt"]',
-      'property',
+      'meta[name="twitter:image:alt"]',
+      'name',
       'AlgoScope interface preview showing algorithm visualizations'
     )
 
@@ -138,7 +169,7 @@ export default function SeoHead() {
               operatingSystem: 'Web',
               url: canonicalUrl,
               image: DEFAULT_IMAGE,
-              description: metadata.description,
+              description: description,
             },
           ],
         },
@@ -146,7 +177,7 @@ export default function SeoHead() {
         2
       )
     }
-  }, [pathname])
+  }, [pathname, search])
 
   return null
 }

@@ -287,6 +287,18 @@ flowchart TD
 
 ---
 
+## Star History
+
+<a href="https://www.star-history.com/?repos=algoscope-hq%2FAlgoScope&type=timeline&legend=bottom-right">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=algoscope-hq/AlgoScope&type=timeline&theme=dark&legend=bottom-right" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=algoscope-hq/AlgoScope&type=timeline&legend=bottom-right" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=algoscope-hq/AlgoScope&type=timeline&legend=bottom-right" />
+ </picture>
+</a>
+
+---
+
 ## 🤝 Contributing
 
 We welcome contributions! Whether it's a bug fix, a new algorithm visualization, or a UI improvement, your help is appreciated.
@@ -305,7 +317,7 @@ We welcome contributions! Whether it's a bug fix, a new algorithm visualization,
 Thanks goes to these wonderful people who have contributed to AlgoScope:
 
 <a href="https://github.com/algoscope-hq/AlgoScope/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=algoscope-hq/AlgoScope&max=500&v=2" />
+  <img src="https://contrib.rocks/image?repo=algoscope-hq/AlgoScope&max=500&v=3" />
 </a>
 
 ---

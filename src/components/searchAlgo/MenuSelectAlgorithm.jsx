@@ -1,8 +1,23 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 export const MenuSelectAlgorithm = ({ algorithm, setAlgorithm }) => {
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  useEffect(() => {
+    const algoFromUrl = searchParams.get('algo')
+    const validAlgos = ['bfs', 'dfs']
+
+    if (algoFromUrl && validAlgos.includes(algoFromUrl)) {
+      setAlgorithm(algoFromUrl)
+    }
+  }, [searchParams, setAlgorithm])
+
   const handleSelect = (algo) => {
     setAlgorithm(algo)
+    if (algo) {
+      setSearchParams({ algo: algo })
+    }
   }
 
   const getButtonClass = (algo) => {

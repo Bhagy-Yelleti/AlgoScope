@@ -1,9 +1,9 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import SpeedSlider from '../SpeedSlider.jsx'
 import CodePanel from '../visualizer/CodePanel'
 import { useStepPlayback } from '../visualizer/useStepPlayback'
 
-// Step Generators and Source Resolvers
 import * as linear from '../../algorithms/searching/linearSearchSteps'
 import * as binary from '../../algorithms/searching/binarySearchSteps'
 
@@ -20,13 +20,26 @@ const createArray = (type) => {
 }
 
 export default function Visualizer({ algorithm }) {
-  // Use a key on this component in the parent to handle resets on algorithm change
+  const [searchParams, setSearchParams] = useSearchParams()
+
   const [baseArray, setBaseArray] = useState(() => createArray(algorithm))
-  const [target, setTarget] = useState(() =>
-    algorithm === 'binarySearch' ? 37 : 30
-  )
+  const [target, setTarget] = useState(() => {
+    const urlTarget = searchParams.get('target')
+    if (urlTarget) return urlTarget
+    return algorithm === 'binarySearch' ? 37 : 30
+  })
   const [speed, setSpeed] = useState(1)
-  const [language, setLanguage] = useState('javascript')
+  const [language, setLanguage] = useState(() => {
+    return searchParams.get('lang') || 'javascript'
+  })
+
+  useEffect(() => {
+    const params = {}
+    if (target) params.target = target
+    if (language) params.lang = language
+    if (algorithm) params.algo = algorithm
+    setSearchParams(params, { replace: true })
+  }, [target, language, algorithm, setSearchParams])
 
   const {
     currentStep,

@@ -1,27 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://algo-scope-virid.vercel.app/</loc>
-  </url>
-  <url>
-    <loc>https://algo-scope-virid.vercel.app/sort</loc>
-  </url>
-  <url>
-    <loc>https://algo-scope-virid.vercel.app/search</loc>
-  </url>
-  <url>
-    <loc>https://algo-scope-virid.vercel.app/spath</loc>
-  </url>
-  <url>
-    <loc>https://algo-scope-virid.vercel.app/ldssearch</loc>
-  </url>
-  <url>
-    <loc>https://algo-scope-virid.vercel.app/adt</loc>
-  </url>
-  <url>
-    <loc>https://algo-scope-virid.vercel.app/practice</loc>
-  </url>
-  <url>
-    <loc>https://algo-scope-virid.vercel.app/about</loc>
-  </url>
+  <!-- Main Pages -->
+  <url><loc>https://algo-scope-virid.vercel.app/</loc><priority>1.0</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/sort</loc><priority>0.8</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/search</loc><priority>0.8</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/spath</loc><priority>0.8</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/ldssearch</loc><priority>0.8</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/adt</loc><priority>0.8</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/practice</loc><priority>0.7</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/about</loc><priority>0.6</priority></url>
+
+  <!-- Sorting Algorithms -->
+  <url><loc>https://algo-scope-virid.vercel.app/sort?algo=bubble</loc><priority>0.7</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/sort?algo=selection</loc><priority>0.7</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/sort?algo=insertion</loc><priority>0.7</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/sort?algo=quick</loc><priority>0.7</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/sort?algo=merge</loc><priority>0.7</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/sort?algo=heap</loc><priority>0.7</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/sort?algo=counting</loc><priority>0.7</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/sort?algo=radix</loc><priority>0.7</priority></url>
+
+  <!-- Searching Algorithms -->
+  <url><loc>https://algo-scope-virid.vercel.app/ldssearch?algo=linear</loc><priority>0.7</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/ldssearch?algo=binary</loc><priority>0.7</priority></url>
+
+  <!-- Graph Search (BFS/DFS) -->
+  <url><loc>https://algo-scope-virid.vercel.app/search?algo=bfs</loc><priority>0.7</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/search?algo=dfs</loc><priority>0.7</priority></url>
+
+  <!-- Shortest Path Algorithms -->
+  <url><loc>https://algo-scope-virid.vercel.app/spath?algo=dijkstra</loc><priority>0.7</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/spath?algo=bfs</loc><priority>0.7</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/spath?algo=astar</loc><priority>0.7</priority></url>
+
+  <!-- Data Structures -->
+  <url><loc>https://algo-scope-virid.vercel.app/adt?type=stack</loc><priority>0.7</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/adt?type=queue</loc><priority>0.7</priority></url>
+  <url><loc>https://algo-scope-virid.vercel.app/adt?type=tree</loc><priority>0.7</priority></url>
 </urlset>

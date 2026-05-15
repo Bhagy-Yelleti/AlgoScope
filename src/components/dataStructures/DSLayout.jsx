@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import StackIV from './stackIV'
 import QueueIV from './queueIV'
@@ -12,11 +13,21 @@ const tabs = [
 ]
 
 export const DSLayout = () => {
-  const [activeTab, setActiveTab] = useState('stack')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const activeTab = searchParams.get('type') || 'stack'
+
+  const setActiveTab = (tabId) => {
+    setSearchParams({ type: tabId })
+  }
+
+  useEffect(() => {
+    if (!searchParams.get('type')) {
+      setSearchParams({ type: 'stack' }, { replace: true })
+    }
+  }, [searchParams, setSearchParams])
 
   return (
     <div className="w-full max-w-7xl mx-auto flex flex-col gap-6 text-slate-200">
-      {/* Internal Navigation Tabs */}
       <div className="flex flex-wrap gap-2 justify-center p-2 bg-slate-900/50 rounded-xl border border-white/5 backdrop-blur-sm">
         {tabs.map((tab) => (
           <button
@@ -41,7 +52,6 @@ export const DSLayout = () => {
         ))}
       </div>
 
-      {/* Main Visualization Canvas */}
       <div className="relative min-h-[600px] w-full bg-slate-950/80 rounded-2xl border border-slate-800 p-6 overflow-hidden shadow-2xl">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:40px_40px] opacity-10 pointer-events-none"></div>
 
