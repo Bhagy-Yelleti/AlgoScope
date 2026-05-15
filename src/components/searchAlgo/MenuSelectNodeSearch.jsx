@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 export const MenuSelectNodeSearch = ({ setNode }) => {
+  const [nodeValue, setNodeValue] = useState('')
+
   const handleChange = (e) => {
+    setNodeValue(e.target.value)
     setNode(e.target.value)
   }
 
   const handleReset = () => {
+    setNodeValue('')
     setNode(null)
   }
 
@@ -18,6 +22,7 @@ export const MenuSelectNodeSearch = ({ setNode }) => {
         <div className="w-full ma-w-sm min-w-[200px]">
           <div className="relative">
             <select
+              value={nodeValue}
               onChange={handleChange}
               className="w-full bg-slate-800 placeholder:text-slate-500 text-white text-sm border border-slate-700 rounded-xl pl-4 pr-10 py-3 transition duration-300 focus:outline-none focus:border-cyan-500 hover:border-slate-500 shadow-sm focus:shadow-md appearance-none cursor-pointer"
             >
