@@ -1,4 +1,4 @@
-import { createStep } from '../../lib/utils';
+import { createStep } from '../../lib/utils'
 
 export const selectionSortSources = {
   javascript: {
@@ -106,23 +106,25 @@ export const selectionSortSources = {
       complete: 14,
     },
   },
-};
+}
 
 export function getSelectionSortSource(language = 'javascript') {
-  return selectionSortSources[language] ?? selectionSortSources.javascript;
+  return selectionSortSources[language] ?? selectionSortSources.javascript
 }
 
 export function resolveSelectionSortLine(language, lineKey) {
-  if (!lineKey) return undefined;
-  const source = getSelectionSortSource(language);
-  return source.lineMap[lineKey] ?? selectionSortSources.javascript.lineMap[lineKey];
+  if (!lineKey) return undefined
+  const source = getSelectionSortSource(language)
+  return (
+    source.lineMap[lineKey] ?? selectionSortSources.javascript.lineMap[lineKey]
+  )
 }
 
 export function generateSelectionSortSteps(inputArray) {
-  const arr = [...inputArray];
-  const steps = [];
-  const n = arr.length;
-  const sortedIndices = [];
+  const arr = [...inputArray]
+  const steps = []
+  const n = arr.length
+  const sortedIndices = []
 
   steps.push(
     createStep({
@@ -134,7 +136,7 @@ export function generateSelectionSortSteps(inputArray) {
       variables: { n },
       duration: 700,
     })
-  );
+  )
 
   for (let i = 0; i < n; i++) {
     steps.push(
@@ -148,9 +150,9 @@ export function generateSelectionSortSteps(inputArray) {
         variables: { i, n },
         duration: 600,
       })
-    );
+    )
 
-    let minIdx = i;
+    let minIdx = i
     steps.push(
       createStep({
         lineKey: 'initMin',
@@ -162,7 +164,7 @@ export function generateSelectionSortSteps(inputArray) {
         variables: { i, minIdx, n },
         duration: 500,
       })
-    );
+    )
 
     for (let j = i + 1; j < n; j++) {
       steps.push(
@@ -176,7 +178,7 @@ export function generateSelectionSortSteps(inputArray) {
           variables: { i, j, minIdx, n },
           duration: 400,
         })
-      );
+      )
 
       steps.push(
         createStep({
@@ -189,10 +191,10 @@ export function generateSelectionSortSteps(inputArray) {
           variables: { i, j, minIdx, n },
           duration: 600,
         })
-      );
+      )
 
       if (arr[j] < arr[minIdx]) {
-        minIdx = j;
+        minIdx = j
         steps.push(
           createStep({
             lineKey: 'updateMin',
@@ -204,7 +206,7 @@ export function generateSelectionSortSteps(inputArray) {
             variables: { i, j, minIdx, n },
             duration: 700,
           })
-        );
+        )
       }
     }
 
@@ -220,11 +222,11 @@ export function generateSelectionSortSteps(inputArray) {
           variables: { i, minIdx, n },
           duration: 850,
         })
-      );
-      [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
+      )
+      ;[arr[i], arr[minIdx]] = [arr[minIdx], arr[i]]
     }
 
-    sortedIndices.push(i);
+    sortedIndices.push(i)
     steps.push(
       createStep({
         lineKey: 'outerLoop',
@@ -235,7 +237,7 @@ export function generateSelectionSortSteps(inputArray) {
         variables: { i, n },
         duration: 550,
       })
-    );
+    )
   }
 
   steps.push(
@@ -248,7 +250,7 @@ export function generateSelectionSortSteps(inputArray) {
       variables: { n },
       duration: 900,
     })
-  );
+  )
 
-  return steps;
+  return steps
 }

@@ -1,4 +1,4 @@
-import { createStep } from '../../lib/utils';
+import { createStep } from '../../lib/utils'
 
 export const radixSortSources = {
   javascript: {
@@ -146,23 +146,23 @@ void countingSortForRadix(vector<int>& arr, int exp) {
       complete: 22,
     },
   },
-};
+}
 
 export function getRadixSortSource(language = 'javascript') {
-  return radixSortSources[language] ?? radixSortSources.javascript;
+  return radixSortSources[language] ?? radixSortSources.javascript
 }
 
 export function resolveRadixSortLine(language, lineKey) {
-  if (!lineKey) return undefined;
-  const source = getRadixSortSource(language);
-  return source.lineMap[lineKey] ?? radixSortSources.javascript.lineMap[lineKey];
+  if (!lineKey) return undefined
+  const source = getRadixSortSource(language)
+  return source.lineMap[lineKey] ?? radixSortSources.javascript.lineMap[lineKey]
 }
 
 export function generateRadixSortSteps(inputArray) {
-  const arr = [...inputArray];
-  const steps = [];
-  const n = arr.length;
-  const max = Math.max(...arr);
+  const arr = [...inputArray]
+  const steps = []
+  const n = arr.length
+  const max = Math.max(...arr)
 
   steps.push(
     createStep({
@@ -173,7 +173,7 @@ export function generateRadixSortSteps(inputArray) {
       variables: { n, max },
       duration: 700,
     })
-  );
+  )
 
   for (let exp = 1; Math.floor(max / exp) > 0; exp *= 10) {
     steps.push(
@@ -185,7 +185,7 @@ export function generateRadixSortSteps(inputArray) {
         variables: { exp, max },
         duration: 600,
       })
-    );
+    )
 
     steps.push(
       createStep({
@@ -196,15 +196,15 @@ export function generateRadixSortSteps(inputArray) {
         variables: { exp },
         duration: 500,
       })
-    );
+    )
 
-    const output = new Array(n);
-    const count = new Array(10).fill(0);
+    const output = new Array(n)
+    const count = new Array(10).fill(0)
 
     // Count Digits
     for (let i = 0; i < n; i++) {
-      const digit = Math.floor(arr[i] / exp) % 10;
-      count[digit]++;
+      const digit = Math.floor(arr[i] / exp) % 10
+      count[digit]++
       steps.push(
         createStep({
           lineKey: 'countDigits',
@@ -215,12 +215,12 @@ export function generateRadixSortSteps(inputArray) {
           variables: { i, val: arr[i], digit, exp, countAtDigit: count[digit] },
           duration: 350,
         })
-      );
+      )
     }
 
     // Prefix Sum
     for (let i = 1; i < 10; i++) {
-      count[i] += count[i - 1];
+      count[i] += count[i - 1]
       steps.push(
         createStep({
           lineKey: 'prefixSum',
@@ -230,15 +230,15 @@ export function generateRadixSortSteps(inputArray) {
           variables: { i, prefixSum: count[i] },
           duration: 250,
         })
-      );
+      )
     }
 
     // Place Elements
     for (let i = n - 1; i >= 0; i--) {
-      const digit = Math.floor(arr[i] / exp) % 10;
-      const pos = count[digit] - 1;
-      output[pos] = arr[i];
-      count[digit]--;
+      const digit = Math.floor(arr[i] / exp) % 10
+      const pos = count[digit] - 1
+      output[pos] = arr[i]
+      count[digit]--
 
       steps.push(
         createStep({
@@ -250,12 +250,12 @@ export function generateRadixSortSteps(inputArray) {
           variables: { i, val: arr[i], digit, pos, newCount: count[digit] },
           duration: 500,
         })
-      );
+      )
     }
 
     // Copy Back
     for (let i = 0; i < n; i++) {
-      arr[i] = output[i];
+      arr[i] = output[i]
       steps.push(
         createStep({
           lineKey: 'copyBack',
@@ -266,7 +266,7 @@ export function generateRadixSortSteps(inputArray) {
           variables: { i, val: arr[i], exp },
           duration: 350,
         })
-      );
+      )
     }
   }
 
@@ -280,7 +280,7 @@ export function generateRadixSortSteps(inputArray) {
       variables: { n },
       duration: 900,
     })
-  );
+  )
 
-  return steps;
+  return steps
 }

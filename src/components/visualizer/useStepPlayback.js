@@ -1,118 +1,118 @@
-import { startTransition, useEffect, useRef, useState } from 'react';
-import { calculateStepDelay } from '../../lib/utils';
+import { startTransition, useEffect, useRef, useState } from 'react'
+import { calculateStepDelay } from '../../lib/utils'
 
 export function useStepPlayback({ speed = 1 }) {
-  const [steps, setSteps] = useState([]);
-  const [currentStepIndex, setCurrentStepIndex] = useState(-1);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const timeoutRef = useRef(null);
+  const [steps, setSteps] = useState([])
+  const [currentStepIndex, setCurrentStepIndex] = useState(-1)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const timeoutRef = useRef(null)
 
   const currentStep =
     currentStepIndex >= 0 && currentStepIndex < steps.length
       ? steps[currentStepIndex]
-      : null;
+      : null
 
-  const hasSteps = steps.length > 0;
-  const isComplete = hasSteps && currentStepIndex === steps.length - 1;
+  const hasSteps = steps.length > 0
+  const isComplete = hasSteps && currentStepIndex === steps.length - 1
 
   useEffect(() => {
     if (!isPlaying || !hasSteps || currentStepIndex < 0) {
-      return undefined;
+      return undefined
     }
 
     if (currentStepIndex >= steps.length - 1) {
-      return undefined;
+      return undefined
     }
 
     // Now using the centralized utility function for calculation
-    const delay = calculateStepDelay(currentStep?.duration, speed);
+    const delay = calculateStepDelay(currentStep?.duration, speed)
 
     timeoutRef.current = window.setTimeout(() => {
       startTransition(() => {
         setCurrentStepIndex((index) => {
           const nextIndex =
-            index < steps.length - 1 ? index + 1 : steps.length - 1;
+            index < steps.length - 1 ? index + 1 : steps.length - 1
 
           if (nextIndex >= steps.length - 1) {
-            setIsPlaying(false);
+            setIsPlaying(false)
           }
 
-          return nextIndex;
-        });
-      });
-    }, delay);
+          return nextIndex
+        })
+      })
+    }, delay)
 
     return () => {
-      window.clearTimeout(timeoutRef.current);
-    };
-  }, [currentStep, currentStepIndex, hasSteps, isPlaying, speed, steps.length]);
+      window.clearTimeout(timeoutRef.current)
+    }
+  }, [currentStep, currentStepIndex, hasSteps, isPlaying, speed, steps.length])
 
   useEffect(
     () => () => {
-      window.clearTimeout(timeoutRef.current);
+      window.clearTimeout(timeoutRef.current)
     },
     []
-  );
+  )
 
   const loadSteps = (nextSteps, options = {}) => {
-    const { autoPlay = true } = options;
+    const { autoPlay = true } = options
 
-    window.clearTimeout(timeoutRef.current);
-    setSteps(nextSteps);
-    setCurrentStepIndex(nextSteps.length > 0 ? 0 : -1);
-    setIsPlaying(autoPlay && nextSteps.length > 1);
-  };
+    window.clearTimeout(timeoutRef.current)
+    setSteps(nextSteps)
+    setCurrentStepIndex(nextSteps.length > 0 ? 0 : -1)
+    setIsPlaying(autoPlay && nextSteps.length > 1)
+  }
 
   const clear = () => {
-    window.clearTimeout(timeoutRef.current);
-    setIsPlaying(false);
-    setSteps([]);
-    setCurrentStepIndex(-1);
-  };
+    window.clearTimeout(timeoutRef.current)
+    setIsPlaying(false)
+    setSteps([])
+    setCurrentStepIndex(-1)
+  }
 
   const pause = () => {
-    setIsPlaying(false);
-  };
+    setIsPlaying(false)
+  }
 
   const play = () => {
     if (!hasSteps || currentStepIndex >= steps.length - 1) {
-      return;
+      return
     }
 
-    setIsPlaying(true);
-  };
+    setIsPlaying(true)
+  }
 
   const reset = () => {
-    window.clearTimeout(timeoutRef.current);
-    setIsPlaying(false);
-    setCurrentStepIndex(hasSteps ? 0 : -1);
-  };
+    window.clearTimeout(timeoutRef.current)
+    setIsPlaying(false)
+    setCurrentStepIndex(hasSteps ? 0 : -1)
+  }
 
   const replay = () => {
     if (!hasSteps) {
-      return;
+      return
     }
 
-    window.clearTimeout(timeoutRef.current);
-    setCurrentStepIndex(0);
-    setIsPlaying(steps.length > 1);
-  };
+    window.clearTimeout(timeoutRef.current)
+    setCurrentStepIndex(0)
+    setIsPlaying(steps.length > 1)
+  }
 
   const stepForward = () => {
     if (!hasSteps) {
-      return;
+      return
     }
 
-    window.clearTimeout(timeoutRef.current);
-    setIsPlaying(false);
+    window.clearTimeout(timeoutRef.current)
+    setIsPlaying(false)
     setCurrentStepIndex((index) => {
       if (index < 0) {
-        return 0;
+        return 0
       }
 
-      return Math.min(index + 1, steps.length - 1);
-    });
-  };
+      return Math.min(index + 1, steps.length - 1)
+    })
+  }
 
   return {
     steps,
@@ -128,5 +128,5 @@ export function useStepPlayback({ speed = 1 }) {
     reset,
     replay,
     stepForward,
-  };
+  }
 }

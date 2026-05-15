@@ -31,7 +31,7 @@ export const createStep = ({
   message,
   variables,
   duration,
-});
+})
 
 /**
  * Calculates the playback delay for a step based on the current speed multiplier.
@@ -42,14 +42,15 @@ export const createStep = ({
  * @param {number} [minDelay=120] - The absolute minimum delay allowed in milliseconds.
  * @returns {number} The calculated delay in milliseconds.
  */
-export const calculateStepDelay = (stepDuration = 700, speed = 1, minDelay = 120) => {
-  const adjustedSpeed = Math.max(speed, 0.1);
-  const base = stepDuration ?? 700;
-  return Math.max(
-    minDelay,
-    Math.round(base / adjustedSpeed)
-  );
-};
+export const calculateStepDelay = (
+  stepDuration = 700,
+  speed = 1,
+  minDelay = 120
+) => {
+  const adjustedSpeed = Math.max(speed, 0.1)
+  const base = stepDuration ?? 700
+  return Math.max(minDelay, Math.round(base / adjustedSpeed))
+}
 
 /**
  * Generates an array of random integers within a specified numerical range.
@@ -64,8 +65,8 @@ export const generateRandomArray = (length, min, max) => {
   return Array.from(
     { length },
     () => Math.floor(Math.random() * (max - min + 1)) + min
-  );
-};
+  )
+}
 
 /**
  * Swaps two elements within an array.
@@ -76,7 +77,7 @@ export const generateRandomArray = (length, min, max) => {
  * @param {number} j - The index of the second element.
  */
 export const swap = (arr, i, j) => {
-  const temp = arr[i];
-  arr[i] = arr[j];
-  arr[j] = temp;
-};
+  const temp = arr[i]
+  arr[i] = arr[j]
+  arr[j] = temp
+}

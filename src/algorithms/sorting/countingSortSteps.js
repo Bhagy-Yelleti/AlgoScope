@@ -1,4 +1,4 @@
-import { createStep } from '../../lib/utils';
+import { createStep } from '../../lib/utils'
 
 export const countingSortSources = {
   javascript: {
@@ -116,28 +116,28 @@ export const countingSortSources = {
       complete: 19,
     },
   },
-};
+}
 
 export function getCountingSortSource(language = 'javascript') {
-  return countingSortSources[language] ?? countingSortSources.javascript;
+  return countingSortSources[language] ?? countingSortSources.javascript
 }
 
 export function resolveCountingSortLine(language, lineKey) {
   if (!lineKey) {
-    return undefined;
+    return undefined
   }
-  const source = getCountingSortSource(language);
+  const source = getCountingSortSource(language)
   return (
     source.lineMap[lineKey] ?? countingSortSources.javascript.lineMap[lineKey]
-  );
+  )
 }
 
 export function generateCountingSortSteps(inputArray) {
-  const arr = [...inputArray];
-  const steps = [];
-  const n = arr.length;
-  const max = Math.max(...arr);
-  const count = new Array(max + 1).fill(0);
+  const arr = [...inputArray]
+  const steps = []
+  const n = arr.length
+  const max = Math.max(...arr)
+  const count = new Array(max + 1).fill(0)
 
   steps.push(
     createStep({
@@ -148,7 +148,7 @@ export function generateCountingSortSteps(inputArray) {
       variables: { n, max },
       duration: 700,
     })
-  );
+  )
 
   steps.push(
     createStep({
@@ -159,10 +159,10 @@ export function generateCountingSortSteps(inputArray) {
       variables: { n, max },
       duration: 500,
     })
-  );
+  )
 
   for (let i = 0; i < n; i++) {
-    count[arr[i]]++;
+    count[arr[i]]++
     steps.push(
       createStep({
         lineKey: 'countOccurrences',
@@ -173,11 +173,11 @@ export function generateCountingSortSteps(inputArray) {
         variables: { i, val: arr[i], countAtVal: count[arr[i]] },
         duration: 400,
       })
-    );
+    )
   }
 
   for (let i = 1; i <= max; i++) {
-    count[i] += count[i - 1];
+    count[i] += count[i - 1]
     steps.push(
       createStep({
         lineKey: 'prefixSum',
@@ -187,15 +187,15 @@ export function generateCountingSortSteps(inputArray) {
         variables: { i, prefixSum: count[i] },
         duration: 300,
       })
-    );
+    )
   }
 
-  const output = new Array(n);
+  const output = new Array(n)
   for (let i = n - 1; i >= 0; i--) {
-    const val = arr[i];
-    const pos = count[val] - 1;
-    output[pos] = val;
-    count[val]--;
+    const val = arr[i]
+    const pos = count[val] - 1
+    output[pos] = val
+    count[val]--
 
     steps.push(
       createStep({
@@ -207,11 +207,11 @@ export function generateCountingSortSteps(inputArray) {
         variables: { i, val, pos, newCount: count[val] },
         duration: 600,
       })
-    );
+    )
   }
 
   for (let i = 0; i < n; i++) {
-    arr[i] = output[i];
+    arr[i] = output[i]
     steps.push(
       createStep({
         lineKey: 'copyBack',
@@ -222,7 +222,7 @@ export function generateCountingSortSteps(inputArray) {
         variables: { i, val: arr[i] },
         duration: 400,
       })
-    );
+    )
   }
 
   steps.push(
@@ -235,7 +235,7 @@ export function generateCountingSortSteps(inputArray) {
       variables: { n },
       duration: 900,
     })
-  );
+  )
 
-  return steps;
+  return steps
 }

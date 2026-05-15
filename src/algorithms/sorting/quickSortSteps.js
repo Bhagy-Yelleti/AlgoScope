@@ -1,4 +1,4 @@
-import { createStep } from '../../lib/utils';
+import { createStep } from '../../lib/utils'
 
 export const quickSortSources = {
   javascript: {
@@ -132,23 +132,23 @@ int partition(int arr[], int low, int high) {
       complete: 19,
     },
   },
-};
+}
 
 export function getQuickSortSource(language = 'javascript') {
-  return quickSortSources[language] ?? quickSortSources.javascript;
+  return quickSortSources[language] ?? quickSortSources.javascript
 }
 
 export function resolveQuickSortLine(language, lineKey) {
-  if (!lineKey) return undefined;
-  const source = getQuickSortSource(language);
-  return source.lineMap[lineKey] ?? quickSortSources.javascript.lineMap[lineKey];
+  if (!lineKey) return undefined
+  const source = getQuickSortSource(language)
+  return source.lineMap[lineKey] ?? quickSortSources.javascript.lineMap[lineKey]
 }
 
 export function generateQuickSortSteps(inputArray) {
-  const arr = [...inputArray];
-  const steps = [];
-  const n = arr.length;
-  const sortedIndices = [];
+  const arr = [...inputArray]
+  const steps = []
+  const n = arr.length
+  const sortedIndices = []
 
   const performQuickSort = (low, high) => {
     steps.push(
@@ -162,20 +162,20 @@ export function generateQuickSortSteps(inputArray) {
         variables: { low, high },
         duration: 500,
       })
-    );
+    )
 
     if (low < high) {
-      const pi = performPartition(low, high);
-      sortedIndices.push(pi);
-      performQuickSort(low, pi - 1);
-      performQuickSort(pi + 1, high);
+      const pi = performPartition(low, high)
+      sortedIndices.push(pi)
+      performQuickSort(low, pi - 1)
+      performQuickSort(pi + 1, high)
     } else if (low === high) {
-      if (!sortedIndices.includes(low)) sortedIndices.push(low);
+      if (!sortedIndices.includes(low)) sortedIndices.push(low)
     }
-  };
+  }
 
   const performPartition = (low, high) => {
-    let pivot = arr[high];
+    let pivot = arr[high]
     steps.push(
       createStep({
         lineKey: 'pivotSelect',
@@ -187,9 +187,9 @@ export function generateQuickSortSteps(inputArray) {
         variables: { low, high, pivot },
         duration: 600,
       })
-    );
+    )
 
-    let i = low - 1;
+    let i = low - 1
     for (let j = low; j < high; j++) {
       steps.push(
         createStep({
@@ -202,12 +202,12 @@ export function generateQuickSortSteps(inputArray) {
           variables: { low, high, pivot, i, j },
           duration: 400,
         })
-      );
+      )
 
       if (arr[j] < pivot) {
-        i++;
+        i++
         if (i !== j) {
-          [arr[i], arr[j]] = [arr[j], arr[i]];
+          ;[arr[i], arr[j]] = [arr[j], arr[i]]
           steps.push(
             createStep({
               lineKey: 'swap',
@@ -219,12 +219,12 @@ export function generateQuickSortSteps(inputArray) {
               variables: { low, high, pivot, i, j },
               duration: 600,
             })
-          );
+          )
         }
       }
     }
 
-    [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+    ;[arr[i + 1], arr[high]] = [arr[high], arr[i + 1]]
     steps.push(
       createStep({
         lineKey: 'finalSwap',
@@ -236,10 +236,10 @@ export function generateQuickSortSteps(inputArray) {
         variables: { low, high, pivot, pi: i + 1 },
         duration: 700,
       })
-    );
+    )
 
-    return i + 1;
-  };
+    return i + 1
+  }
 
   steps.push(
     createStep({
@@ -251,9 +251,9 @@ export function generateQuickSortSteps(inputArray) {
       variables: { n },
       duration: 700,
     })
-  );
+  )
 
-  performQuickSort(0, n - 1);
+  performQuickSort(0, n - 1)
 
   steps.push(
     createStep({
@@ -265,7 +265,7 @@ export function generateQuickSortSteps(inputArray) {
       variables: { n },
       duration: 900,
     })
-  );
+  )
 
-  return steps;
+  return steps
 }

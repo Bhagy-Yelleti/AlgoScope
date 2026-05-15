@@ -1,4 +1,4 @@
-import { createStep } from '../../lib/utils';
+import { createStep } from '../../lib/utils'
 
 export const mergeSortSources = {
   javascript: {
@@ -156,22 +156,22 @@ void merge(int arr[], int l, int m, int r) {
       complete: 27,
     },
   },
-};
+}
 
 export function getMergeSortSource(language = 'javascript') {
-  return mergeSortSources[language] ?? mergeSortSources.javascript;
+  return mergeSortSources[language] ?? mergeSortSources.javascript
 }
 
 export function resolveMergeSortLine(language, lineKey) {
-  if (!lineKey) return undefined;
-  const source = getMergeSortSource(language);
-  return source.lineMap[lineKey] ?? mergeSortSources.javascript.lineMap[lineKey];
+  if (!lineKey) return undefined
+  const source = getMergeSortSource(language)
+  return source.lineMap[lineKey] ?? mergeSortSources.javascript.lineMap[lineKey]
 }
 
 export function generateMergeSortSteps(inputArray) {
-  const arr = [...inputArray];
-  const steps = [];
-  const n = arr.length;
+  const arr = [...inputArray]
+  const steps = []
+  const n = arr.length
 
   const performMergeSort = (l, r) => {
     steps.push(
@@ -184,15 +184,15 @@ export function generateMergeSortSteps(inputArray) {
         variables: { l, r },
         duration: 500,
       })
-    );
+    )
 
     if (l < r) {
-      const m = Math.floor((l + r) / 2);
-      performMergeSort(l, m);
-      performMergeSort(m + 1, r);
-      performMerge(l, m, r);
+      const m = Math.floor((l + r) / 2)
+      performMergeSort(l, m)
+      performMergeSort(m + 1, r)
+      performMerge(l, m, r)
     }
-  };
+  }
 
   const performMerge = (l, m, r) => {
     steps.push(
@@ -205,10 +205,10 @@ export function generateMergeSortSteps(inputArray) {
         variables: { l, m, r },
         duration: 600,
       })
-    );
+    )
 
-    const L = arr.slice(l, m + 1);
-    const R = arr.slice(m + 1, r + 1);
+    const L = arr.slice(l, m + 1)
+    const R = arr.slice(m + 1, r + 1)
 
     steps.push(
       createStep({
@@ -220,9 +220,11 @@ export function generateMergeSortSteps(inputArray) {
         variables: { l, m, r, L, R },
         duration: 500,
       })
-    );
+    )
 
-    let i = 0, j = 0, k = l;
+    let i = 0,
+      j = 0,
+      k = l
 
     while (i < L.length && j < R.length) {
       steps.push(
@@ -235,14 +237,14 @@ export function generateMergeSortSteps(inputArray) {
           variables: { l, m, r, i, j, k, leftVal: L[i], rightVal: R[j] },
           duration: 400,
         })
-      );
+      )
 
       if (L[i] <= R[j]) {
-        arr[k] = L[i];
-        i++;
+        arr[k] = L[i]
+        i++
       } else {
-        arr[k] = R[j];
-        j++;
+        arr[k] = R[j]
+        j++
       }
 
       steps.push(
@@ -255,12 +257,12 @@ export function generateMergeSortSteps(inputArray) {
           variables: { l, m, r, i, j, k },
           duration: 500,
         })
-      );
-      k++;
+      )
+      k++
     }
 
     while (i < L.length) {
-      arr[k] = L[i];
+      arr[k] = L[i]
       steps.push(
         createStep({
           lineKey: 'overwrite',
@@ -271,13 +273,13 @@ export function generateMergeSortSteps(inputArray) {
           variables: { l, m, r, i, j, k },
           duration: 400,
         })
-      );
-      i++;
-      k++;
+      )
+      i++
+      k++
     }
 
     while (j < R.length) {
-      arr[k] = R[j];
+      arr[k] = R[j]
       steps.push(
         createStep({
           lineKey: 'overwrite',
@@ -288,11 +290,11 @@ export function generateMergeSortSteps(inputArray) {
           variables: { l, m, r, i, j, k },
           duration: 400,
         })
-      );
-      j++;
-      k++;
+      )
+      j++
+      k++
     }
-  };
+  }
 
   steps.push(
     createStep({
@@ -303,9 +305,9 @@ export function generateMergeSortSteps(inputArray) {
       variables: { n },
       duration: 700,
     })
-  );
+  )
 
-  performMergeSort(0, n - 1);
+  performMergeSort(0, n - 1)
 
   steps.push(
     createStep({
@@ -317,7 +319,7 @@ export function generateMergeSortSteps(inputArray) {
       variables: { n },
       duration: 900,
     })
-  );
+  )
 
-  return steps;
+  return steps
 }

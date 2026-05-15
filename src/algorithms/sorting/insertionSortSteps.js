@@ -1,4 +1,4 @@
-import { createStep } from '../../lib/utils';
+import { createStep } from '../../lib/utils'
 
 export const insertionSortSources = {
   javascript: {
@@ -94,25 +94,25 @@ export const insertionSortSources = {
       complete: 13,
     },
   },
-};
+}
 
 export function getInsertionSortSource(language = 'javascript') {
-  return insertionSortSources[language] ?? insertionSortSources.javascript;
+  return insertionSortSources[language] ?? insertionSortSources.javascript
 }
 
 export function resolveInsertionSortLine(language, lineKey) {
-  if (!lineKey) return undefined;
-  const source = getInsertionSortSource(language);
+  if (!lineKey) return undefined
+  const source = getInsertionSortSource(language)
   return (
     source.lineMap[lineKey] ?? insertionSortSources.javascript.lineMap[lineKey]
-  );
+  )
 }
 
 export function generateInsertionSortSteps(inputArray) {
-  const arr = [...inputArray];
-  const steps = [];
-  const n = arr.length;
-  const sortedIndices = [0];
+  const arr = [...inputArray]
+  const steps = []
+  const n = arr.length
+  const sortedIndices = [0]
 
   steps.push(
     createStep({
@@ -124,11 +124,11 @@ export function generateInsertionSortSteps(inputArray) {
       variables: { n },
       duration: 700,
     })
-  );
+  )
 
   for (let i = 1; i < n; i++) {
-    let key = arr[i];
-    let j = i - 1;
+    let key = arr[i]
+    let j = i - 1
 
     steps.push(
       createStep({
@@ -141,7 +141,7 @@ export function generateInsertionSortSteps(inputArray) {
         variables: { i, key, n },
         duration: 600,
       })
-    );
+    )
 
     steps.push(
       createStep({
@@ -154,7 +154,7 @@ export function generateInsertionSortSteps(inputArray) {
         variables: { i, key, j, n },
         duration: 500,
       })
-    );
+    )
 
     while (j >= 0 && arr[j] > key) {
       steps.push(
@@ -168,9 +168,9 @@ export function generateInsertionSortSteps(inputArray) {
           variables: { i, key, j, n },
           duration: 450,
         })
-      );
+      )
 
-      arr[j + 1] = arr[j];
+      arr[j + 1] = arr[j]
       steps.push(
         createStep({
           lineKey: 'shift',
@@ -182,8 +182,8 @@ export function generateInsertionSortSteps(inputArray) {
           variables: { i, key, j, n },
           duration: 600,
         })
-      );
-      j--;
+      )
+      j--
     }
 
     if (j >= 0) {
@@ -198,11 +198,11 @@ export function generateInsertionSortSteps(inputArray) {
           variables: { i, key, j, n },
           duration: 450,
         })
-      );
+      )
     }
 
-    arr[j + 1] = key;
-    sortedIndices.push(i);
+    arr[j + 1] = key
+    sortedIndices.push(i)
     steps.push(
       createStep({
         lineKey: 'insert',
@@ -214,7 +214,7 @@ export function generateInsertionSortSteps(inputArray) {
         variables: { i, key, j: j + 1, n },
         duration: 800,
       })
-    );
+    )
   }
 
   steps.push(
@@ -227,7 +227,7 @@ export function generateInsertionSortSteps(inputArray) {
       variables: { n },
       duration: 900,
     })
-  );
+  )
 
-  return steps;
+  return steps
 }

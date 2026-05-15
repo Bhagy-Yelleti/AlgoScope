@@ -1,4 +1,4 @@
-import { createStep } from '../../lib/utils';
+import { createStep } from '../../lib/utils'
 
 export const heapSortSources = {
   javascript: {
@@ -132,28 +132,28 @@ void heapify(int arr[], int n, int i) {
       complete: 20,
     },
   },
-};
+}
 
 export function getHeapSortSource(language = 'javascript') {
-  return heapSortSources[language] ?? heapSortSources.javascript;
+  return heapSortSources[language] ?? heapSortSources.javascript
 }
 
 export function resolveHeapSortLine(language, lineKey) {
-  if (!lineKey) return undefined;
-  const source = getHeapSortSource(language);
-  return source.lineMap[lineKey] ?? heapSortSources.javascript.lineMap[lineKey];
+  if (!lineKey) return undefined
+  const source = getHeapSortSource(language)
+  return source.lineMap[lineKey] ?? heapSortSources.javascript.lineMap[lineKey]
 }
 
 export function generateHeapSortSteps(inputArray) {
-  const arr = [...inputArray];
-  const steps = [];
-  const n = arr.length;
-  const sortedIndices = [];
+  const arr = [...inputArray]
+  const steps = []
+  const n = arr.length
+  const sortedIndices = []
 
   const performHeapify = (currentN, i, lineContext = 'heapifyFunc') => {
-    let largest = i;
-    let l = 2 * i + 1;
-    let r = 2 * i + 2;
+    let largest = i
+    let l = 2 * i + 1
+    let r = 2 * i + 2
 
     steps.push(
       createStep({
@@ -166,7 +166,7 @@ export function generateHeapSortSteps(inputArray) {
         variables: { n: currentN, i, largest },
         duration: 400,
       })
-    );
+    )
 
     if (l < currentN) {
       steps.push(
@@ -180,8 +180,8 @@ export function generateHeapSortSteps(inputArray) {
           variables: { n: currentN, i, largest, l },
           duration: 350,
         })
-      );
-      if (arr[l] > arr[largest]) largest = l;
+      )
+      if (arr[l] > arr[largest]) largest = l
     }
 
     if (r < currentN) {
@@ -196,8 +196,8 @@ export function generateHeapSortSteps(inputArray) {
           variables: { n: currentN, i, largest, r },
           duration: 350,
         })
-      );
-      if (arr[r] > arr[largest]) largest = r;
+      )
+      if (arr[r] > arr[largest]) largest = r
     }
 
     if (largest !== i) {
@@ -212,11 +212,11 @@ export function generateHeapSortSteps(inputArray) {
           variables: { n: currentN, i, largest },
           duration: 600,
         })
-      );
-      [arr[i], arr[largest]] = [arr[largest], arr[i]];
-      performHeapify(currentN, largest, 'swap');
+      )
+      ;[arr[i], arr[largest]] = [arr[largest], arr[i]]
+      performHeapify(currentN, largest, 'swap')
     }
-  };
+  }
 
   steps.push(
     createStep({
@@ -227,7 +227,7 @@ export function generateHeapSortSteps(inputArray) {
       variables: { n },
       duration: 700,
     })
-  );
+  )
 
   for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
     steps.push(
@@ -240,8 +240,8 @@ export function generateHeapSortSteps(inputArray) {
         variables: { i, n },
         duration: 500,
       })
-    );
-    performHeapify(n, i, 'buildHeap');
+    )
+    performHeapify(n, i, 'buildHeap')
   }
 
   for (let i = n - 1; i > 0; i--) {
@@ -256,9 +256,9 @@ export function generateHeapSortSteps(inputArray) {
         variables: { i, n },
         duration: 700,
       })
-    );
-    [arr[0], arr[i]] = [arr[i], arr[0]];
-    sortedIndices.push(i);
+    )
+    ;[arr[0], arr[i]] = [arr[i], arr[0]]
+    sortedIndices.push(i)
 
     steps.push(
       createStep({
@@ -271,10 +271,10 @@ export function generateHeapSortSteps(inputArray) {
         variables: { i, n },
         duration: 500,
       })
-    );
-    performHeapify(i, 0, 'heapifyCall');
+    )
+    performHeapify(i, 0, 'heapifyCall')
   }
-  sortedIndices.push(0);
+  sortedIndices.push(0)
 
   steps.push(
     createStep({
@@ -286,7 +286,7 @@ export function generateHeapSortSteps(inputArray) {
       variables: { n },
       duration: 900,
     })
-  );
+  )
 
-  return steps;
+  return steps
 }
