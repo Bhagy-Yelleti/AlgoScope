@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 
-export const MenuSelectNodesShortestPath = ({ setSource, setTarget, onReset }) => {
+export const MenuSelectNodesShortestPath = ({
+  setSource,
+  setTarget,
+  onReset,
+}) => {
   const [sourceValue, setSourceValue] = useState('')
   const [targetValue, setTargetValue] = useState('')
 
@@ -15,8 +19,8 @@ export const MenuSelectNodesShortestPath = ({ setSource, setTarget, onReset }) =
   }
 
   const handleReset = () => {
-    setSourceValue('')   
-    setTargetValue('')   
+    setSourceValue('')
+    setTargetValue('')
     setSource(null)
     setTarget(null)
     if (onReset) onReset()
@@ -37,11 +41,24 @@ export const MenuSelectNodesShortestPath = ({ setSource, setTarget, onReset }) =
             >
               <option value="">Choose Source</option>
               {Array.from({ length: 9 }, (_, i) => i + 1).map((element) => (
-                <option key={element} value={element}>{element}</option>
+                <option key={element} value={element}>
+                  {element}
+                </option>
               ))}
             </select>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.2" stroke="currentColor" className="h-5 w-5 ml-1 absolute top-3.5 right-4 text-slate-400 pointer-events-none">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.2"
+              stroke="currentColor"
+              className="h-5 w-5 ml-1 absolute top-3.5 right-4 text-slate-400 pointer-events-none"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+              />
             </svg>
           </div>
         </div>
@@ -55,11 +72,24 @@ export const MenuSelectNodesShortestPath = ({ setSource, setTarget, onReset }) =
             >
               <option value="">Choose Target</option>
               {Array.from({ length: 9 }, (_, i) => i + 1).map((element) => (
-                <option key={element} value={element}>{element}</option>
+                <option key={element} value={element}>
+                  {element}
+                </option>
               ))}
             </select>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.2" stroke="currentColor" className="h-5 w-5 ml-1 absolute top-3.5 right-4 text-slate-400 pointer-events-none">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.2"
+              stroke="currentColor"
+              className="h-5 w-5 ml-1 absolute top-3.5 right-4 text-slate-400 pointer-events-none"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+              />
             </svg>
           </div>
         </div>

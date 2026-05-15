@@ -19,10 +19,9 @@ export const ShortestPathPage = () => {
     setSpeed(newValue)
   }
 
-
   const handleResetNodes = () => {
-  setSource(null)
-  setTarget(null)
+    setSource(null)
+    setTarget(null)
   }
 
   const currentSource = useMemo(() => {
