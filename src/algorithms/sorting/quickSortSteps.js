@@ -132,6 +132,109 @@ int partition(int arr[], int low, int high) {
       complete: 19,
     },
   },
+  c: {
+    code: `void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+    for (int j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+    int temp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp;
+    return i + 1;
+}`,
+    lineMap: {
+      function: 1,
+      recursion: 2,
+      partitionCall: 3,
+      partitionFunc: 8,
+      pivotSelect: 9,
+      compare: 12,
+      swap: 15,
+      finalSwap: 19,
+      complete: 21,
+    },
+  },
+  rust: {
+    code: `fn quick_sort(arr: &mut [i32], low: isize, high: isize) {
+    if low < high {
+        let pi = partition(arr, low, high);
+        quick_sort(arr, low, pi - 1);
+        quick_sort(arr, pi + 1, high);
+    }
+}
+
+fn partition(arr: &mut [i32], low: isize, high: isize) -> isize {
+    let pivot = arr[high as usize];
+    let mut i = low - 1;
+    for j in low..high {
+        if arr[j as usize] < pivot {
+            i += 1;
+            arr.swap(i as usize, j as usize);
+        }
+    }
+    arr.swap((i + 1) as usize, high as usize);
+    i + 1
+}`,
+    lineMap: {
+      function: 1,
+      recursion: 2,
+      partitionCall: 3,
+      partitionFunc: 8,
+      pivotSelect: 9,
+      compare: 12,
+      swap: 14,
+      finalSwap: 17,
+      complete: 19,
+    },
+  },
+  go: {
+    code: `func quickSort(arr []int, low, high int) {
+    if low < high {
+        pi := partition(arr, low, high)
+        quickSort(arr, low, pi-1)
+        quickSort(arr, pi+1, high)
+    }
+}
+
+func partition(arr []int, low, high int) int {
+    pivot := arr[high]
+    i := low - 1
+    for j := low; j < high; j++ {
+        if arr[j] < pivot {
+            i++
+            arr[i], arr[j] = arr[j], arr[i]
+        }
+    }
+    arr[i+1], arr[high] = arr[high], arr[i+1]
+    return i + 1
+}`,
+    lineMap: {
+      function: 1,
+      recursion: 2,
+      partitionCall: 3,
+      partitionFunc: 8,
+      pivotSelect: 9,
+      compare: 12,
+      swap: 14,
+      finalSwap: 17,
+      complete: 19,
+    },
+  },
 }
 
 export function getQuickSortSource(language = 'javascript') {
@@ -158,7 +261,7 @@ export function generateQuickSortSteps(inputArray) {
         array: arr,
         indices: [low, high],
         sortedIndices: [...sortedIndices],
-        message: `Quick Sort on range [\${low}, \${high}].`,
+        message: `Quick Sort on range [${low}, ${high}].`,
         variables: { low, high },
         duration: 500,
       })
@@ -183,7 +286,7 @@ export function generateQuickSortSteps(inputArray) {
         array: arr,
         indices: [high],
         sortedIndices: [...sortedIndices],
-        message: `Selected pivot \${pivot} at index \${high}.`,
+        message: `Selected pivot ${pivot} at index ${high}.`,
         variables: { low, high, pivot },
         duration: 600,
       })
@@ -198,7 +301,7 @@ export function generateQuickSortSteps(inputArray) {
           array: arr,
           indices: [j, high],
           sortedIndices: [...sortedIndices],
-          message: `Compare \${arr[j]} with pivot \${pivot}.`,
+          message: `Compare ${arr[j]} with pivot ${pivot}.`,
           variables: { low, high, pivot, i, j },
           duration: 400,
         })
@@ -215,7 +318,7 @@ export function generateQuickSortSteps(inputArray) {
               array: arr,
               indices: [i, j],
               sortedIndices: [...sortedIndices],
-              message: `\${arr[j]} is smaller than pivot, move it to index \${i}.`,
+              message: `${arr[j]} is smaller than pivot, move it to index ${i}.`,
               variables: { low, high, pivot, i, j },
               duration: 600,
             })
@@ -232,7 +335,7 @@ export function generateQuickSortSteps(inputArray) {
         array: arr,
         indices: [i + 1, high],
         sortedIndices: [...sortedIndices],
-        message: `Place pivot \${pivot} in its correct position at index \${i + 1}.`,
+        message: `Place pivot ${pivot} in its correct position at index ${i + 1}.`,
         variables: { low, high, pivot, pi: i + 1 },
         duration: 700,
       })

@@ -116,6 +116,98 @@ export const countingSortSources = {
       complete: 19,
     },
   },
+  c: {
+    code: `void countingSort(int arr[], int n) {
+    int max = arr[0];
+    for (int i = 1; i < n; i++)
+        if (arr[i] > max) max = arr[i];
+    int count[max + 1];
+    memset(count, 0, sizeof(count));
+    for (int i = 0; i < n; i++)
+        count[arr[i]]++;
+    for (int i = 1; i <= max; i++)
+        count[i] += count[i - 1];
+    int output[n];
+    for (int i = n - 1; i >= 0; i--) {
+        output[count[arr[i]] - 1] = arr[i];
+        count[arr[i]]--;
+    }
+    for (int i = 0; i < n; i++)
+        arr[i] = output[i];
+}`,
+    lineMap: {
+      function: 1,
+      setup: 4,
+      countOccurrences: 7,
+      prefixSum: 9,
+      placeElements: 12,
+      copyBack: 16,
+      complete: 18,
+    },
+  },
+  rust: {
+    code: `fn counting_sort(arr: &mut [i32]) {
+    let n = arr.len();
+    let max = *arr.iter().max().unwrap() as usize;
+    let mut count = vec![0; max + 1];
+    for &x in arr.iter() {
+        count[x as usize] += 1;
+    }
+    for i in 1..=max {
+        count[i] += count[i - 1];
+    }
+    let mut output = vec![0; n];
+    for i in (0..n).rev() {
+        output[count[arr[i] as usize] - 1] = arr[i];
+        count[arr[i] as usize] -= 1;
+    }
+    for i in 0..n {
+        arr[i] = output[i];
+    }
+}`,
+    lineMap: {
+      function: 1,
+      setup: 3,
+      countOccurrences: 5,
+      prefixSum: 8,
+      placeElements: 12,
+      copyBack: 16,
+      complete: 19,
+    },
+  },
+  go: {
+    code: `func countingSort(arr []int) {
+    n := len(arr)
+    max := arr[0]
+    for _, v := range arr {
+        if v > max { max = v }
+    }
+    count := make([]int, max+1)
+    for _, v := range arr {
+        count[v]++
+    }
+    for i := 1; i <= max; i++ {
+        count[i] += count[i-1]
+    }
+    output := make([]int, n)
+    for i := n - 1; i >= 0; i-- {
+        output[count[arr[i]]-1] = arr[i]
+        count[arr[i]]--
+    }
+    for i := 0; i < n; i++ {
+        arr[i] = output[i]
+    }
+}`,
+    lineMap: {
+      function: 1,
+      setup: 7,
+      countOccurrences: 9,
+      prefixSum: 12,
+      placeElements: 16,
+      copyBack: 20,
+      complete: 23,
+    },
+  },
 }
 
 export function getCountingSortSource(language = 'javascript') {
@@ -155,7 +247,7 @@ export function generateCountingSortSteps(inputArray) {
       lineKey: 'setup',
       type: 'setup',
       array: arr,
-      message: `Initialized count array of size \${max + 1}.`,
+      message: `Initialized count array of size ${max + 1}.`,
       variables: { n, max },
       duration: 500,
     })
@@ -169,7 +261,7 @@ export function generateCountingSortSteps(inputArray) {
         type: 'active',
         array: arr,
         indices: [i],
-        message: `Value \${arr[i]} found. Increment count[\${arr[i]}].`,
+        message: `Value ${arr[i]} found. Increment count[${arr[i]}].`,
         variables: { i, val: arr[i], countAtVal: count[arr[i]] },
         duration: 400,
       })
@@ -183,7 +275,7 @@ export function generateCountingSortSteps(inputArray) {
         lineKey: 'prefixSum',
         type: 'outer-loop',
         array: arr,
-        message: `Compute prefix sum: count[\${i}] = \${count[i]}.`,
+        message: `Compute prefix sum: count[${i}] = ${count[i]}.`,
         variables: { i, prefixSum: count[i] },
         duration: 300,
       })
@@ -203,7 +295,7 @@ export function generateCountingSortSteps(inputArray) {
         type: 'insert',
         array: arr,
         indices: [i],
-        message: `Place \${val} at output index \${pos} (from count[\${val}]).`,
+        message: `Place ${val} at output index ${pos} (from count[${val}]).`,
         variables: { i, val, pos, newCount: count[val] },
         duration: 600,
       })
@@ -218,7 +310,7 @@ export function generateCountingSortSteps(inputArray) {
         type: 'insert',
         array: arr,
         indices: [i],
-        message: `Copy \${output[i]} back to original array at index \${i}.`,
+        message: `Copy ${output[i]} back to original array at index ${i}.`,
         variables: { i, val: arr[i] },
         duration: 400,
       })

@@ -156,6 +156,127 @@ void merge(int arr[], int l, int m, int r) {
       complete: 27,
     },
   },
+  c: {
+    code: `void mergeSort(int arr[], int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}
+
+void merge(int arr[], int l, int m, int r) {
+    int n1 = m - l + 1, n2 = r - m;
+    int L[n1], R[n2];
+    for (int i = 0; i < n1; i++) L[i] = arr[l + i];
+    for (int j = 0; j < n2; j++) R[j] = arr[m + 1 + j];
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) arr[k++] = L[i++];
+        else arr[k++] = R[j++];
+    }
+    while (i < n1) arr[k++] = L[i++];
+    while (j < n2) arr[k++] = R[j++];
+}`,
+    lineMap: {
+      function: 1,
+      recursion: 2,
+      mergeCall: 6,
+      mergeFunc: 10,
+      setupSubarrays: 13,
+      compare: 17,
+      overwrite: 17,
+      complete: 22,
+    },
+  },
+  rust: {
+    code: `fn merge_sort(arr: &mut [i32], l: usize, r: usize) {
+    if l < r {
+        let m = l + (r - l) / 2;
+        merge_sort(arr, l, m);
+        merge_sort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}
+
+fn merge(arr: &mut [i32], l: usize, m: usize, r: usize) {
+    let left_half = arr[l..=m].to_vec();
+    let right_half = arr[m + 1..=r].to_vec();
+    let (mut i, mut j, mut k) = (0, 0, l);
+    while i < left_half.len() && j < right_half.len() {
+        if left_half[i] <= right_half[j] {
+            arr[k] = left_half[i];
+            i += 1;
+        } else {
+            arr[k] = right_half[j];
+            j += 1;
+        }
+        k += 1;
+    }
+    while i < left_half.len() {
+        arr[k] = left_half[i];
+        i += 1; k += 1;
+    }
+    while j < right_half.len() {
+        arr[k] = right_half[j];
+        j += 1; k += 1;
+    }
+}`,
+    lineMap: {
+      function: 1,
+      recursion: 2,
+      mergeCall: 6,
+      mergeFunc: 10,
+      setupSubarrays: 11,
+      compare: 15,
+      overwrite: 16,
+      complete: 27,
+    },
+  },
+  go: {
+    code: `func mergeSort(arr []int, l, r int) {
+    if l < r {
+        m := l + (r-l)/2
+        mergeSort(arr, l, m)
+        mergeSort(arr, m+1, r)
+        merge(arr, l, m, r)
+    }
+}
+
+func merge(arr []int, l, m, r int) {
+    n1, n2 := m-l+1, r-m
+    L := make([]int, n1)
+    R := make([]int, n2)
+    copy(L, arr[l:m+1])
+    copy(R, arr[m+1:r+1])
+    i, j, k := 0, 0, l
+    for i < n1 && j < n2 {
+        if L[i] <= R[j] {
+            arr[k] = L[i]; i++
+        } else {
+            arr[k] = R[j]; j++
+        }
+        k++
+    }
+    for i < n1 {
+        arr[k] = L[i]; i++; k++
+    }
+    for j < n2 {
+        arr[k] = R[j]; j++; k++
+    }
+}`,
+    lineMap: {
+      function: 1,
+      recursion: 2,
+      mergeCall: 6,
+      mergeFunc: 10,
+      setupSubarrays: 14,
+      compare: 18,
+      overwrite: 19,
+      complete: 29,
+    },
+  },
 }
 
 export function getMergeSortSource(language = 'javascript') {
@@ -180,7 +301,7 @@ export function generateMergeSortSteps(inputArray) {
         type: 'outer-loop',
         array: arr,
         indices: [l, r],
-        message: `Merge Sort on range [\${l}, \${r}].`,
+        message: `Merge Sort on range [${l}, ${r}].`,
         variables: { l, r },
         duration: 500,
       })
@@ -201,7 +322,7 @@ export function generateMergeSortSteps(inputArray) {
         type: 'merge-start',
         array: arr,
         indices: [l, r],
-        message: `Merging subarrays [\${l}, \${m}] and [\${m + 1}, \${r}].`,
+        message: `Merging subarrays [${l}, ${m}] and [${m + 1}, ${r}].`,
         variables: { l, m, r },
         duration: 600,
       })
@@ -233,7 +354,7 @@ export function generateMergeSortSteps(inputArray) {
           type: 'compare',
           array: arr,
           indices: [k, l + i, m + 1 + j],
-          message: `Compare L[\${i}] (\${L[i]}) and R[\${j}] (\${R[j]}).`,
+          message: `Compare L[${i}] (${L[i]}) and R[${j}] (${R[j]}).`,
           variables: { l, m, r, i, j, k, leftVal: L[i], rightVal: R[j] },
           duration: 400,
         })
@@ -253,7 +374,7 @@ export function generateMergeSortSteps(inputArray) {
           type: 'insert',
           array: arr,
           indices: [k],
-          message: `Overwrite index \${k} with \${arr[k]}.`,
+          message: `Overwrite index ${k} with ${arr[k]}.`,
           variables: { l, m, r, i, j, k },
           duration: 500,
         })
@@ -269,7 +390,7 @@ export function generateMergeSortSteps(inputArray) {
           type: 'insert',
           array: arr,
           indices: [k],
-          message: `Copy remaining element \${L[i]} from left subarray.`,
+          message: `Copy remaining element ${L[i]} from left subarray.`,
           variables: { l, m, r, i, j, k },
           duration: 400,
         })
@@ -286,7 +407,7 @@ export function generateMergeSortSteps(inputArray) {
           type: 'insert',
           array: arr,
           indices: [k],
-          message: `Copy remaining element \${R[j]} from right subarray.`,
+          message: `Copy remaining element ${R[j]} from right subarray.`,
           variables: { l, m, r, i, j, k },
           duration: 400,
         })

@@ -6,6 +6,7 @@ import { useStepPlayback } from '../visualizer/useStepPlayback'
 
 import * as linear from '../../algorithms/searching/linearSearchSteps'
 import * as binary from '../../algorithms/searching/binarySearchSteps'
+import { getSearchingSource } from '../../algorithms/searching/searchingSources'
 
 const algoMap = {
   linearSearch: linear,
@@ -21,7 +22,6 @@ const createArray = (type) => {
 
 export default function Visualizer({ algorithm }) {
   const [searchParams, setSearchParams] = useSearchParams()
-
   const [baseArray, setBaseArray] = useState(() => createArray(algorithm))
   const [target, setTarget] = useState(() => {
     const urlTarget = searchParams.get('target')
@@ -78,10 +78,8 @@ export default function Visualizer({ algorithm }) {
   const foundIndex = currentStep?.foundIndex ?? null
 
   const currentAlgoSource = useMemo(() => {
-    if (!algorithm || !algoMap[algorithm]) return null
-    const getSourceName = `get${algorithm.charAt(0).toUpperCase() + algorithm.slice(1)}Source`
-    const getSource = algoMap[algorithm][getSourceName]
-    return getSource ? getSource(language) : null
+    if (!algorithm) return null
+    return getSearchingSource(algorithm, language)
   }, [algorithm, language])
 
   const activeLine = useMemo(() => {
@@ -95,7 +93,6 @@ export default function Visualizer({ algorithm }) {
   const getStateClass = (index) => {
     if (!hasSteps) return ''
     if (index === foundIndex) return 'found'
-
     if (algorithm === 'linearSearch') {
       if (activeIndices.includes(index)) {
         return currentStep?.type === 'found' ? 'found' : 'active'
@@ -160,7 +157,6 @@ export default function Visualizer({ algorithm }) {
                       : 'Ready'}
                   </div>
                 </div>
-
                 <div className="flex flex-wrap justify-center gap-2 sm:gap-3 py-4 sm:py-8">
                   {visualArray.map((item, idx) => (
                     <span
@@ -173,7 +169,6 @@ export default function Visualizer({ algorithm }) {
                   ))}
                 </div>
               </div>
-
               <div className="grid gap-4 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
                 <div className="rounded-2xl border border-slate-700/80 bg-slate-900/70 p-4 sm:p-5 shadow-xl">
                   <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-400/80">
@@ -183,7 +178,6 @@ export default function Visualizer({ algorithm }) {
                     {currentStep?.message ??
                       `Enter a target and start to see steps.`}
                   </h3>
-
                   <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
                     <div className="rounded-xl border border-slate-700 bg-slate-950/70 p-3 sm:p-4">
                       <p className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-slate-400">
@@ -221,13 +215,11 @@ export default function Visualizer({ algorithm }) {
                     </div>
                   </div>
                 </div>
-
                 <div className="min-w-0">
                   <CodePanel
                     title={`${algorithm.replace('Search', ' Search').charAt(0).toUpperCase() + algorithm.replace('Search', ' Search').slice(1)}`}
                     code={
-                      currentAlgoSource?.code ??
-                      '// Select algorithm to see code'
+                      currentAlgoSource || '// Select algorithm to see code'
                     }
                     language={language}
                     activeLine={activeLine}
@@ -235,7 +227,6 @@ export default function Visualizer({ algorithm }) {
                 </div>
               </div>
             </div>
-
             <div className="flex min-w-0 flex-col gap-4">
               <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4 shadow-xl">
                 <h3 className="text-base font-semibold text-slate-300">
@@ -255,7 +246,6 @@ export default function Visualizer({ algorithm }) {
                       placeholder="Target Value"
                     />
                   </div>
-
                   <div className="rounded-xl border border-slate-700/50 bg-slate-900/50 px-3 py-2">
                     <SpeedSlider
                       value={speed}
@@ -265,7 +255,6 @@ export default function Visualizer({ algorithm }) {
                       step={0.05}
                     />
                   </div>
-
                   <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
                     <button
                       onClick={handleSearch}
@@ -288,7 +277,6 @@ export default function Visualizer({ algorithm }) {
                   </div>
                 </div>
               </div>
-
               <div className="rounded-2xl border border-slate-700/70 bg-slate-900/60 p-4">
                 <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
                   Code Language
@@ -296,15 +284,17 @@ export default function Visualizer({ algorithm }) {
                 <select
                   value={language}
                   onChange={(event) => setLanguage(event.target.value)}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 transition focus:border-cyan-500 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 transition focus:border-cyan-500 focus:outline-none cursor-pointer"
                 >
                   <option value="javascript">JavaScript</option>
                   <option value="python">Python</option>
                   <option value="java">Java</option>
                   <option value="cpp">C++</option>
+                  <option value="c">C</option>
+                  <option value="rust">Rust</option>
+                  <option value="go">Go</option>
                 </select>
               </div>
-
               {hasSteps && (
                 <div className="rounded-2xl border border-cyan-500/20 bg-slate-900/60 p-4">
                   <div className="mb-3 flex items-center justify-between gap-3">
@@ -324,7 +314,6 @@ export default function Visualizer({ algorithm }) {
                           : 'Paused'}
                     </div>
                   </div>
-
                   <div className="grid grid-cols-3 gap-3">
                     <button
                       type="button"

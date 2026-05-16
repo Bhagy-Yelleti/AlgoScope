@@ -106,6 +106,88 @@ export const selectionSortSources = {
       complete: 14,
     },
   },
+  c: {
+    code: `void selectionSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[minIdx]) {
+                minIdx = j;
+            }
+        }
+        if (minIdx != i) {
+            int temp = arr[i];
+            arr[i] = arr[minIdx];
+            arr[minIdx] = temp;
+        }
+    }
+}`,
+    lineMap: {
+      function: 1,
+      setup: 1,
+      outerLoop: 2,
+      initMin: 3,
+      innerLoop: 4,
+      compare: 5,
+      updateMin: 6,
+      swap: 10,
+      complete: 15,
+    },
+  },
+  rust: {
+    code: `fn selection_sort(arr: &mut [i32]) {
+    let n = arr.len();
+    for i in 0..n - 1 {
+        let mut min_idx = i;
+        for j in i + 1..n {
+            if arr[j] < arr[min_idx] {
+                min_idx = j;
+            }
+        }
+        if min_idx != i {
+            arr.swap(i, min_idx);
+        }
+    }
+}`,
+    lineMap: {
+      function: 1,
+      setup: 2,
+      outerLoop: 3,
+      initMin: 4,
+      innerLoop: 5,
+      compare: 6,
+      updateMin: 7,
+      swap: 11,
+      complete: 14,
+    },
+  },
+  go: {
+    code: `func selectionSort(arr []int) {
+    n := len(arr)
+    for i := 0; i < n-1; i++ {
+        minIdx := i
+        for j := i + 1; j < n; j++ {
+            if arr[j] < arr[minIdx] {
+                minIdx = j
+            }
+        }
+        if minIdx != i {
+            arr[i], arr[minIdx] = arr[minIdx], arr[i]
+        }
+    }
+}`,
+    lineMap: {
+      function: 1,
+      setup: 2,
+      outerLoop: 3,
+      initMin: 4,
+      innerLoop: 5,
+      compare: 6,
+      updateMin: 7,
+      swap: 10,
+      complete: 14,
+    },
+  },
 }
 
 export function getSelectionSortSource(language = 'javascript') {
@@ -146,7 +228,7 @@ export function generateSelectionSortSteps(inputArray) {
         array: arr,
         indices: [i],
         sortedIndices: [...sortedIndices],
-        message: `Finding the minimum element for index \${i}.`,
+        message: `Finding the minimum element for index ${i}.`,
         variables: { i, n },
         duration: 600,
       })
@@ -160,7 +242,7 @@ export function generateSelectionSortSteps(inputArray) {
         array: arr,
         indices: [i],
         sortedIndices: [...sortedIndices],
-        message: `Assume index \${i} (value \${arr[i]}) is the current minimum.`,
+        message: `Assume index ${i} (value ${arr[i]}) is the current minimum.`,
         variables: { i, minIdx, n },
         duration: 500,
       })
@@ -174,7 +256,7 @@ export function generateSelectionSortSteps(inputArray) {
           array: arr,
           indices: [j, minIdx],
           sortedIndices: [...sortedIndices],
-          message: `Check index \${j} against current minimum at index \${minIdx}.`,
+          message: `Check index ${j} against current minimum at index ${minIdx}.`,
           variables: { i, j, minIdx, n },
           duration: 400,
         })
@@ -187,7 +269,7 @@ export function generateSelectionSortSteps(inputArray) {
           array: arr,
           indices: [j, minIdx],
           sortedIndices: [...sortedIndices],
-          message: `Compare \${arr[j]} and \${arr[minIdx]}.`,
+          message: `Compare ${arr[j]} and ${arr[minIdx]}.`,
           variables: { i, j, minIdx, n },
           duration: 600,
         })
@@ -202,7 +284,7 @@ export function generateSelectionSortSteps(inputArray) {
             array: arr,
             indices: [minIdx],
             sortedIndices: [...sortedIndices],
-            message: `Found a smaller element! New minimum is \${arr[minIdx]} at index \${minIdx}.`,
+            message: `Found a smaller element! New minimum is ${arr[minIdx]} at index ${minIdx}.`,
             variables: { i, j, minIdx, n },
             duration: 700,
           })
@@ -218,7 +300,7 @@ export function generateSelectionSortSteps(inputArray) {
           array: arr,
           indices: [i, minIdx],
           sortedIndices: [...sortedIndices],
-          message: `Swap the minimum element (\${arr[minIdx]}) with the element at index \${i} (\${arr[i]}).`,
+          message: `Swap the minimum element (${arr[minIdx]}) with the element at index ${i} (${arr[i]}).`,
           variables: { i, minIdx, n },
           duration: 850,
         })
@@ -233,7 +315,7 @@ export function generateSelectionSortSteps(inputArray) {
         type: 'pass-complete',
         array: arr,
         sortedIndices: [...sortedIndices],
-        message: `Pass \${i + 1} complete. Index \${i} is now sorted.`,
+        message: `Pass ${i + 1} complete. Index ${i} is now sorted.`,
         variables: { i, n },
         duration: 550,
       })
