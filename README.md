@@ -83,6 +83,7 @@ Learning Data Structures and Algorithms (DSA) is often a daunting task for stude
 ### Frontend
 
 - **Framework:** [React 19](https://react.dev/)
+- **Authentication:** [Clerk](https://clerk.com/)
 - **Build Tool:** [Vite 7](https://vitejs.dev/)
 - **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
 - **Animations:** [Framer Motion](https://www.framer.com/motion/), [Anime.js](https://animejs.com/)
@@ -119,7 +120,12 @@ cd AlgoScope
 # 2. Install dependencies
 npm install
 
-# 3. Start the development server
+# 3. Configure Environment Variables
+# Create a .env file from the example
+cp .env.example .env
+# Open .env and add your VITE_CLERK_PUBLISHABLE_KEY from Clerk Dashboard
+
+# 4. Start the development server
 npm run dev
 ```
 
