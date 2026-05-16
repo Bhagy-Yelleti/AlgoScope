@@ -152,7 +152,7 @@ export const CanvasShortestPath = ({
   useEffect(() => {
     resetStyles()
     if (runKey === null || !algorithm || !source || !target) {
-      setStatus('')
+      setTimeout(() => setStatus(''), 0)
       return
     }
 

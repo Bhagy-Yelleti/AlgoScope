@@ -181,7 +181,7 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1, runKey }) => {
   // Reset nodes when algorithm or vertex changes (but not on run)
   useEffect(() => {
     resetNodes()
-    setStatus('')
+    setTimeout(() => setStatus(''), 0)
   }, [algorithm, vertex])
 
   // animate algorithm with enhanced visual effects — only fires when runKey changes
