@@ -74,11 +74,14 @@ export const Navbar = () => {
   // Derive active state from current URL instead of local state
   const { pathname } = useLocation()
 
-  const algorithmLinks = [
-    { name: 'Search', href: '/search' },
-    { name: 'Shortest Path', href: '/spath' },
-    { name: 'Sort', href: '/sort' },
-  ]
+const algorithmLinks = [
+  { name: 'Search', href: '/search' },
+  { name: 'Shortest Path', href: '/spath' },
+  { name: 'Sort', href: '/sort' },
+  { name: 'Abstract Data Types', href: '/adt' },
+  { name: 'Array Search', href: '/ldssearch' },
+  { name: 'Kadane\'s Algorithm', href: '/kadane' }
+]
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-slate-950/50 backdrop-blur supports-[backdrop-filter]:bg-slate-950/40 rounded-xl shadow-2xl">
