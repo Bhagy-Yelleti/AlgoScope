@@ -3,10 +3,10 @@ import { useSearchParams } from 'react-router-dom'
 import SpeedSlider from '../SpeedSlider.jsx'
 import CodePanel from '../visualizer/CodePanel'
 import { useStepPlayback } from '../visualizer/useStepPlayback'
+import ComplexityCard from '../ComplexityCard'
 
 import * as linear from '../../algorithms/searching/linearSearchSteps'
 import * as binary from '../../algorithms/searching/binarySearchSteps'
-import { getSearchingSource } from '../../algorithms/searching/searchingSources'
 
 const algoMap = {
   linearSearch: linear,
@@ -20,8 +20,11 @@ const createArray = (type) => {
   return [50, 120, 72, 30, 203, 90, 160, 88, 17, 45, 37, 99, 101, 93, 63]
 }
 
-export default function Visualizer({ algorithm }) {
+export default function Visualizer() {
   const [searchParams, setSearchParams] = useSearchParams()
+  const [algorithm, setAlgorithm] = useState(
+    () => searchParams.get('algo') || 'linearSearch'
+  )
   const [baseArray, setBaseArray] = useState(() => createArray(algorithm))
   const [target, setTarget] = useState(() => {
     const urlTarget = searchParams.get('target')
@@ -32,6 +35,14 @@ export default function Visualizer({ algorithm }) {
   const [language, setLanguage] = useState(() => {
     return searchParams.get('lang') || 'javascript'
   })
+
+  const handleAlgorithmChange = (e) => {
+    const newAlgo = e.target.value
+    setAlgorithm(newAlgo)
+    clearPlayback()
+    setBaseArray(createArray(newAlgo))
+    setTarget(newAlgo === 'binarySearch' ? 37 : 30)
+  }
 
   useEffect(() => {
     const params = {}
@@ -78,8 +89,10 @@ export default function Visualizer({ algorithm }) {
   const foundIndex = currentStep?.foundIndex ?? null
 
   const currentAlgoSource = useMemo(() => {
-    if (!algorithm) return null
-    return getSearchingSource(algorithm, language)
+    if (!algorithm || !algoMap[algorithm]) return null
+    const getSourceName = `get${algorithm.charAt(0).toUpperCase() + algorithm.slice(1)}Source`
+    const getSource = algoMap[algorithm][getSourceName]
+    return getSource ? getSource(language) : null
   }, [algorithm, language])
 
   const activeLine = useMemo(() => {
@@ -169,6 +182,11 @@ export default function Visualizer({ algorithm }) {
                   ))}
                 </div>
               </div>
+
+              <ComplexityCard
+                algorithm={algorithm === 'linearSearch' ? 'linear' : 'binary'}
+              />
+
               <div className="grid gap-4 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
                 <div className="rounded-2xl border border-slate-700/80 bg-slate-900/70 p-4 sm:p-5 shadow-xl">
                   <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-400/80">
@@ -219,24 +237,76 @@ export default function Visualizer({ algorithm }) {
                   <CodePanel
                     title={`${algorithm.replace('Search', ' Search').charAt(0).toUpperCase() + algorithm.replace('Search', ' Search').slice(1)}`}
                     code={
-                      currentAlgoSource || '// Select algorithm to see code'
+                      currentAlgoSource?.code ??
+                      '// Select algorithm to see code'
                     }
                     language={language}
                     activeLine={activeLine}
+                    onLanguageChange={setLanguage}
                   />
                 </div>
               </div>
             </div>
+
             <div className="flex min-w-0 flex-col gap-4">
+              {/* How to use stepper */}
+              <div className="rounded-2xl border border-white/5 bg-slate-950/60 p-3 space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-2">
+                  How to use
+                </p>
+                {[
+                  { step: '1', label: 'Pick a search algorithm' },
+                  { step: '2', label: 'Enter a target value' },
+                  { step: '3', label: 'Press Start Search' },
+                ].map(({ step, label }) => {
+                  const done =
+                    (step === '1' && algorithm) ||
+                    (step === '2' && target) ||
+                    (step === '3' && hasSteps)
+                  return (
+                    <div key={step} className="flex items-center gap-3">
+                      <span
+                        className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-colors duration-300 ${
+                          done
+                            ? 'bg-cyan-500 text-white'
+                            : 'bg-slate-700 text-slate-400'
+                        }`}
+                      >
+                        {done ? '✓' : step}
+                      </span>
+                      <span
+                        className={`text-sm transition-colors duration-300 ${
+                          done ? 'text-slate-200' : 'text-slate-500'
+                        }`}
+                      >
+                        {label}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+
               <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4 shadow-xl">
-                <h3 className="text-base font-semibold text-slate-300">
-                  Controls
-                </h3>
-                <div className="mt-4 space-y-4">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <div className="space-y-4">
+                  <div>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
+                      Algorithm
+                    </p>
+                    <select
+                      value={algorithm}
+                      onChange={handleAlgorithmChange}
+                      disabled={isRunning}
+                      className="w-full appearance-none rounded-xl border border-slate-700 bg-slate-900/80 py-3 pl-4 pr-10 text-sm text-white shadow-lg transition duration-300 hover:border-slate-600 focus:border-cyan-500 focus:outline-none disabled:opacity-50"
+                    >
+                      <option value="linearSearch">Linear Search</option>
+                      <option value="binarySearch">Binary Search</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
                       Target Value
-                    </label>
+                    </p>
                     <input
                       type="number"
                       value={target}
@@ -246,6 +316,7 @@ export default function Visualizer({ algorithm }) {
                       placeholder="Target Value"
                     />
                   </div>
+
                   <div className="rounded-xl border border-slate-700/50 bg-slate-900/50 px-3 py-2">
                     <SpeedSlider
                       value={speed}
@@ -255,6 +326,7 @@ export default function Visualizer({ algorithm }) {
                       step={0.05}
                     />
                   </div>
+
                   <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
                     <button
                       onClick={handleSearch}
@@ -277,24 +349,7 @@ export default function Visualizer({ algorithm }) {
                   </div>
                 </div>
               </div>
-              <div className="rounded-2xl border border-slate-700/70 bg-slate-900/60 p-4">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
-                  Code Language
-                </p>
-                <select
-                  value={language}
-                  onChange={(event) => setLanguage(event.target.value)}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 transition focus:border-cyan-500 focus:outline-none cursor-pointer"
-                >
-                  <option value="javascript">JavaScript</option>
-                  <option value="python">Python</option>
-                  <option value="java">Java</option>
-                  <option value="cpp">C++</option>
-                  <option value="c">C</option>
-                  <option value="rust">Rust</option>
-                  <option value="go">Go</option>
-                </select>
-              </div>
+
               {hasSteps && (
                 <div className="rounded-2xl border border-cyan-500/20 bg-slate-900/60 p-4">
                   <div className="mb-3 flex items-center justify-between gap-3">

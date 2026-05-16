@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import SpeedSlider from '../SpeedSlider.jsx'
 import CodePanel from '../visualizer/CodePanel'
 import { useStepPlayback } from '../visualizer/useStepPlayback'
+import ComplexityCard from '../ComplexityCard'
 
 import * as bubble from '../../algorithms/sorting/bubbleSortSteps'
 import * as selection from '../../algorithms/sorting/selectionSortSteps'
@@ -27,11 +28,12 @@ const algoMap = {
 const createRandomArray = () =>
   Array.from({ length: 8 }, () => Math.floor(Math.random() * 200) + 50)
 
-export default function Visualizer({ algorithmType }) {
+export default function Visualizer() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [baseArray, setBaseArray] = useState([50, 120, 70, 30, 200, 90, 160])
   const [speed, setSpeed] = useState(1)
   const [language, setLanguage] = useState('javascript')
+  const [algorithmType, setAlgorithmType] = useState('simple')
 
   const algoFromUrl = searchParams.get('algo')
   const selectedAlgorithm =
@@ -264,6 +266,8 @@ export default function Visualizer({ algorithmType }) {
                 </div>
               </div>
 
+              <ComplexityCard algorithm={selectedAlgorithm} />
+
               <div className="grid gap-4 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
                 <div className="rounded-2xl border border-slate-700/80 bg-slate-900/70 p-4 sm:p-5 shadow-xl">
                   <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-400/80">
@@ -326,30 +330,89 @@ export default function Visualizer({ algorithmType }) {
                     }
                     language={language}
                     activeLine={activeLine}
+                    onLanguageChange={setLanguage}
                   />
                 </div>
               </div>
             </div>
 
             <div className="flex min-w-0 flex-col gap-4">
+              {/* How to use stepper */}
+              <div className="rounded-2xl border border-white/5 bg-slate-950/60 p-3 space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-2">
+                  How to use
+                </p>
+                {[
+                  { step: '1', label: 'Pick a sort category' },
+                  { step: '2', label: 'Pick an algorithm' },
+                  { step: '3', label: 'Press Start Sort' },
+                ].map(({ step, label }) => {
+                  const done =
+                    (step === '1' && algorithmType) ||
+                    (step === '2' && selectedAlgorithm) ||
+                    (step === '3' && hasSteps)
+                  return (
+                    <div key={step} className="flex items-center gap-3">
+                      <span
+                        className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-colors duration-300 ${
+                          done
+                            ? 'bg-cyan-500 text-white'
+                            : 'bg-slate-700 text-slate-400'
+                        }`}
+                      >
+                        {done ? '✓' : step}
+                      </span>
+                      <span
+                        className={`text-sm transition-colors duration-300 ${
+                          done ? 'text-slate-200' : 'text-slate-500'
+                        }`}
+                      >
+                        {label}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+
               <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4 shadow-xl">
-                <h3 className="text-base font-semibold text-slate-300">
-                  Controls
-                </h3>
-                <div className="mt-4 space-y-4">
-                  <select
-                    value={selectedAlgorithm}
-                    onChange={handleAlgorithmChange}
-                    disabled={isRunning}
-                    className="w-full appearance-none rounded-xl border border-slate-700 bg-slate-900/80 py-3 pl-4 pr-10 text-sm text-white shadow-lg transition duration-300 hover:border-slate-600 focus:border-cyan-500 focus:outline-none disabled:opacity-50"
-                  >
-                    <option value="">Choose Algorithm</option>
-                    {algorithmOptions[algorithmType].map((alg) => (
-                      <option key={alg} value={alg}>
-                        {`${alg.charAt(0).toUpperCase() + alg.slice(1)} Sort`}
-                      </option>
-                    ))}
-                  </select>
+                <div className="space-y-4">
+                  <div>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
+                      Sort Category
+                    </p>
+                    <select
+                      value={algorithmType}
+                      onChange={(e) => {
+                        setAlgorithmType(e.target.value)
+                        clearPlayback()
+                        setSearchParams({})
+                      }}
+                      disabled={isRunning}
+                      className="w-full appearance-none rounded-xl border border-slate-700 bg-slate-900/80 py-3 pl-4 pr-10 text-sm text-white shadow-lg transition duration-300 hover:border-slate-600 focus:border-cyan-500 focus:outline-none disabled:opacity-50"
+                    >
+                      <option value="simple">Simple Sorts</option>
+                      <option value="complex">Complex Sorts</option>
+                      <option value="integer">Integer Sorts</option>
+                    </select>
+                  </div>
+                  <div>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
+                      Algorithm
+                    </p>
+                    <select
+                      value={selectedAlgorithm}
+                      onChange={handleAlgorithmChange}
+                      disabled={isRunning}
+                      className="w-full appearance-none rounded-xl border border-slate-700 bg-slate-900/80 py-3 pl-4 pr-10 text-sm text-white shadow-lg transition duration-300 hover:border-slate-600 focus:border-cyan-500 focus:outline-none disabled:opacity-50"
+                    >
+                      <option value="">Choose Algorithm</option>
+                      {algorithmOptions[algorithmType].map((alg) => (
+                        <option key={alg} value={alg}>
+                          {`${alg.charAt(0).toUpperCase() + alg.slice(1)} Sort`}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
                   <div className="rounded-xl border border-slate-700/50 bg-slate-900/50 px-3 py-2">
                     <SpeedSlider
@@ -431,36 +494,6 @@ export default function Visualizer({ algorithmType }) {
                   </div>
                 </div>
               )}
-
-              <div className="rounded-2xl border border-slate-700/70 bg-slate-900/60 p-4">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
-                  Code Language
-                </p>
-                <select
-                  value={language}
-                  onChange={(event) => setLanguage(event.target.value)}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-slate-100 transition focus:border-cyan-500 focus:outline-none"
-                >
-                  <option value="javascript">JavaScript</option>
-                  <option value="python">Python</option>
-                  <option value="java">Java</option>
-                  <option value="cpp">C++</option>
-                  <option value="c">C</option>
-                  <option value="rust">Rust</option>
-                  <option value="go">Go</option>
-                </select>
-              </div>
-
-              <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-                  Synchronization
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-300">
-                  The chart and code viewer render from the same playback step,
-                  so array state, active indices, explanation text, and
-                  highlighted source line stay aligned.
-                </p>
-              </div>
             </div>
           </div>
         </div>
