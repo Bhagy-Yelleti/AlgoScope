@@ -31,22 +31,22 @@ const CodePanel = memo(function CodePanel({
   }, [activeLine])
 
   useEffect(() => {
-    if (!copied) {
-      return undefined
-    }
+    if (!copied) return
 
     const timeoutId = window.setTimeout(() => {
       setCopied(false)
     }, 1800)
 
-    return () => {
-      window.clearTimeout(timeoutId)
-    }
+    return () => window.clearTimeout(timeoutId)
   }, [copied])
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(code)
-    setCopied(true)
+    try {
+      await navigator.clipboard.writeText(code)
+      setCopied(true)
+    } catch (err) {
+      console.error('Failed to copy code: ', err)
+    }
   }
 
   return (

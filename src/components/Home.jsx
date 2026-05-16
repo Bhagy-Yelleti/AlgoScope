@@ -4,6 +4,7 @@ import SortingImg from '../assets/new-home-images/array.png'
 import SearchingImg from '../assets/new-home-images/traversal.png'
 import LinearSearchImg from '../assets/new-home-images/search.png'
 import GraphAlgoImg from '../assets/new-home-images/shortestPath.png'
+import KadaneImg from '../assets/new-home-images/KadaneImg.png'
 import adt from '../assets/new-home-images/adt.png'
 import { motion } from 'framer-motion'
 
@@ -59,6 +60,14 @@ const ALGORITHMS = [
     image: adt,
     imageAlt: 'Stack, queue, and linked list data structure visualization',
   },
+  {
+    title: 'Kadane Algorithm',
+    description: 'Visualize Maximum Subarray Sum using Kadane’s Algorithm.',
+    color: 'bg-slate-900/50 border-pink-500/30 hover:border-pink-400',
+    link: '/kadane',
+    image: KadaneImg,
+    imageAlt: 'Kadane algorithm visualization for maximum subarray sum',
+  },
 ]
 
 export const Home = () => {
@@ -104,7 +113,7 @@ export const Home = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
-            className="pt-8"
+            className="pt-8 flex flex-wrap items-center justify-center gap-4"
           >
             <a
               href="#explore"
@@ -117,6 +126,12 @@ export const Home = () => {
               className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-200 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:scale-105 hover:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
             >
               Start Exploring
+            </a>
+            <a
+              href="/practice"
+              className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-200 bg-emerald-600/80 border border-emerald-500/40 rounded-lg hover:bg-emerald-500 hover:scale-105 hover:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+            >
+              Practice
             </a>
           </motion.div>
         </motion.div>

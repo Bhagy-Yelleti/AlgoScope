@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import Visualizer from './Visualizer'
 import { motion } from 'framer-motion'
+import Visualizer from './Visualizer'
 
 const ArrayVisualizerPage = () => {
   return (

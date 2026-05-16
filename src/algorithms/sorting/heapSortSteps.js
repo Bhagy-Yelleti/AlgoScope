@@ -132,6 +132,108 @@ void heapify(int arr[], int n, int i) {
       complete: 20,
     },
   },
+  c: {
+    code: `void heapSort(int arr[], int n) {
+    for (int i = n / 2 - 1; i >= 0; i--)
+        heapify(arr, n, i);
+    for (int i = n - 1; i > 0; i--) {
+        int temp = arr[0];
+        arr[0] = arr[i];
+        arr[i] = temp;
+        heapify(arr, i, 0);
+    }
+}
+
+void heapify(int arr[], int n, int i) {
+    int largest = i;
+    int l = 2 * i + 1, r = 2 * i + 2;
+    if (l < n && arr[l] > arr[largest]) largest = l;
+    if (r < n && arr[r] > arr[largest]) largest = r;
+    if (largest != i) {
+        int temp = arr[i];
+        arr[i] = arr[largest];
+        arr[largest] = temp;
+        heapify(arr, n, largest);
+    }
+}`,
+    lineMap: {
+      function: 1,
+      buildHeap: 2,
+      extractMax: 4,
+      heapifyCall: 9,
+      heapifyFunc: 13,
+      compare: 16,
+      swap: 19,
+      complete: 24,
+    },
+  },
+  rust: {
+    code: `fn heap_sort(arr: &mut [i32]) {
+    let n = arr.len();
+    for i in (0..n / 2).rev() {
+        heapify(arr, n, i);
+    }
+    for i in (1..n).rev() {
+        arr.swap(0, i);
+        heapify(arr, i, 0);
+    }
+}
+
+fn heapify(arr: &mut [i32], n: usize, i: usize) {
+    let mut largest = i;
+    let l = 2 * i + 1;
+    let r = 2 * i + 2;
+    if l < n && arr[l] > arr[largest] { largest = l; }
+    if r < n && arr[r] > arr[largest] { largest = r; }
+    if largest != i {
+        arr.swap(i, largest);
+        heapify(arr, n, largest);
+    }
+}`,
+    lineMap: {
+      function: 1,
+      buildHeap: 3,
+      extractMax: 6,
+      heapifyCall: 8,
+      heapifyFunc: 12,
+      compare: 16,
+      swap: 19,
+      complete: 23,
+    },
+  },
+  go: {
+    code: `func heapSort(arr []int) {
+    n := len(arr)
+    for i := n/2 - 1; i >= 0; i-- {
+        heapify(arr, n, i)
+    }
+    for i := n - 1; i > 0; i-- {
+        arr[0], arr[i] = arr[i], arr[0]
+        heapify(arr, i, 0)
+    }
+}
+
+func heapify(arr []int, n int, i int) {
+    largest := i
+    l, r := 2*i+1, 2*i+2
+    if l < n && arr[l] > arr[largest] { largest = l }
+    if r < n && arr[r] > arr[largest] { largest = r }
+    if largest != i {
+        arr[i], arr[largest] = arr[largest], arr[i]
+        heapify(arr, n, largest)
+    }
+}`,
+    lineMap: {
+      function: 1,
+      buildHeap: 3,
+      extractMax: 6,
+      heapifyCall: 8,
+      heapifyFunc: 12,
+      compare: 15,
+      swap: 18,
+      complete: 22,
+    },
+  },
 }
 
 export function getHeapSortSource(language = 'javascript') {
@@ -162,7 +264,7 @@ export function generateHeapSortSteps(inputArray) {
         array: arr,
         indices: [i],
         sortedIndices: [...sortedIndices],
-        message: `Heapifying node at index \${i}.`,
+        message: `Heapifying node at index ${i}.`,
         variables: { n: currentN, i, largest },
         duration: 400,
       })
@@ -176,7 +278,7 @@ export function generateHeapSortSteps(inputArray) {
           array: arr,
           indices: [l, largest],
           sortedIndices: [...sortedIndices],
-          message: `Compare left child \${arr[l]} with parent \${arr[largest]}.`,
+          message: `Compare left child ${arr[l]} with parent ${arr[largest]}.`,
           variables: { n: currentN, i, largest, l },
           duration: 350,
         })
@@ -192,7 +294,7 @@ export function generateHeapSortSteps(inputArray) {
           array: arr,
           indices: [r, largest],
           sortedIndices: [...sortedIndices],
-          message: `Compare right child \${arr[r]} with largest so far \${arr[largest]}.`,
+          message: `Compare right child ${arr[r]} with largest so far ${arr[largest]}.`,
           variables: { n: currentN, i, largest, r },
           duration: 350,
         })
@@ -208,7 +310,7 @@ export function generateHeapSortSteps(inputArray) {
           array: arr,
           indices: [i, largest],
           sortedIndices: [...sortedIndices],
-          message: `Swap parent \${arr[i]} with largest child \${arr[largest]}.`,
+          message: `Swap parent ${arr[i]} with largest child ${arr[largest]}.`,
           variables: { n: currentN, i, largest },
           duration: 600,
         })
@@ -236,7 +338,7 @@ export function generateHeapSortSteps(inputArray) {
         type: 'outer-loop',
         array: arr,
         indices: [i],
-        message: `Building max heap: processing index \${i}.`,
+        message: `Building max heap: processing index ${i}.`,
         variables: { i, n },
         duration: 500,
       })
@@ -252,7 +354,7 @@ export function generateHeapSortSteps(inputArray) {
         array: arr,
         indices: [0, i],
         sortedIndices: [...sortedIndices],
-        message: `Swap max element \${arr[0]} with last element \${arr[i]}.`,
+        message: `Swap max element ${arr[0]} with last element ${arr[i]}.`,
         variables: { i, n },
         duration: 700,
       })
@@ -267,7 +369,7 @@ export function generateHeapSortSteps(inputArray) {
         array: arr,
         indices: [0],
         sortedIndices: [...sortedIndices],
-        message: `Restoring heap property for remaining \${i} elements.`,
+        message: `Restoring heap property for remaining ${i} elements.`,
         variables: { i, n },
         duration: 500,
       })

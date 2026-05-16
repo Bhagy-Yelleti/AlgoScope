@@ -14,7 +14,11 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'AlgoScope Backend is running!' })
 })
 
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`)
+  })
+}
+
 export default app
-// app.listen(PORT, () => {
-//   console.log(`Server is running on http://localhost:${PORT}`)
-// })

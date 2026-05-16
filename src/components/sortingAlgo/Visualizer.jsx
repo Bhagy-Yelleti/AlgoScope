@@ -62,10 +62,10 @@ export default function Visualizer() {
 
   const handleSort = () => {
     if (selectedAlgorithm && algoMap[selectedAlgorithm]) {
-      const generator =
-        algoMap[selectedAlgorithm][
-          `generate${selectedAlgorithm.charAt(0).toUpperCase() + selectedAlgorithm.slice(1)}SortSteps`
-        ]
+      const generatorName = `generate${
+        selectedAlgorithm.charAt(0).toUpperCase() + selectedAlgorithm.slice(1)
+      }SortSteps`
+      const generator = algoMap[selectedAlgorithm][generatorName]
       if (generator) {
         clearPlayback()
         loadSteps(generator(baseArray))
@@ -86,10 +86,10 @@ export default function Visualizer() {
 
   const currentAlgoSource = useMemo(() => {
     if (!selectedAlgorithm || !algoMap[selectedAlgorithm]) return null
-    const getSource =
-      algoMap[selectedAlgorithm][
-        `get${selectedAlgorithm.charAt(0).toUpperCase() + selectedAlgorithm.slice(1)}SortSource`
-      ]
+    const methodName = `get${
+      selectedAlgorithm.charAt(0).toUpperCase() + selectedAlgorithm.slice(1)
+    }SortSource`
+    const getSource = algoMap[selectedAlgorithm][methodName]
     return getSource ? getSource(language) : null
   }, [selectedAlgorithm, language])
 
@@ -98,12 +98,13 @@ export default function Visualizer() {
       !selectedAlgorithm ||
       !currentStep?.lineKey ||
       !algoMap[selectedAlgorithm]
-    )
+    ) {
       return undefined
-    const resolveLine =
-      algoMap[selectedAlgorithm][
-        `resolve${selectedAlgorithm.charAt(0).toUpperCase() + selectedAlgorithm.slice(1)}SortLine`
-      ]
+    }
+    const methodName = `resolve${
+      selectedAlgorithm.charAt(0).toUpperCase() + selectedAlgorithm.slice(1)
+    }SortLine`
+    const resolveLine = algoMap[selectedAlgorithm][methodName]
     return resolveLine ? resolveLine(language, currentStep.lineKey) : undefined
   }, [selectedAlgorithm, currentStep, language])
 
@@ -127,126 +128,91 @@ export default function Visualizer() {
       background: 'rgba(6, 182, 212, 0.8)',
     }
 
-    if (stateClass === 'compare') {
-      return {
-        ...baseStyle,
+    const styles = {
+      compare: {
         background: '#2563eb',
         borderColor: '#60a5fa',
         boxShadow: '0 0 18px rgba(59, 130, 246, 0.55)',
         transform: 'translateY(-4px)',
-      }
-    }
-
-    if (stateClass === 'swap') {
-      return {
-        ...baseStyle,
+      },
+      swap: {
         background: '#f59e0b',
         borderColor: '#d97706',
         boxShadow: '0 0 15px rgba(245, 158, 11, 0.45)',
-      }
-    }
-
-    if (stateClass === 'pivot') {
-      return {
-        ...baseStyle,
+      },
+      pivot: {
         background: '#f43f5e',
         borderColor: '#e11d48',
         boxShadow: '0 0 15px rgba(244, 63, 94, 0.5)',
-      }
-    }
-
-    if (stateClass === 'min') {
-      return {
-        ...baseStyle,
+      },
+      min: {
         background: '#8b5cf6',
         borderColor: '#7c3aed',
         boxShadow: '0 0 15px rgba(139, 92, 246, 0.5)',
-      }
-    }
-
-    if (stateClass === 'sorted') {
-      return {
-        ...baseStyle,
+      },
+      sorted: {
         background: '#0891b2',
         borderColor: '#06b6d4',
         boxShadow: '0 0 15px rgba(6, 182, 212, 0.45)',
-      }
-    }
-
-    if (stateClass === 'active') {
-      return {
-        ...baseStyle,
+      },
+      active: {
         background: '#10b981',
         borderColor: '#059669',
         boxShadow: '0 0 15px rgba(16, 185, 129, 0.5)',
-      }
+      },
     }
 
-    return baseStyle
+    return stateClass ? { ...baseStyle, ...styles[stateClass] } : baseStyle
   }
 
   const getElementStyle = (index) => {
     const stateClass = getStateClass(index)
-    if (stateClass === 'compare') {
-      return {
+    const styles = {
+      compare: {
         background: '#2563eb',
         color: '#fff',
         borderColor: '#60a5fa',
         transform: 'scale(1.12)',
         boxShadow:
           '0 0 0 1px rgba(147, 197, 253, 0.55), 0 0 18px rgba(59, 130, 246, 0.35)',
-      }
-    }
-    if (stateClass === 'swap') {
-      return {
+      },
+      swap: {
         background: '#f59e0b',
         color: '#fff',
         borderColor: '#d97706',
         transform: 'scale(1.1)',
-      }
-    }
-    if (stateClass === 'pivot') {
-      return {
+      },
+      pivot: {
         background: '#f43f5e',
         color: '#fff',
         borderColor: '#e11d48',
         transform: 'scale(1.1)',
-      }
-    }
-    if (stateClass === 'min') {
-      return {
+      },
+      min: {
         background: '#8b5cf6',
         color: '#fff',
         borderColor: '#7c3aed',
         transform: 'scale(1.1)',
-      }
-    }
-    if (stateClass === 'sorted') {
-      return {
+      },
+      sorted: {
         background: '#0891b2',
         color: '#fff',
         borderColor: '#06b6d4',
-      }
-    }
-    if (stateClass === 'active') {
-      return {
+      },
+      active: {
         background: '#10b981',
         color: '#fff',
         borderColor: '#059669',
         transform: 'scale(1.1)',
-      }
+      },
     }
-    return undefined
+    return stateClass ? styles[stateClass] : undefined
   }
 
   const handleAlgorithmChange = (event) => {
     const newAlgo = event.target.value
     clearPlayback()
-    if (newAlgo) {
-      setSearchParams({ algo: newAlgo })
-    } else {
-      setSearchParams({})
-    }
+    setSearchParams(newAlgo ? { algo: newAlgo } : {})
   }
 
   return (
@@ -309,7 +275,11 @@ export default function Visualizer() {
                   </p>
                   <h3 className="mt-2 text-lg sm:text-xl font-semibold text-slate-100">
                     {currentStep?.message ??
-                      `Select ${selectedAlgorithm ? selectedAlgorithm + ' sort' : 'an algorithm'} and start to see steps.`}
+                      `Select ${
+                        selectedAlgorithm
+                          ? selectedAlgorithm + ' sort'
+                          : 'an algorithm'
+                      } and start to see steps.`}
                   </h3>
 
                   <div className="mt-4 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
@@ -348,7 +318,12 @@ export default function Visualizer() {
 
                 <div className="min-w-0">
                   <CodePanel
-                    title={`${selectedAlgorithm ? selectedAlgorithm.charAt(0).toUpperCase() + selectedAlgorithm.slice(1) : ''} Sort`}
+                    title={`${
+                      selectedAlgorithm
+                        ? selectedAlgorithm.charAt(0).toUpperCase() +
+                          selectedAlgorithm.slice(1)
+                        : ''
+                    } Sort`}
                     code={
                       currentAlgoSource?.code ??
                       '// Select algorithm to see code'
