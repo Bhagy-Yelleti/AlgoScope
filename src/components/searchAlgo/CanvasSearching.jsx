@@ -139,7 +139,9 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1, runKey }) => {
   useEffect(() => {
     if (!networkRef.current) return
     if (runKey !== null) {
-      networkRef.current.fit({ animation: { duration: 400, easingFunction: 'easeInOutQuad' } })
+      networkRef.current.fit({
+        animation: { duration: 400, easingFunction: 'easeInOutQuad' },
+      })
     }
   }, [runKey])
 
@@ -184,7 +186,14 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1, runKey }) => {
 
   // animate algorithm with enhanced visual effects — only fires when runKey changes
   useEffect(() => {
-    if (runKey === null || !algorithm || !vertex || !nodesRef.current || !edgesRef.current) return
+    if (
+      runKey === null ||
+      !algorithm ||
+      !vertex ||
+      !nodesRef.current ||
+      !edgesRef.current
+    )
+      return
 
     const nodes = nodesRef.current
     const edges = edgesRef.current
@@ -381,17 +390,19 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1, runKey }) => {
           style={{ background: 'transparent' }}
         />
 
-
         {/* Color legend */}
         <div className="absolute bottom-3 left-3 z-10 flex items-center gap-3 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-lg px-3 py-2">
           <span className="flex items-center gap-1.5 text-xs text-slate-300">
-            <span className="w-3 h-3 rounded-full bg-cyan-500 inline-block"></span>Unvisited
+            <span className="w-3 h-3 rounded-full bg-cyan-500 inline-block"></span>
+            Unvisited
           </span>
           <span className="flex items-center gap-1.5 text-xs text-slate-300">
-            <span className="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>Visiting
+            <span className="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
+            Visiting
           </span>
           <span className="flex items-center gap-1.5 text-xs text-slate-300">
-            <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>Visited
+            <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+            Visited
           </span>
         </div>
 
@@ -406,11 +417,26 @@ export const CanvasSearching = ({ algorithm, vertex, speed = 1, runKey }) => {
                 : 'bg-slate-800/50 text-slate-300 border-white/10 hover:bg-slate-800/80 hover:text-white'
             }`}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-4 h-4"
+            >
               {physics ? (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+                />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 5.25v13.5m-7.5-13.5v13.5"
+                />
               )}
             </svg>
             {physics ? 'Physics ON' : 'Physics OFF'}

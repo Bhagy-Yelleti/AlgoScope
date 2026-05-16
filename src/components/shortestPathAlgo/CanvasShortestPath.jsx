@@ -66,14 +66,26 @@ export const CanvasShortestPath = ({
         },
         font: { size: 16, color: '#f8fafc', face: 'Arial', bold: true },
         borderWidth: 3,
-        shadow: { enabled: true, color: 'rgba(0,0,0,0.5)', size: 10, x: 5, y: 5 },
+        shadow: {
+          enabled: true,
+          color: 'rgba(0,0,0,0.5)',
+          size: 10,
+          x: 5,
+          y: 5,
+        },
       },
       edges: {
         arrows: { to: { enabled: true, scaleFactor: 0.8 } },
         color: { color: '#64748b', highlight: '#22d3ee', hover: '#22d3ee' },
         width: 3,
         smooth: { type: 'curvedCW', roundness: 0.0 },
-        shadow: { enabled: true, color: 'rgba(0,0,0,0.5)', size: 10, x: 5, y: 5 },
+        shadow: {
+          enabled: true,
+          color: 'rgba(0,0,0,0.5)',
+          size: 10,
+          x: 5,
+          y: 5,
+        },
         font: {
           size: 14,
           color: '#f8fafc',
@@ -107,7 +119,9 @@ export const CanvasShortestPath = ({
   // Recenter on run
   useEffect(() => {
     if (!networkRef.current || runKey === null) return
-    networkRef.current.fit({ animation: { duration: 400, easingFunction: 'easeInOutQuad' } })
+    networkRef.current.fit({
+      animation: { duration: 400, easingFunction: 'easeInOutQuad' },
+    })
   }, [runKey])
 
   useEffect(() => {
@@ -126,7 +140,11 @@ export const CanvasShortestPath = ({
       })
     })
     edgesRef.current.get().forEach((e) => {
-      edgesRef.current.update({ id: e.id, color: { color: '#64748b' }, width: 3 })
+      edgesRef.current.update({
+        id: e.id,
+        color: { color: '#64748b' },
+        width: 3,
+      })
     })
   }
 
@@ -145,10 +163,13 @@ export const CanvasShortestPath = ({
     const nodeIds = nodes.get().map((n) => n.id)
 
     const adj = {}
-    nodeIds.forEach((id) => { adj[id] = [] })
+    nodeIds.forEach((id) => {
+      adj[id] = []
+    })
     edges.get().forEach((e) => {
       const edgeId = e.id
-      const w = typeof e.weight === 'number' ? e.weight : parseFloat(e.label ?? '1')
+      const w =
+        typeof e.weight === 'number' ? e.weight : parseFloat(e.label ?? '1')
       if (!Number.isFinite(w)) return
       if (!adj[e.from]) adj[e.from] = []
       adj[e.from].push({ to: e.to, w, edgeId })
@@ -161,8 +182,14 @@ export const CanvasShortestPath = ({
 
     const visitLaterNode = (id, delay) => {
       const t = setTimeout(() => {
-        nodes.update({ id, color: { background: '#f43f5e', border: '#ffffff' }, size: 35 })
-        setTimeout(() => { nodes.update({ id, size: 30 }) }, 300 / speed)
+        nodes.update({
+          id,
+          color: { background: '#f43f5e', border: '#ffffff' },
+          size: 35,
+        })
+        setTimeout(() => {
+          nodes.update({ id, size: 30 })
+        }, 300 / speed)
       }, delay)
       timers.push(t)
     }
@@ -170,7 +197,9 @@ export const CanvasShortestPath = ({
     const visitLaterEdge = (edgeId, delay) => {
       const t = setTimeout(() => {
         edges.update({ id: edgeId, color: { color: '#10b981' }, width: 6 })
-        setTimeout(() => { edges.update({ id: edgeId, width: 5 }) }, 200 / speed)
+        setTimeout(() => {
+          edges.update({ id: edgeId, width: 5 })
+        }, 200 / speed)
       }, delay)
       timers.push(t)
     }
@@ -204,15 +233,22 @@ export const CanvasShortestPath = ({
         }
       })
 
-      setTimeout(() => {
-        pathNodes.forEach((n) => {
-          nodes.update({ id: n, color: { background: '#10b981', border: '#ffffff' }, size: 28 })
-        })
-        pathEdges.forEach((eId) => {
-          edges.update({ id: eId, color: { color: '#10b981' }, width: 5 })
-        })
-        setStatus(`Path found from ${src} to ${dst}.`)
-      }, delay + 500 / speed)
+      setTimeout(
+        () => {
+          pathNodes.forEach((n) => {
+            nodes.update({
+              id: n,
+              color: { background: '#10b981', border: '#ffffff' },
+              size: 28,
+            })
+          })
+          pathEdges.forEach((eId) => {
+            edges.update({ id: eId, color: { color: '#10b981' }, width: 5 })
+          })
+          setStatus(`Path found from ${src} to ${dst}.`)
+        },
+        delay + 500 / speed
+      )
     }
 
     const runDijkstra = () => {
@@ -220,18 +256,28 @@ export const CanvasShortestPath = ({
       const dist = {}
       const parent = {}
       const used = new Set()
-      nodeIds.forEach((id) => { dist[id] = Infinity; parent[id] = null })
+      nodeIds.forEach((id) => {
+        dist[id] = Infinity
+        parent[id] = null
+      })
       dist[src] = 0
       while (used.size < nodeIds.length) {
-        let u = null, best = Infinity
+        let u = null,
+          best = Infinity
         for (const id of nodeIds) {
           if (used.has(id)) continue
-          if (dist[id] < best) { best = dist[id]; u = id }
+          if (dist[id] < best) {
+            best = dist[id]
+            u = id
+          }
         }
         if (u == null || best === Infinity) break
         used.add(u)
         for (const { to, w } of adj[u] || []) {
-          if (dist[u] + w < dist[to]) { dist[to] = dist[u] + w; parent[to] = u }
+          if (dist[u] + w < dist[to]) {
+            dist[to] = dist[u] + w
+            parent[to] = u
+          }
         }
       }
       reconstructAndAnimatePath(parent)
@@ -241,18 +287,24 @@ export const CanvasShortestPath = ({
       setStatus(`Running Bellman-Ford algorithm from ${src} to ${dst}...`)
       const dist = {}
       const parent = {}
-      nodeIds.forEach((id) => { dist[id] = Infinity; parent[id] = null })
+      nodeIds.forEach((id) => {
+        dist[id] = Infinity
+        parent[id] = null
+      })
       dist[src] = 0
       const edgeList = []
       edges.get().forEach((e) => {
-        const w = typeof e.weight === 'number' ? e.weight : parseFloat(e.label ?? '1')
+        const w =
+          typeof e.weight === 'number' ? e.weight : parseFloat(e.label ?? '1')
         if (Number.isFinite(w)) edgeList.push({ from: e.from, to: e.to, w })
       })
       for (let i = 0; i < nodeIds.length - 1; i++) {
         let changed = false
         for (const { from, to, w } of edgeList) {
           if (dist[from] !== Infinity && dist[from] + w < dist[to]) {
-            dist[to] = dist[from] + w; parent[to] = from; changed = true
+            dist[to] = dist[from] + w
+            parent[to] = from
+            changed = true
           }
         }
         if (!changed) break
@@ -268,27 +320,35 @@ export const CanvasShortestPath = ({
       const next = Array.from({ length: n }, () => Array(n).fill(null))
       for (let i = 0; i < n; i++) dist[i][i] = 0
       edges.get().forEach((e) => {
-        const i = idxOf.get(e.from), j = idxOf.get(e.to)
-        const w = typeof e.weight === 'number' ? e.weight : parseFloat(e.label ?? '1')
+        const i = idxOf.get(e.from),
+          j = idxOf.get(e.to)
+        const w =
+          typeof e.weight === 'number' ? e.weight : parseFloat(e.label ?? '1')
         if (!Number.isFinite(w)) return
-        if (w < dist[i][j]) { dist[i][j] = w; next[i][j] = e.to }
+        if (w < dist[i][j]) {
+          dist[i][j] = w
+          next[i][j] = e.to
+        }
       })
       for (let k = 0; k < n; k++)
         for (let i = 0; i < n; i++)
           for (let j = 0; j < n; j++)
             if (dist[i][k] + dist[k][j] < dist[i][j]) {
-              dist[i][j] = dist[i][k] + dist[k][j]; next[i][j] = next[i][k]
+              dist[i][j] = dist[i][k] + dist[k][j]
+              next[i][j] = next[i][k]
             }
 
       const buildParentFromNext = () => {
         const parent = {}
-        const i = idxOf.get(src), j = idxOf.get(dst)
+        const i = idxOf.get(src),
+          j = idxOf.get(dst)
         if (next[i][j] == null) return parent
         let u = src
         while (u !== dst) {
           const v = next[idxOf.get(u)][j]
           if (v == null) break
-          parent[v] = u; u = v
+          parent[v] = u
+          u = v
         }
         return parent
       }
@@ -299,7 +359,9 @@ export const CanvasShortestPath = ({
     if (algorithm === 'bellmanford') runBellmanFord()
     if (algorithm === 'floydwarshall') runFloydWarshall()
 
-    return () => { timers.forEach(clearTimeout) }
+    return () => {
+      timers.forEach(clearTimeout)
+    }
   }, [runKey, algorithm, source, target, speed])
 
   return (
@@ -315,13 +377,16 @@ export const CanvasShortestPath = ({
         {/* Color legend */}
         <div className="absolute bottom-3 left-3 z-10 flex items-center gap-3 bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-lg px-3 py-2">
           <span className="flex items-center gap-1.5 text-xs text-slate-300">
-            <span className="w-3 h-3 rounded-full bg-cyan-500 inline-block"></span>Unvisited
+            <span className="w-3 h-3 rounded-full bg-cyan-500 inline-block"></span>
+            Unvisited
           </span>
           <span className="flex items-center gap-1.5 text-xs text-slate-300">
-            <span className="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>Visiting
+            <span className="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
+            Visiting
           </span>
           <span className="flex items-center gap-1.5 text-xs text-slate-300">
-            <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>Path
+            <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+            Path
           </span>
         </div>
 
@@ -335,11 +400,26 @@ export const CanvasShortestPath = ({
                 : 'bg-slate-800/50 text-slate-300 border-white/10 hover:bg-slate-800/80 hover:text-white'
             }`}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-4 h-4"
+            >
               {physics ? (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+                />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 5.25v13.5m-7.5-13.5v13.5"
+                />
               )}
             </svg>
             {physics ? 'Physics ON' : 'Physics OFF'}

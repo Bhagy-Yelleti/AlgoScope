@@ -74,7 +74,9 @@ export const VisualizerPage = () => {
               <div key={step} className="flex items-center gap-3">
                 <span
                   className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-colors duration-300 ${
-                    done ? 'bg-cyan-500 text-white' : 'bg-slate-700 text-slate-400'
+                    done
+                      ? 'bg-cyan-500 text-white'
+                      : 'bg-slate-700 text-slate-400'
                   }`}
                 >
                   {done ? '✓' : step}
@@ -112,7 +114,10 @@ export const VisualizerPage = () => {
           </button>
         </div>
 
-        <MenuSelectAlgorithm algorithm={algorithm} setAlgorithm={setAlgorithm} />
+        <MenuSelectAlgorithm
+          algorithm={algorithm}
+          setAlgorithm={setAlgorithm}
+        />
         <MenuSelectNodeSearch node={node} setNode={setNode} />
         <SpeedSlider value={speed} onChange={handleSpeedChange} />
       </div>

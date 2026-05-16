@@ -9,11 +9,20 @@ const ChevronIcon = () => (
     stroke="currentColor"
     className="h-5 w-5 absolute top-3.5 right-4 text-slate-400 pointer-events-none"
   >
-    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+    />
   </svg>
 )
 
-export const MenuSelectNodesShortestPath = ({ source, target, setSource, setTarget }) => {
+export const MenuSelectNodesShortestPath = ({
+  source,
+  target,
+  setSource,
+  setTarget,
+}) => {
   const nodeOptions = Array.from({ length: 9 }, (_, i) => i + 1)
 
   return (
@@ -30,7 +39,9 @@ export const MenuSelectNodesShortestPath = ({ source, target, setSource, setTarg
           >
             <option value="">Choose Source</option>
             {nodeOptions.map((n) => (
-              <option key={n} value={n}>{n}</option>
+              <option key={n} value={n}>
+                {n}
+              </option>
             ))}
           </select>
           <ChevronIcon />
@@ -43,7 +54,9 @@ export const MenuSelectNodesShortestPath = ({ source, target, setSource, setTarg
           >
             <option value="">Choose Target</option>
             {nodeOptions.map((n) => (
-              <option key={n} value={n}>{n}</option>
+              <option key={n} value={n}>
+                {n}
+              </option>
             ))}
           </select>
           <ChevronIcon />

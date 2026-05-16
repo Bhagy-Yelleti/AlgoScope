@@ -13,11 +13,15 @@ const ComplexityCard = ({ algorithm }) => {
       </h2>
       <div className="flex flex-1 gap-6">
         <div className="flex-1 bg-slate-900/60 rounded-lg px-4 py-3 border border-slate-700/50">
-          <p className="text-slate-400 text-xs mb-1 uppercase tracking-wider">Time</p>
+          <p className="text-slate-400 text-xs mb-1 uppercase tracking-wider">
+            Time
+          </p>
           <p className="text-white font-semibold text-sm">{current.time}</p>
         </div>
         <div className="flex-1 bg-slate-900/60 rounded-lg px-4 py-3 border border-slate-700/50">
-          <p className="text-slate-400 text-xs mb-1 uppercase tracking-wider">Space</p>
+          <p className="text-slate-400 text-xs mb-1 uppercase tracking-wider">
+            Space
+          </p>
           <p className="text-white font-semibold text-sm">{current.space}</p>
         </div>
       </div>

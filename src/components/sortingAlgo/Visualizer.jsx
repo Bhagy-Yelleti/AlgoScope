@@ -339,7 +339,9 @@ export default function Visualizer() {
             <div className="flex min-w-0 flex-col gap-4">
               {/* How to use stepper */}
               <div className="rounded-2xl border border-white/5 bg-slate-950/60 p-3 space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-2">How to use</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-2">
+                  How to use
+                </p>
                 {[
                   { step: '1', label: 'Pick a sort category' },
                   { step: '2', label: 'Pick an algorithm' },
@@ -351,12 +353,22 @@ export default function Visualizer() {
                     (step === '3' && hasSteps)
                   return (
                     <div key={step} className="flex items-center gap-3">
-                      <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-colors duration-300 ${
-                        done ? 'bg-cyan-500 text-white' : 'bg-slate-700 text-slate-400'
-                      }`}>{done ? '✓' : step}</span>
-                      <span className={`text-sm transition-colors duration-300 ${
-                        done ? 'text-slate-200' : 'text-slate-500'
-                      }`}>{label}</span>
+                      <span
+                        className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-colors duration-300 ${
+                          done
+                            ? 'bg-cyan-500 text-white'
+                            : 'bg-slate-700 text-slate-400'
+                        }`}
+                      >
+                        {done ? '✓' : step}
+                      </span>
+                      <span
+                        className={`text-sm transition-colors duration-300 ${
+                          done ? 'text-slate-200' : 'text-slate-500'
+                        }`}
+                      >
+                        {label}
+                      </span>
                     </div>
                   )
                 })}
@@ -365,7 +377,9 @@ export default function Visualizer() {
               <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4 shadow-xl">
                 <div className="space-y-4">
                   <div>
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">Sort Category</p>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
+                      Sort Category
+                    </p>
                     <select
                       value={algorithmType}
                       onChange={(e) => {
@@ -382,7 +396,9 @@ export default function Visualizer() {
                     </select>
                   </div>
                   <div>
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">Algorithm</p>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
+                      Algorithm
+                    </p>
                     <select
                       value={selectedAlgorithm}
                       onChange={handleAlgorithmChange}
@@ -478,7 +494,6 @@ export default function Visualizer() {
                   </div>
                 </div>
               )}
-
             </div>
           </div>
         </div>

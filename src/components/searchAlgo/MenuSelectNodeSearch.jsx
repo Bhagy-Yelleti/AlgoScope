@@ -31,7 +31,11 @@ export const MenuSelectNodeSearch = ({ node, setNode }) => {
           stroke="currentColor"
           className="h-5 w-5 absolute top-3.5 right-4 text-slate-400 pointer-events-none"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+          />
         </svg>
       </div>
     </div>

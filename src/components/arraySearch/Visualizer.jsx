@@ -183,7 +183,9 @@ export default function Visualizer() {
                 </div>
               </div>
 
-              <ComplexityCard algorithm={algorithm === 'linearSearch' ? 'linear' : 'binary'} />
+              <ComplexityCard
+                algorithm={algorithm === 'linearSearch' ? 'linear' : 'binary'}
+              />
 
               <div className="grid gap-4 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
                 <div className="rounded-2xl border border-slate-700/80 bg-slate-900/70 p-4 sm:p-5 shadow-xl">
@@ -191,7 +193,8 @@ export default function Visualizer() {
                     Step Insight
                   </p>
                   <h3 className="mt-2 text-lg sm:text-xl font-semibold text-slate-100">
-                    {currentStep?.message ?? `Enter a target and start to see steps.`}
+                    {currentStep?.message ??
+                      `Enter a target and start to see steps.`}
                   </h3>
                   <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
                     <div className="rounded-xl border border-slate-700 bg-slate-950/70 p-3 sm:p-4">
@@ -233,7 +236,10 @@ export default function Visualizer() {
                 <div className="min-w-0">
                   <CodePanel
                     title={`${algorithm.replace('Search', ' Search').charAt(0).toUpperCase() + algorithm.replace('Search', ' Search').slice(1)}`}
-                    code={currentAlgoSource?.code ?? '// Select algorithm to see code'}
+                    code={
+                      currentAlgoSource?.code ??
+                      '// Select algorithm to see code'
+                    }
                     language={language}
                     activeLine={activeLine}
                     onLanguageChange={setLanguage}
@@ -245,7 +251,9 @@ export default function Visualizer() {
             <div className="flex min-w-0 flex-col gap-4">
               {/* How to use stepper */}
               <div className="rounded-2xl border border-white/5 bg-slate-950/60 p-3 space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-2">How to use</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-2">
+                  How to use
+                </p>
                 {[
                   { step: '1', label: 'Pick a search algorithm' },
                   { step: '2', label: 'Enter a target value' },
@@ -257,12 +265,22 @@ export default function Visualizer() {
                     (step === '3' && hasSteps)
                   return (
                     <div key={step} className="flex items-center gap-3">
-                      <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-colors duration-300 ${
-                        done ? 'bg-cyan-500 text-white' : 'bg-slate-700 text-slate-400'
-                      }`}>{done ? '✓' : step}</span>
-                      <span className={`text-sm transition-colors duration-300 ${
-                        done ? 'text-slate-200' : 'text-slate-500'
-                      }`}>{label}</span>
+                      <span
+                        className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-colors duration-300 ${
+                          done
+                            ? 'bg-cyan-500 text-white'
+                            : 'bg-slate-700 text-slate-400'
+                        }`}
+                      >
+                        {done ? '✓' : step}
+                      </span>
+                      <span
+                        className={`text-sm transition-colors duration-300 ${
+                          done ? 'text-slate-200' : 'text-slate-500'
+                        }`}
+                      >
+                        {label}
+                      </span>
                     </div>
                   )
                 })}
@@ -271,7 +289,9 @@ export default function Visualizer() {
               <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4 shadow-xl">
                 <div className="space-y-4">
                   <div>
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">Algorithm</p>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
+                      Algorithm
+                    </p>
                     <select
                       value={algorithm}
                       onChange={handleAlgorithmChange}
@@ -284,7 +304,9 @@ export default function Visualizer() {
                   </div>
 
                   <div>
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">Target Value</p>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
+                      Target Value
+                    </p>
                     <input
                       type="number"
                       value={target}
@@ -311,7 +333,11 @@ export default function Visualizer() {
                       disabled={isRunning || !target}
                       className="text-sm font-bold rounded-xl bg-cyan-600 px-6 py-3 text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-cyan-500 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                      {isRunning ? 'Searching...' : hasSteps ? 'Restart Search' : 'Start Search'}
+                      {isRunning
+                        ? 'Searching...'
+                        : hasSteps
+                          ? 'Restart Search'
+                          : 'Start Search'}
                     </button>
                     <button
                       onClick={handleReset}
@@ -336,7 +362,11 @@ export default function Visualizer() {
                       </p>
                     </div>
                     <div className="rounded-full border border-slate-700 bg-slate-950/60 px-3 py-1 text-xs font-medium text-slate-200">
-                      {isPlaying ? 'Searching' : isComplete ? 'Complete' : 'Paused'}
+                      {isPlaying
+                        ? 'Searching'
+                        : isComplete
+                          ? 'Complete'
+                          : 'Paused'}
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-3">
