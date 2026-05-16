@@ -6,19 +6,12 @@ export const CanvasKadane = ({ numbers, speed }) => {
   const [maxSum, setMaxSum] = useState(0)
   const [currentSum, setCurrentSum] = useState(0)
   const [bestRange, setBestRange] = useState([0, 0])
-  const [status, setStatus] = useState(
-    'Enter array and start visualization.'
-  )
+  const [status, setStatus] = useState('Enter array and start visualization.')
 
   useEffect(() => {
     if (!numbers.length) {
-    setActiveIndex(-1)
-    setMaxSum(0)
-    setCurrentSum(0)
-    setBestRange([0, 0])
-    setStatus('Enter array and start visualization.')
-    return
-  }
+      return
+    }
 
     let timers = []
 
@@ -29,15 +22,15 @@ export const CanvasKadane = ({ numbers, speed }) => {
     let end = 0
     let tempStart = 0
 
-    setMaxSum(max)
-    setCurrentSum(curr)
-
     numbers.forEach((num, i) => {
       const timer = setTimeout(
         () => {
           setActiveIndex(i)
 
           if (i === 0) {
+            setCurrentSum(curr)
+            setMaxSum(max)
+            setBestRange([0, 0])
             setStatus(`Starting with ${num}`)
             return
           }
@@ -72,24 +65,32 @@ export const CanvasKadane = ({ numbers, speed }) => {
     return () => timers.forEach(clearTimeout)
   }, [numbers, speed])
 
+  const displayActiveIndex = numbers.length ? activeIndex : -1
+  const displayCurrentSum = numbers.length ? currentSum : 0
+  const displayMaxSum = numbers.length ? maxSum : 0
+  const displayBestRange = numbers.length ? bestRange : [0, 0]
+  const displayStatus = numbers.length
+    ? status
+    : 'Enter array and start visualization.'
+
   return (
     <div className="w-full">
       <div className="rounded-xl border border-white/10 bg-slate-900/50 p-8 shadow-lg min-h-[350px] flex flex-col justify-center">
         <div className="flex flex-wrap justify-center gap-4">
           {numbers.map((num, idx) => {
             const inBest =
-              idx >= bestRange[0] && idx <= bestRange[1]
+              idx >= displayBestRange[0] && idx <= displayBestRange[1]
 
             return (
               <div
                 key={idx}
                 className={`w-16 h-16 rounded-xl flex items-center justify-center text-xl font-bold border-2 transition-all duration-500
                 ${
-                  idx === activeIndex
+                  idx === displayActiveIndex
                     ? 'bg-cyan-500 text-black scale-110 border-white'
                     : inBest
-                    ? 'bg-emerald-500/30 border-emerald-400 text-white'
-                    : 'bg-slate-800 border-slate-700 text-slate-200'
+                      ? 'bg-emerald-500/30 border-emerald-400 text-white'
+                      : 'bg-slate-800 border-slate-700 text-slate-200'
                 }`}
               >
                 {num}
@@ -102,21 +103,21 @@ export const CanvasKadane = ({ numbers, speed }) => {
           <div className="rounded-xl bg-slate-800/60 p-5 border border-slate-700">
             <p className="text-slate-400 text-sm">Current Sum</p>
             <h2 className="text-3xl font-bold text-cyan-400 mt-2">
-              {currentSum}
+              {displayCurrentSum}
             </h2>
           </div>
 
           <div className="rounded-xl bg-slate-800/60 p-5 border border-slate-700">
             <p className="text-slate-400 text-sm">Maximum Sum</p>
             <h2 className="text-3xl font-bold text-emerald-400 mt-2">
-              {maxSum}
+              {displayMaxSum}
             </h2>
           </div>
         </div>
       </div>
 
       <div className="mt-4">
-        <StatusDisplay message={status} />
+        <StatusDisplay message={displayStatus} />
       </div>
     </div>
   )

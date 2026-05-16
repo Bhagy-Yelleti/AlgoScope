@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect} from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import SpeedSlider from '../SpeedSlider'
 import ComplexityCard from '../ComplexityCard'
@@ -12,14 +12,11 @@ const complexityData = {
   space: 'O(1)',
 }
 
-
 const VisualizerPage = () => {
-    useEffect(() => {
-      document.title = 'Kadane Algorithm | AlgoScope'
-    }, [])
-    const [arrayInput, setArrayInput] = useState(
-    '-2,1,-3,4,-1,2,1,-5,4'
-  )
+  useEffect(() => {
+    document.title = 'Kadane Algorithm | AlgoScope'
+  }, [])
+  const [arrayInput, setArrayInput] = useState('-2,1,-3,4,-1,2,1,-5,4')
 
   const [numbers, setNumbers] = useState([])
   const [speed, setSpeed] = useState(1)
@@ -35,9 +32,9 @@ const VisualizerPage = () => {
   }
 
   const handleReset = () => {
-  setNumbers([])
-  setArrayInput('-2,1,-3,4,-1,2,1,-5,4')
-}
+    setNumbers([])
+    setArrayInput('-2,1,-3,4,-1,2,1,-5,4')
+  }
 
   const currentSource = useMemo(() => {
     return (
@@ -105,4 +102,4 @@ const VisualizerPage = () => {
   )
 }
 
-export default VisualizerPage;
+export default VisualizerPage

@@ -61,12 +61,12 @@ const ALGORITHMS = [
     imageAlt: 'Stack, queue, and linked list data structure visualization',
   },
   {
-  title: 'Kadane Algorithm',
-  description: 'Visualize Maximum Subarray Sum using Kadane’s Algorithm.',
-  color: 'bg-slate-900/50 border-pink-500/30 hover:border-pink-400',
-  link: '/kadane',
-  image: KadaneImg,
-  imageAlt: 'Kadane algorithm visualization for maximum subarray sum',
+    title: 'Kadane Algorithm',
+    description: 'Visualize Maximum Subarray Sum using Kadane’s Algorithm.',
+    color: 'bg-slate-900/50 border-pink-500/30 hover:border-pink-400',
+    link: '/kadane',
+    image: KadaneImg,
+    imageAlt: 'Kadane algorithm visualization for maximum subarray sum',
   },
 ]
 
