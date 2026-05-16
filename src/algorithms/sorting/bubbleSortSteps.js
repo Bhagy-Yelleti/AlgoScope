@@ -3,11 +3,11 @@ import { createStep } from '../../lib/utils'
 export const bubbleSortSources = {
   javascript: {
     code: `function bubbleSort(arr) {
-  const n = arr.length
+  const n = arr.length;
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n - i - 1; j++) {
       if (arr[j] > arr[j + 1]) {
-        swap(arr[j], arr[j + 1])
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
       }
     }
   }
@@ -20,6 +20,28 @@ export const bubbleSortSources = {
       compare: 5,
       swap: 6,
       complete: 10,
+    },
+  },
+  c: {
+    code: `void bubbleSort(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}`,
+    lineMap: {
+      function: 1,
+      setup: 1,
+      outerLoop: 2,
+      innerLoop: 3,
+      compare: 4,
+      swap: 6,
+      complete: 11,
     },
   },
   python: {
@@ -83,21 +105,59 @@ export const bubbleSortSources = {
       complete: 9,
     },
   },
+  rust: {
+    code: `fn bubble_sort(arr: &mut [i32]) {
+    let n = arr.len();
+    for i in 0..n {
+        for j in 0..n - i - 1 {
+            if arr[j] > arr[j + 1] {
+                arr.swap(j, j + 1);
+            }
+        }
+    }
+}`,
+    lineMap: {
+      function: 1,
+      setup: 2,
+      outerLoop: 3,
+      innerLoop: 4,
+      compare: 5,
+      swap: 6,
+      complete: 9,
+    },
+  },
+  go: {
+    code: `func bubbleSort(arr []int) {
+    n := len(arr)
+    for i := 0; i < n; i++ {
+        for j := 0; j < n-i-1; j++ {
+            if arr[j] > arr[j+1] {
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+            }
+        }
+    }
+}`,
+    lineMap: {
+      function: 1,
+      setup: 2,
+      outerLoop: 3,
+      innerLoop: 4,
+      compare: 5,
+      swap: 6,
+      complete: 9,
+    },
+  },
 }
 
 export function getBubbleSortSource(language = 'javascript') {
-  return bubbleSortSources[language] ?? bubbleSortSources.javascript
+  const lang = language.toLowerCase()
+  return bubbleSortSources[lang] ?? bubbleSortSources.javascript
 }
 
 export function resolveBubbleSortLine(language, lineKey) {
-  if (!lineKey) {
-    return undefined
-  }
-
+  if (!lineKey) return undefined
   const source = getBubbleSortSource(language)
-  return (
-    source.lineMap[lineKey] ?? bubbleSortSources.javascript.lineMap[lineKey]
-  )
+  return source.lineMap[lineKey] ?? bubbleSortSources.javascript.lineMap[lineKey]
 }
 
 export function generateBubbleSortSteps(inputArray) {
@@ -112,7 +172,7 @@ export function generateBubbleSortSteps(inputArray) {
       type: 'start',
       array: arr,
       sortedIndices,
-      message: 'Bubble Sort starts with the current array state.',
+      message: 'Bubble Sort starts.',
       variables: { n },
       duration: 700,
     })
@@ -124,7 +184,7 @@ export function generateBubbleSortSteps(inputArray) {
       type: 'setup',
       array: arr,
       sortedIndices,
-      message: `Store the array length as n = ${n}.`,
+      message: `n = ${n}.`,
       variables: { n },
       duration: 650,
     })
@@ -137,7 +197,7 @@ export function generateBubbleSortSteps(inputArray) {
         type: 'outer-loop',
         array: arr,
         sortedIndices,
-        message: `Start pass ${i + 1}. The largest remaining value will bubble to index ${n - i - 1}.`,
+        message: `Pass ${i + 1}.`,
         variables: { i, n },
         duration: 600,
       })
@@ -151,7 +211,7 @@ export function generateBubbleSortSteps(inputArray) {
           array: arr,
           indices: [j, j + 1],
           sortedIndices,
-          message: `Inspect indices ${j} and ${j + 1}.`,
+          message: `Check ${j} and ${j + 1}.`,
           variables: { i, j, n },
           duration: 450,
         })
@@ -180,7 +240,7 @@ export function generateBubbleSortSteps(inputArray) {
             array: arr,
             indices: [j, j + 1],
             sortedIndices,
-            message: `Swap ${arr[j + 1]} and ${arr[j]} to move the larger value right.`,
+            message: `Swap ${arr[j + 1]} and ${arr[j]}.`,
             variables: { i, j, n },
             duration: 850,
           })
@@ -189,18 +249,6 @@ export function generateBubbleSortSteps(inputArray) {
     }
 
     sortedIndices.unshift(n - i - 1)
-
-    steps.push(
-      createStep({
-        lineKey: 'outerLoop',
-        type: 'pass-complete',
-        array: arr,
-        sortedIndices,
-        message: `Pass ${i + 1} complete. Index ${n - i - 1} is now fixed.`,
-        variables: { i, n },
-        duration: 550,
-      })
-    )
   }
 
   steps.push(
@@ -209,7 +257,7 @@ export function generateBubbleSortSteps(inputArray) {
       type: 'complete',
       array: arr,
       sortedIndices: Array.from({ length: n }, (_, index) => index),
-      message: 'Bubble Sort is complete. The full array is sorted.',
+      message: 'Sorted.',
       variables: { n },
       duration: 900,
     })

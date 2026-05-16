@@ -108,6 +108,90 @@ export const binarySearchSources = {
       notFound: 13,
     },
   },
+  c: {
+    code: `int binarySearch(int arr[], int n, int target) {
+    int low = 0;
+    int high = n - 1;
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        if (arr[mid] == target) {
+            return mid;
+        } else if (arr[mid] < target) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return -1;
+}`,
+    lineMap: {
+      function: 1,
+      setup: 2,
+      loop: 4,
+      mid: 5,
+      compare: 6,
+      found: 7,
+      low: 8,
+      high: 10,
+      notFound: 13,
+    },
+  },
+  rust: {
+    code: `fn binary_search(arr: &[i32], target: i32) -> i32 {
+    let mut low = 0;
+    let mut high = (arr.len() as i32) - 1;
+    while low <= high {
+        let mid = low + (high - low) / 2;
+        if arr[mid as usize] == target {
+            return mid;
+        } else if arr[mid as usize] < target {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    -1
+}`,
+    lineMap: {
+      function: 1,
+      setup: 2,
+      loop: 4,
+      mid: 5,
+      compare: 6,
+      found: 7,
+      low: 9,
+      high: 11,
+      notFound: 14,
+    },
+  },
+  go: {
+    code: `func binarySearch(arr []int, target int) int {
+    low := 0
+    high := len(arr) - 1
+    for low <= high {
+        mid := low + (high-low)/2
+        if arr[mid] == target {
+            return mid
+        } else if arr[mid] < target {
+            low = mid + 1
+        } else {
+            high = mid - 1
+        }
+    }
+    return -1
+}`,
+    lineMap: {
+      function: 1,
+      setup: 2,
+      loop: 4,
+      mid: 5,
+      compare: 6,
+      found: 7,
+      low: 9,
+      high: 11,
+      notFound: 14,
+    },
+  },
 }
 
 const createStep = ({
@@ -135,9 +219,7 @@ export function getBinarySearchSource(language = 'javascript') {
 }
 
 export function resolveBinarySearchSortLine(language, lineKey) {
-  if (!lineKey) {
-    return undefined
-  }
+  if (!lineKey) return undefined
 
   const source = getBinarySearchSource(language)
   return (

@@ -1,20 +1,20 @@
-import { useState } from 'react'
-import Visualizer from './Visualizer'
-import { motion } from 'framer-motion'
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import Visualizer from './Visualizer';
 
 const ArrayVisualizerPage = () => {
-  const [algorithm, setAlgorithm] = useState('linearSearch')
+  const [algorithm, setAlgorithm] = useState('linearSearch');
 
   const handleAlgorithmChange = (e) => {
-    setAlgorithm(e.target.value)
-  }
+    setAlgorithm(e.target.value);
+  };
 
   return (
     <motion.div
       className="lg:w-full w-auto p-4 sm:p-6 bg-slate-950/50 min-h-screen shadow-2xl rounded-2xl border border-white/10 backdrop-blur-xl"
-      initial={{ opacity: 0, y: 20 }} // Start: invisible and 20px down
-      animate={{ opacity: 1, y: 0 }} // End: fully visible at original position
-      transition={{ duration: 1, ease: 'easeInOut' }} // Animation settings
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1, ease: 'easeInOut' }}
     >
       <div className="flex justify-center mb-6 border-b border-white/5 pb-6">
         <select
@@ -28,7 +28,7 @@ const ArrayVisualizerPage = () => {
       </div>
       <Visualizer key={algorithm} algorithm={algorithm} />
     </motion.div>
-  )
-}
+  );
+};
 
-export default ArrayVisualizerPage
+export default ArrayVisualizerPage;

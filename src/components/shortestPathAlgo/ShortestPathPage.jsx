@@ -25,8 +25,16 @@ export const ShortestPathPage = () => {
   }
 
   const currentSource = useMemo(() => {
-    if (!algorithm || !shortestPathSources[algorithm]) return null
-    return shortestPathSources[algorithm][language]?.code ?? ''
+    if (!algorithm || !shortestPathSources || !shortestPathSources[algorithm]) {
+      return null
+    }
+
+    const algoData = shortestPathSources[algorithm]
+    const langData = algoData[language]
+
+    if (!langData) return null
+
+    return typeof langData === 'string' ? langData : langData.code
   }, [algorithm, language])
 
   const getAlgorithmName = (algo) => {
@@ -41,11 +49,10 @@ export const ShortestPathPage = () => {
   return (
     <motion.div
       className="lg:w-full w-auto flex flex-col lg:flex-row p-4 sm:p-6 bg-slate-950/50 min-h-screen rounded-2xl shadow-2xl border border-white/10 backdrop-blur-xl"
-      initial={{ opacity: 0, y: 20 }} // Start: invisible and 20px down
-      animate={{ opacity: 1, y: 0 }} // End: fully visible at original position
-      transition={{ duration: 1, ease: 'easeInOut' }} // Animation settings
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1, ease: 'easeInOut' }}
     >
-      {/* Left Panel: Controls */}
       <div className="w-full lg:w-1/4 xl:w-1/5 p-4 flex flex-col justify-between bg-slate-900/80 shadow-xl rounded-xl border border-white/5 backdrop-blur-sm">
         <h2 className="text-2xl font-bold text-center text-white border-b border-white/10 pb-4 tracking-tight">
           Controls
@@ -73,12 +80,14 @@ export const ShortestPathPage = () => {
             <option value="python">Python</option>
             <option value="cpp">C++</option>
             <option value="java">Java</option>
+            <option value="c">C</option>
+            <option value="rust">Rust</option>
+            <option value="go">Go</option>
           </select>
         </div>
         <ComplexityCard algorithm={algorithm} />
       </div>
 
-      {/* Right Panel: Visualization and Code */}
       <div className="w-full lg:w-3/4 xl:w-4/5 mt-4 lg:mt-0 lg:ml-6 flex flex-col gap-6">
         <div className="rounded-xl overflow-hidden border border-white/10 shadow-lg">
           <CanvasShortestPath

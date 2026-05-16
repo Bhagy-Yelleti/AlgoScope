@@ -146,6 +146,118 @@ void countingSortForRadix(vector<int>& arr, int exp) {
       complete: 22,
     },
   },
+  c: {
+    code: `void radixSort(int arr[], int n) {
+    int max = getMax(arr, n);
+    for (int exp = 1; max / exp > 0; exp *= 10)
+        countingSort(arr, n, exp);
+}
+
+void countingSort(int arr[], int n, int exp) {
+    int output[n];
+    int count[10] = {0};
+    for (int i = 0; i < n; i++)
+        count[(arr[i] / exp) % 10]++;
+    for (int i = 1; i < 10; i++)
+        count[i] += count[i - 1];
+    for (int i = n - 1; i >= 0; i--) {
+        int digit = (arr[i] / exp) % 10;
+        output[count[digit] - 1] = arr[i];
+        count[digit]--;
+    }
+    for (int i = 0; i < n; i++)
+        arr[i] = output[i];
+}`,
+    lineMap: {
+      function: 1,
+      outerLoop: 3,
+      countingSortCall: 4,
+      countingSortFunc: 7,
+      countDigits: 10,
+      prefixSum: 12,
+      placeElements: 14,
+      copyBack: 19,
+      complete: 21,
+    },
+  },
+  rust: {
+    code: `fn radix_sort(arr: &mut [i32]) {
+    let max = *arr.iter().max().unwrap();
+    let mut exp = 1;
+    while max / exp > 0 {
+        counting_sort(arr, exp);
+        exp *= 10;
+    }
+}
+
+fn counting_sort(arr: &mut [i32], exp: i32) {
+    let n = arr.len();
+    let mut output = vec![0; n];
+    let mut count = [0; 10];
+    for &val in arr.iter() {
+        count[((val / exp) % 10) as usize] += 1;
+    }
+    for i in 1..10 {
+        count[i] += count[i - 1];
+    }
+    for i in (0..n).rev() {
+        let digit = ((arr[i] / exp) % 10) as usize;
+        output[count[digit] - 1] = arr[i];
+        count[digit] -= 1;
+    }
+    arr.copy_from_slice(&output);
+}`,
+    lineMap: {
+      function: 1,
+      outerLoop: 4,
+      countingSortCall: 5,
+      countingSortFunc: 10,
+      countDigits: 14,
+      prefixSum: 17,
+      placeElements: 20,
+      copyBack: 25,
+      complete: 26,
+    },
+  },
+  go: {
+    code: `func radixSort(arr []int) {
+    max := getMax(arr)
+    for exp := 1; max/exp > 0; exp *= 10 {
+        countingSort(arr, exp)
+    }
+}
+
+func countingSort(arr []int, exp int) {
+    n := len(arr)
+    output := make([]int, n)
+    count := [10]int{}
+    for i := 0; i < n; i++ {
+        count[(arr[i]/exp)%10]++
+    }
+    for i := 1; i < 10; i++ {
+        count[i] += count[i-1]
+    }
+    for i := n - 1; i >= 0; i-- {
+        digit := (arr[i] / exp) % 10
+        output[count[digit]-1] = arr[i]
+        count[digit]--
+    }
+    for i := 0; i < n; i++ {
+        arr[i] = output[i]
+    }
+}`,
+    lineMap: {
+      function: 1,
+      outerLoop: 3,
+      countingSortCall: 4,
+      countingSortFunc: 8,
+      countDigits: 12,
+      prefixSum: 15,
+      placeElements: 18,
+      copyBack: 23,
+      complete: 26,
+    },
+  },
 }
 
 export function getRadixSortSource(language = 'javascript') {
@@ -181,7 +293,7 @@ export function generateRadixSortSteps(inputArray) {
         lineKey: 'outerLoop',
         type: 'outer-loop',
         array: arr,
-        message: `Processing digit at place \${exp}.`,
+        message: `Processing digit at place ${exp}.`,
         variables: { exp, max },
         duration: 600,
       })
@@ -192,7 +304,7 @@ export function generateRadixSortSteps(inputArray) {
         lineKey: 'countingSortCall',
         type: 'setup',
         array: arr,
-        message: `Applying counting sort for digit place \${exp}.`,
+        message: `Applying counting sort for digit place ${exp}.`,
         variables: { exp },
         duration: 500,
       })
@@ -211,7 +323,7 @@ export function generateRadixSortSteps(inputArray) {
           type: 'active',
           array: arr,
           indices: [i],
-          message: `Value \${arr[i]} has digit \${digit} at place \${exp}. Increment count[\${digit}].`,
+          message: `Value ${arr[i]} has digit ${digit} at place ${exp}. Increment count[${digit}].`,
           variables: { i, val: arr[i], digit, exp, countAtDigit: count[digit] },
           duration: 350,
         })
@@ -226,7 +338,7 @@ export function generateRadixSortSteps(inputArray) {
           lineKey: 'prefixSum',
           type: 'outer-loop',
           array: arr,
-          message: `Compute prefix sum for count array: count[\${i}] = \${count[i]}.`,
+          message: `Compute prefix sum for count array: count[${i}] = ${count[i]}.`,
           variables: { i, prefixSum: count[i] },
           duration: 250,
         })
@@ -246,7 +358,7 @@ export function generateRadixSortSteps(inputArray) {
           type: 'insert',
           array: arr,
           indices: [i],
-          message: `Place \${arr[i]} at output index \${pos} based on digit \${digit}.`,
+          message: `Place ${arr[i]} at output index ${pos} based on digit ${digit}.`,
           variables: { i, val: arr[i], digit, pos, newCount: count[digit] },
           duration: 500,
         })
@@ -262,7 +374,7 @@ export function generateRadixSortSteps(inputArray) {
           type: 'insert',
           array: arr,
           indices: [i],
-          message: `Update array with elements sorted by digit place \${exp}.`,
+          message: `Update array with elements sorted by digit place ${exp}.`,
           variables: { i, val: arr[i], exp },
           duration: 350,
         })
