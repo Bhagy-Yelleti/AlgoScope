@@ -221,9 +221,13 @@ export default function Visualizer({ algorithmType }) {
             <div className="flex min-w-0 min-h-0 flex-col gap-4">
               <div className="rounded-2xl border border-slate-700/80 bg-slate-900/55 p-3 sm:p-4 shadow-xl">
                 <div className="mb-3 flex items-center justify-between gap-3">
-                  <h3 className="text-base font-semibold text-slate-200">Array</h3>
+                  <h3 className="text-base font-semibold text-slate-200">
+                    Array
+                  </h3>
                   <div className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-200">
-                    {currentStep?.type ? currentStep.type.replace('-', ' ') : 'Ready'}
+                    {currentStep?.type
+                      ? currentStep.type.replace('-', ' ')
+                      : 'Ready'}
                   </div>
                 </div>
 
@@ -268,7 +272,9 @@ export default function Visualizer({ algorithmType }) {
                   <h3 className="mt-2 text-lg sm:text-xl font-semibold text-slate-100">
                     {currentStep?.message ??
                       `Select ${
-                        selectedAlgorithm ? selectedAlgorithm + ' sort' : 'an algorithm'
+                        selectedAlgorithm
+                          ? selectedAlgorithm + ' sort'
+                          : 'an algorithm'
                       } and start to see steps.`}
                   </h3>
 
@@ -278,7 +284,9 @@ export default function Visualizer({ algorithmType }) {
                         Active Indices
                       </p>
                       <p className="mt-1 sm:mt-2 font-mono text-base sm:text-lg text-slate-100">
-                        {activeIndices.length > 0 ? activeIndices.join(', ') : 'None'}
+                        {activeIndices.length > 0
+                          ? activeIndices.join(', ')
+                          : 'None'}
                       </p>
                     </div>
                     <div className="rounded-xl border border-slate-700 bg-slate-950/70 p-3 sm:p-4">
@@ -312,7 +320,10 @@ export default function Visualizer({ algorithmType }) {
                           selectedAlgorithm.slice(1)
                         : ''
                     } Sort`}
-                    code={currentAlgoSource?.code ?? '// Select algorithm to see code'}
+                    code={
+                      currentAlgoSource?.code ??
+                      '// Select algorithm to see code'
+                    }
                     language={language}
                     activeLine={activeLine}
                   />
@@ -322,7 +333,9 @@ export default function Visualizer({ algorithmType }) {
 
             <div className="flex min-w-0 flex-col gap-4">
               <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4 shadow-xl">
-                <h3 className="text-base font-semibold text-slate-300">Controls</h3>
+                <h3 className="text-base font-semibold text-slate-300">
+                  Controls
+                </h3>
                 <div className="mt-4 space-y-4">
                   <select
                     value={selectedAlgorithm}
@@ -354,7 +367,11 @@ export default function Visualizer({ algorithmType }) {
                       disabled={isRunning || !selectedAlgorithm}
                       className="text-sm font-bold rounded-xl bg-cyan-600 px-6 py-3 text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-cyan-500 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                      {isRunning ? 'Playing...' : hasSteps ? 'Restart Sort' : 'Start Sort'}
+                      {isRunning
+                        ? 'Playing...'
+                        : hasSteps
+                          ? 'Restart Sort'
+                          : 'Start Sort'}
                     </button>
                     <button
                       onClick={handleReset}
@@ -379,7 +396,11 @@ export default function Visualizer({ algorithmType }) {
                       </p>
                     </div>
                     <div className="rounded-full border border-slate-700 bg-slate-950/60 px-3 py-1 text-xs font-medium text-slate-200">
-                      {isPlaying ? 'Playing' : isComplete ? 'Complete' : 'Paused'}
+                      {isPlaying
+                        ? 'Playing'
+                        : isComplete
+                          ? 'Complete'
+                          : 'Paused'}
                     </div>
                   </div>
 
@@ -435,8 +456,9 @@ export default function Visualizer({ algorithmType }) {
                   Synchronization
                 </p>
                 <p className="mt-2 text-sm leading-6 text-slate-300">
-                  The chart and code viewer render from the same playback step, so array state,
-                  active indices, explanation text, and highlighted source line stay aligned.
+                  The chart and code viewer render from the same playback step,
+                  so array state, active indices, explanation text, and
+                  highlighted source line stay aligned.
                 </p>
               </div>
             </div>

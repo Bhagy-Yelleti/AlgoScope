@@ -175,7 +175,8 @@ export default function Visualizer({ algorithm }) {
                     Step Insight
                   </p>
                   <h3 className="mt-2 text-lg sm:text-xl font-semibold text-slate-100">
-                    {currentStep?.message ?? `Enter a target and start to see steps.`}
+                    {currentStep?.message ??
+                      `Enter a target and start to see steps.`}
                   </h3>
                   <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
                     <div className="rounded-xl border border-slate-700 bg-slate-950/70 p-3 sm:p-4">
@@ -217,7 +218,9 @@ export default function Visualizer({ algorithm }) {
                 <div className="min-w-0">
                   <CodePanel
                     title={`${algorithm.replace('Search', ' Search').charAt(0).toUpperCase() + algorithm.replace('Search', ' Search').slice(1)}`}
-                    code={currentAlgoSource || '// Select algorithm to see code'}
+                    code={
+                      currentAlgoSource || '// Select algorithm to see code'
+                    }
                     language={language}
                     activeLine={activeLine}
                   />
@@ -258,7 +261,11 @@ export default function Visualizer({ algorithm }) {
                       disabled={isRunning || !target}
                       className="text-sm font-bold rounded-xl bg-cyan-600 px-6 py-3 text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-cyan-500 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                      {isRunning ? 'Searching...' : hasSteps ? 'Restart Search' : 'Start Search'}
+                      {isRunning
+                        ? 'Searching...'
+                        : hasSteps
+                          ? 'Restart Search'
+                          : 'Start Search'}
                     </button>
                     <button
                       onClick={handleReset}
@@ -300,7 +307,11 @@ export default function Visualizer({ algorithm }) {
                       </p>
                     </div>
                     <div className="rounded-full border border-slate-700 bg-slate-950/60 px-3 py-1 text-xs font-medium text-slate-200">
-                      {isPlaying ? 'Searching' : isComplete ? 'Complete' : 'Paused'}
+                      {isPlaying
+                        ? 'Searching'
+                        : isComplete
+                          ? 'Complete'
+                          : 'Paused'}
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-3">

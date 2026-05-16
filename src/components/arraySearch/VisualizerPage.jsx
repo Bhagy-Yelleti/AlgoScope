@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import Visualizer from './Visualizer';
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import Visualizer from './Visualizer'
 
 const ArrayVisualizerPage = () => {
-  const [algorithm, setAlgorithm] = useState('linearSearch');
+  const [algorithm, setAlgorithm] = useState('linearSearch')
 
   const handleAlgorithmChange = (e) => {
-    setAlgorithm(e.target.value);
-  };
+    setAlgorithm(e.target.value)
+  }
 
   return (
     <motion.div
@@ -28,7 +28,7 @@ const ArrayVisualizerPage = () => {
       </div>
       <Visualizer key={algorithm} algorithm={algorithm} />
     </motion.div>
-  );
-};
+  )
+}
 
-export default ArrayVisualizerPage;
+export default ArrayVisualizerPage

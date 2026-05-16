@@ -6,14 +6,14 @@ export const searchingSources = {
     if (arr[i] === target) return i;
   }
   return -1;
-}`
+}`,
     },
     python: {
       code: `def linear_search(arr, target):
     for i in range(len(arr)):
         if arr[i] == target:
             return i
-    return -1`
+    return -1`,
     },
     java: {
       code: `public int linearSearch(int[] arr, int target) {
@@ -21,7 +21,7 @@ export const searchingSources = {
         if (arr[i] == target) return i;
     }
     return -1;
-}`
+}`,
     },
     cpp: {
       code: `int linearSearch(int arr[], int n, int target) {
@@ -29,7 +29,7 @@ export const searchingSources = {
         if (arr[i] == target) return i;
     }
     return -1;
-}`
+}`,
     },
     c: {
       code: `int linearSearch(int arr[], int n, int target) {
@@ -37,7 +37,7 @@ export const searchingSources = {
         if (arr[i] == target) return i;
     }
     return -1;
-}`
+}`,
     },
     rust: {
       code: `fn linear_search(arr: &[i32], target: i32) -> Option<usize> {
@@ -47,7 +47,7 @@ export const searchingSources = {
         }
     }
     None
-}`
+}`,
     },
     go: {
       code: `func linearSearch(arr []int, target int) int {
@@ -57,8 +57,8 @@ export const searchingSources = {
         }
     }
     return -1
-}`
-    }
+}`,
+    },
   },
   binarySearch: {
     javascript: {
@@ -72,7 +72,7 @@ export const searchingSources = {
     else high = mid - 1;
   }
   return -1;
-}`
+}`,
     },
     python: {
       code: `def binary_search(arr, target):
@@ -85,7 +85,7 @@ export const searchingSources = {
             low = mid + 1
         else:
             high = mid - 1
-    return -1`
+    return -1`,
     },
     java: {
       code: `public int binarySearch(int[] arr, int target) {
@@ -98,7 +98,7 @@ export const searchingSources = {
         else high = mid - 1;
     }
     return -1;
-}`
+}`,
     },
     cpp: {
       code: `int binarySearch(int arr[], int n, int target) {
@@ -110,7 +110,7 @@ export const searchingSources = {
         else high = mid - 1;
     }
     return -1;
-}`
+}`,
     },
     c: {
       code: `int binarySearch(int arr[], int n, int target) {
@@ -122,7 +122,7 @@ export const searchingSources = {
         else high = mid - 1;
     }
     return -1;
-}`
+}`,
     },
     rust: {
       code: `fn binary_search(arr: &[i32], target: i32) -> Option<usize> {
@@ -135,7 +135,7 @@ export const searchingSources = {
         else { high = mid - 1; }
     }
     None
-}`
+}`,
     },
     go: {
       code: `func binarySearch(arr []int, target int) int {
@@ -146,11 +146,11 @@ export const searchingSources = {
         if arr[mid] < target { low = mid + 1 } else { high = mid - 1 }
     }
     return -1
-}`
-    }
-  }
-};
+}`,
+    },
+  },
+}
 
 export const getSearchingSource = (algo, lang) => {
-  return searchingSources[algo]?.[lang]?.code || "";
-};
+  return searchingSources[algo]?.[lang]?.code || ''
+}
