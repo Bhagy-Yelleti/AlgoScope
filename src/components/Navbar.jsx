@@ -156,8 +156,9 @@ export const Navbar = () => {
             <div className="flex items-center gap-4 border-l border-white/10 pl-6">
               <SignedOut>
                 <SignInButton mode="modal">
-                  <button className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
-                    Sign In
+                  <button className="relative group overflow-hidden rounded-xl bg-slate-900 px-6 py-2 text-sm font-bold text-white transition-all duration-300 active:scale-95">
+                    <span className="relative z-10">Sign In</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </button>
                 </SignInButton>
               </SignedOut>
@@ -165,7 +166,8 @@ export const Navbar = () => {
                 <UserButton
                   appearance={{
                     elements: {
-                      userButtonAvatarBox: 'w-9 h-9 border border-white/10',
+                      userButtonAvatarBox:
+                        'w-9 h-9 border border-white/10 shadow-xl',
                     },
                   }}
                 />
@@ -245,8 +247,9 @@ export const Navbar = () => {
               >
                 <SignedOut>
                   <SignInButton mode="modal">
-                    <button className="w-full rounded-xl bg-indigo-600 px-4 py-3 text-base font-bold text-white shadow-lg hover:bg-indigo-500 transition-all active:scale-95">
-                      Sign In
+                    <button className="w-full relative group overflow-hidden rounded-xl bg-slate-900 border border-white/10 px-4 py-3 text-base font-bold text-white transition-all duration-300 active:scale-[0.98]">
+                      <span className="relative z-10">Sign In</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-purple-600/10" />
                     </button>
                   </SignInButton>
                 </SignedOut>
