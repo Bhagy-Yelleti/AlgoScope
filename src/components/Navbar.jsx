@@ -166,7 +166,8 @@ export const Navbar = () => {
                 <UserButton
                   appearance={{
                     elements: {
-                      userButtonAvatarBox: 'w-9 h-9 border border-white/10 shadow-xl',
+                      userButtonAvatarBox:
+                        'w-9 h-9 border border-white/10 shadow-xl',
                     },
                   }}
                 />
