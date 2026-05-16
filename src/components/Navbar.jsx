@@ -78,9 +78,8 @@ export const Navbar = () => {
     { name: 'Search', href: '/search' },
     { name: 'Shortest Path', href: '/spath' },
     { name: 'Sort', href: '/sort' },
+    { name: 'About', href: '/about' },
   ]
-
-  const navLinks = [{ name: 'Practice', href: '/practice' }]
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-slate-950/50 backdrop-blur supports-[backdrop-filter]:bg-slate-950/40 rounded-xl shadow-2xl">
@@ -115,31 +114,17 @@ export const Navbar = () => {
                     <Link
                       key={link.name}
                       to={link.href}
-                      className={`block rounded-lg px-4 py-2 text-sm transition-all ${
-                        pathname === link.href
-                          ? 'bg-indigo-500/20 text-indigo-300'
-                          : 'text-slate-300 hover:bg-white/5 hover:text-white'
-                      }`}
+                      className={`block rounded-lg px-4 py-2 text-sm transition-all ${pathname === link.href
+                        ? 'bg-indigo-500/20 text-indigo-300'
+                        : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                        }`}
                     >
                       {link.name}
                     </Link>
                   ))}
                 </div>
               </li>
-              {navLinks.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.href}
-                    className={`block rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                      pathname === link.href
-                        ? 'bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-500/40 font-semibold'
-                        : 'text-slate-400 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
+
             </ul>
             <Link
               to="https://github.com/algoscope-hq/AlgoScope"
@@ -223,17 +208,16 @@ export const Navbar = () => {
                 <SearchBar />
               </div>
               <ul className="space-y-2">
-                {[...algorithmLinks, ...navLinks].map((link) => (
+                {algorithmLinks.map((link) => (
                   // Animate each link
                   <motion.li key={link.name} variants={menuItemVariants}>
                     <Link
                       to={link.href}
                       onClick={() => setOpen(false)}
-                      className={`block rounded-xl px-4 py-3 text-base font-medium transition-all ${
-                        pathname === link.href
-                          ? 'bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-500/40 font-semibold'
-                          : 'text-slate-400 hover:text-white hover:bg-white/5'
-                      }`}
+                      className={`block rounded-xl px-4 py-3 text-base font-medium transition-all ${pathname === link.href
+                        ? 'bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-500/40 font-semibold'
+                        : 'text-slate-400 hover:text-white hover:bg-white/5'
+                        }`}
                     >
                       {link.name}
                     </Link>
