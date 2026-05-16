@@ -78,7 +78,6 @@ export const Navbar = () => {
     { name: 'Search', href: '/search' },
     { name: 'Shortest Path', href: '/spath' },
     { name: 'Sort', href: '/sort' },
-    { name: 'About', href: '/about' },
   ]
 
   return (
@@ -114,17 +113,17 @@ export const Navbar = () => {
                     <Link
                       key={link.name}
                       to={link.href}
-                      className={`block rounded-lg px-4 py-2 text-sm transition-all ${pathname === link.href
-                        ? 'bg-indigo-500/20 text-indigo-300'
-                        : 'text-slate-300 hover:bg-white/5 hover:text-white'
-                        }`}
+                      className={`block rounded-lg px-4 py-2 text-sm transition-all ${
+                        pathname === link.href
+                          ? 'bg-indigo-500/20 text-indigo-300'
+                          : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                      }`}
                     >
                       {link.name}
                     </Link>
                   ))}
                 </div>
               </li>
-
             </ul>
             <Link
               to="https://github.com/algoscope-hq/AlgoScope"
@@ -214,10 +213,11 @@ export const Navbar = () => {
                     <Link
                       to={link.href}
                       onClick={() => setOpen(false)}
-                      className={`block rounded-xl px-4 py-3 text-base font-medium transition-all ${pathname === link.href
-                        ? 'bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-500/40 font-semibold'
-                        : 'text-slate-400 hover:text-white hover:bg-white/5'
-                        }`}
+                      className={`block rounded-xl px-4 py-3 text-base font-medium transition-all ${
+                        pathname === link.href
+                          ? 'bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-500/40 font-semibold'
+                          : 'text-slate-400 hover:text-white hover:bg-white/5'
+                      }`}
                     >
                       {link.name}
                     </Link>
