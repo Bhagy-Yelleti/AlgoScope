@@ -78,6 +78,9 @@ export const Navbar = () => {
     { name: 'Search', href: '/search' },
     { name: 'Shortest Path', href: '/spath' },
     { name: 'Sort', href: '/sort' },
+    { name: 'Abstract Data Types', href: '/adt' },
+    { name: 'Array Search', href: '/ldssearch' },
+    { name: "Kadane's Algorithm", href: '/kadane' },
   ]
 
   return (
