@@ -4,6 +4,7 @@ import SortingImg from '../assets/new-home-images/array.png'
 import SearchingImg from '../assets/new-home-images/traversal.png'
 import LinearSearchImg from '../assets/new-home-images/search.png'
 import GraphAlgoImg from '../assets/new-home-images/shortestPath.png'
+import KadaneImg from '../assets/new-home-images/KadaneImg.png'
 import adt from '../assets/new-home-images/adt.png'
 import { motion } from 'framer-motion'
 
@@ -58,6 +59,14 @@ const ALGORITHMS = [
     link: '/adt',
     image: adt,
     imageAlt: 'Stack, queue, and linked list data structure visualization',
+  },
+  {
+    title: 'Kadane Algorithm',
+    description: 'Visualize Maximum Subarray Sum using Kadane’s Algorithm.',
+    color: 'bg-slate-900/50 border-pink-500/30 hover:border-pink-400',
+    link: '/kadane',
+    image: KadaneImg,
+    imageAlt: 'Kadane algorithm visualization for maximum subarray sum',
   },
 ]
 
