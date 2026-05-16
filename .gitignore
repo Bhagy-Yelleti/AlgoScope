@@ -28,3 +28,4 @@ AGENTS.md
 src/output.css
 
 .env
+.env.local
