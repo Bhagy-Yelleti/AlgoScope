@@ -187,13 +187,13 @@ export default function Visualizer() {
                 algorithm={algorithm === 'linearSearch' ? 'linear' : 'binary'}
               />
 
-              <div className="grid gap-4 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-                <div className="rounded-2xl border border-slate-700/80 bg-slate-900/70 p-4 sm:p-5 shadow-xl">
+              <div className="grid gap-4 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] items-start">
+                <div className="h-fit rounded-2xl border border-slate-700/80 bg-slate-900/70 p-4 sm:p-5 shadow-xl mb-4 px-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-400/80">
                     Step Insight
                   </p>
                   <h3 className="mt-2 text-lg sm:text-xl font-semibold text-slate-100">
-                    {currentStep?.message ??
+                    {currentStep?.message?.replace('!', '.') ??
                       `Enter a target and start to see steps.`}
                   </h3>
                   <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
