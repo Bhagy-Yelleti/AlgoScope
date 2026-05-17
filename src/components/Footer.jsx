@@ -32,7 +32,7 @@ const Footer = () => {
                   className="w-full h-full object-contain rounded-lg"
                 />
               </div>
-              <h3 className="text-2xl font-bold text-white tracking-tight">
+              <h3 className="text-2xl font-bold text-white tracking-tight logo-font">
                 AlgoScope
               </h3>
             </div>
