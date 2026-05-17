@@ -32,7 +32,7 @@ const Footer = () => {
                   className="w-full h-full object-contain rounded-lg"
                 />
               </div>
-              <h3 className="text-2xl font-bold text-white tracking-tight">
+              <h3 className="text-2xl font-bold text-white tracking-tight logo-font">
                 AlgoScope
               </h3>
             </div>
@@ -54,10 +54,14 @@ const Footer = () => {
                 { name: 'Sorting', path: '/sort' },
                 { name: 'Searching', path: '/search' },
                 { name: 'Graphs', path: '/spath' },
+                { name: 'Array Search', path: '/ldssearch' },
+                { name: 'ADTs', path: '/adt' },
+                { name: "Kadane's Algorithm", path: '/kadane' },
               ].map((link, i) => (
                 <li key={i}>
                   <Link
                     to={link.path}
+                    onClick={() => window.scrollTo(0, 0)}
                     className="text-slate-400 hover:text-cyan-400 transition-colors duration-300"
                   >
                     {link.name}
@@ -73,9 +77,17 @@ const Footer = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <h4 className="text-lg font-semibold mb-4 text-white">Connect</h4>
+            <h4 className="text-lg font-semibold mb-4 text-white">Company</h4>
             <div className="flex flex-col space-y-3">
-              <div className="flex items-center space-x-2">
+              <Link
+                to="/about"
+                onClick={() => window.scrollTo(0, 0)}
+                className="text-slate-400 hover:text-cyan-400 transition-colors duration-300"
+              >
+                About
+              </Link>
+
+              <div className="flex items-center space-x-3">
                 <motion.a
                   href="https://github.com/algoscope-hq/AlgoScope.git"
                   className="w-9 h-9 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center hover:bg-white/10 hover:border-white/20 transition-all"

@@ -1,5 +1,11 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from '@clerk/clerk-react'
 // 1. Import motion and AnimatePresence
 import { motion, AnimatePresence } from 'framer-motion'
 import githubIcon from '../assets/github-mark-white.svg'
@@ -68,12 +74,13 @@ export const Navbar = () => {
   // Derive active state from current URL instead of local state
   const { pathname } = useLocation()
 
-  const links = [
+  const algorithmLinks = [
     { name: 'Search', href: '/search' },
     { name: 'Shortest Path', href: '/spath' },
     { name: 'Sort', href: '/sort' },
-    { name: 'Practice', href: '/practice' },
-    { name: 'About', href: '/about' },
+    { name: 'Abstract Data Types', href: '/adt' },
+    { name: 'Array Search', href: '/ldssearch' },
+    { name: "Kadane's Algorithm", href: '/kadane' },
   ]
 
   return (
@@ -93,26 +100,33 @@ export const Navbar = () => {
           </Link>
 
           {/* Desktop Search */}
-          <div className="hidden lg:flex flex-1 justify-center max-w-sm mx-8">
+          <div className="hidden md:flex flex-1 justify-center max-w-xs mx-4">
             <SearchBar />
           </div>
 
           <div className="hidden md:flex items-center gap-6">
             <ul className="flex items-center gap-1">
-              {links.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.href}
-                    className={`block rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                      pathname === link.href
-                        ? 'bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-500/40 font-semibold'
-                        : 'text-slate-400 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
+              <li className="relative group">
+                <button className="rounded-lg px-4 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-200">
+                  Explore
+                </button>
+
+                <div className="absolute left-0 top-12 py-2 invisible opacity-0 translate-y-2 min-w-[220px] rounded-xl border border-white/10 bg-slate-900/95 p-2 shadow-2xl backdrop-blur-xl transition-all duration-200 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 z-50">
+                  {algorithmLinks.map((link) => (
+                    <Link
+                      key={link.name}
+                      to={link.href}
+                      className={`block rounded-lg px-4 py-2 text-sm transition-all ${
+                        pathname === link.href
+                          ? 'bg-indigo-500/20 text-indigo-300'
+                          : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                      }`}
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
+                </div>
+              </li>
             </ul>
             <Link
               to="https://github.com/algoscope-hq/AlgoScope"
@@ -125,98 +139,55 @@ export const Navbar = () => {
               />
               <span>Github</span>
             </Link>
+
+            <div className="flex items-center gap-4 border-l border-white/10 pl-6">
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <button className="relative group overflow-hidden rounded-xl bg-slate-900 px-6 py-2 text-sm font-bold text-white transition-all duration-300 active:scale-95">
+                    <span className="relative z-10">Sign In</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </button>
+                </SignInButton>
+              </SignedOut>
+              <SignedIn>
+                <UserButton
+                  appearance={{
+                    elements: {
+                      userButtonAvatarBox:
+                        'w-9 h-9 border border-white/10 shadow-xl',
+                    },
+                  }}
+                />
+              </SignedIn>
+            </div>
           </div>
 
-          {/*           <button */}
-          {/*             type="button" */}
-          {/*             aria-label="Toggle menu" */}
-          {/*             aria-expanded={open} */}
-          {/*             onClick={() => setOpen((o) => !o)} */}
-          {/*             className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black" */}
-          {/*           > */}
-          {/*             <svg */}
-          {/*               className={`h-6 w-6 ${open ? 'hidden' : 'block'}`} */}
-          {/*               viewBox="0 0 24 24" */}
-          {/*               fill="none" */}
-          {/*               stroke="currentColor" */}
-          {/*               strokeWidth="2" */}
-          {/*             > */}
-          {/*               <path */}
-          {/*                 strokeLinecap="round" */}
-          {/*                 strokeLinejoin="round" */}
-          {/*                 d="M4 6h16M4 12h16M4 18h16" */}
-          {/*               /> */}
-          {/*             </svg> */}
-          {/*             <svg */}
-          {/*               className={`h-6 w-6 ${open ? 'block' : 'hidden'}`} */}
-          {/*               viewBox="0 0 24 24" */}
-          {/*               fill="none" */}
-          {/*               stroke="currentColor" */}
-          {/*               strokeWidth="2" */}
-          {/*             > */}
-          {/*               <path */}
-          {/*                 strokeLinecap="round" */}
-          {/*                 strokeLinejoin="round" */}
-          {/*                 d="M6 18L18 6M6 6l12 12" */}
-          {/*               /> */}
-          {/*             </svg> */}
-          {/*           </button> */}
-          {/*         </div> */}
-          {/*       </nav> */}
-          {/**/}
-          {/*       <div */}
-          {/*         className={`md:hidden ${ */}
-          {/*           open ? 'block' : 'hidden' */}
-          {/*         } border-t border-black/5 bg-white/90 backdrop-blur shadow-lg rounded-lg`} */}
-          {/*       > */}
-          {/*         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3"> */}
-          {/*           <ul className="space-y-1"> */}
-          {/*             {links.map((link) => ( */}
-          {/*               <li key={link.name}> */}
-          {/*                 <Link */}
-          {/*                   to={link.href} */}
-          {/*                   onClick={() => { */}
-          {/*                     setActive(link.name) */}
-          {/*                     setOpen(false) */}
-          {/*                   }} */}
-          {/*                   className={`block rounded-md px-3 py-2 text-sm font-medium transition-colors ${ */}
-          {/*                     active === link.name */}
-          {/*                       ? 'bg-black text-white' */}
-          {/*                       : 'text-gray-700 hover:text-black hover:bg-gray-100' */}
-          {/*                   }`} */}
-          {/*                 > */}
-          {/*                   {link.name} */}
-          {/*                 </Link> */}
-          {/*               </li> */}
-          {/*             ))} */}
-          {/*           </ul> */}
-          {/*           <Link */}
-          {/*             to="#get-started" */}
-          {/*             className="mt-3 block text-center rounded-md bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800" */}
-          {/*           > */}
-          {/*             Get Started */}
-          {/*           </Link> */}
-          {/*         </div> */}
-          {/*       </div> */}
-          {/*     </header> */}
-          {/*   ) */}
-          {/* } */}
-
           {/* 5. Apply the animation to the button */}
-          <motion.button
-            type="button"
-            aria-label="Toggle menu"
-            aria-expanded={open}
-            onClick={() => setOpen((o) => !o)}
-            // Animate between 'open' and 'closed' states
-            animate={open ? 'open' : 'closed'}
-            className="md:hidden inline-flex flex-col items-center justify-center gap-1 rounded-lg p-2 text-slate-300 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 transition-colors"
-          >
-            {/* 6. Remove old SVGs and add animated lines */}
-            <Line variants={topVariants} />
-            <Line variants={middleVariants} />
-            <Line variants={bottomVariants} />
-          </motion.button>
+          <div className="flex items-center gap-4 md:hidden">
+            <SignedIn>
+              <UserButton
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: 'w-8 h-8 border border-white/10',
+                  },
+                }}
+              />
+            </SignedIn>
+            <motion.button
+              type="button"
+              aria-label="Toggle menu"
+              aria-expanded={open}
+              onClick={() => setOpen((o) => !o)}
+              // Animate between 'open' and 'closed' states
+              animate={open ? 'open' : 'closed'}
+              className="inline-flex flex-col items-center justify-center gap-1 rounded-lg p-2 text-slate-300 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20 transition-colors"
+            >
+              {/* 6. Remove old SVGs and add animated lines */}
+              <Line variants={topVariants} />
+              <Line variants={middleVariants} />
+              <Line variants={bottomVariants} />
+            </motion.button>
+          </div>
         </div>
       </div>
 
@@ -239,7 +210,7 @@ export const Navbar = () => {
                 <SearchBar />
               </div>
               <ul className="space-y-2">
-                {links.map((link) => (
+                {algorithmLinks.map((link) => (
                   // Animate each link
                   <motion.li key={link.name} variants={menuItemVariants}>
                     <Link
@@ -256,11 +227,23 @@ export const Navbar = () => {
                   </motion.li>
                 ))}
               </ul>
-              <motion.div variants={menuItemVariants} className="mt-6">
+
+              <motion.div
+                variants={menuItemVariants}
+                className="mt-6 flex flex-col gap-3"
+              >
+                <SignedOut>
+                  <SignInButton mode="modal">
+                    <button className="w-full relative group overflow-hidden rounded-xl bg-slate-900 border border-white/10 px-4 py-3 text-base font-bold text-white transition-all duration-300 active:scale-[0.98]">
+                      <span className="relative z-10">Sign In</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-purple-600/10" />
+                    </button>
+                  </SignInButton>
+                </SignedOut>
                 <Link
                   to="https://github.com/algoscope-hq/AlgoScope"
                   onClick={() => setOpen(false)}
-                  className="block w-full text-center rounded-xl bg-white px-4 py-3 text-base font-bold text-black shadow-lg hover:bg-slate-200 transition-all"
+                  className="block w-full text-center rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-base font-bold text-white shadow-lg hover:bg-white/10 transition-all active:scale-95"
                 >
                   Github
                 </Link>
