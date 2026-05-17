@@ -13,6 +13,7 @@ import * as merge from '../../algorithms/sorting/mergeSortSteps'
 import * as heap from '../../algorithms/sorting/heapSortSteps'
 import * as counting from '../../algorithms/sorting/countingSortSteps'
 import * as radix from '../../algorithms/sorting/radixSortSteps'
+import * as shell from '../../algorithms/sorting/shellSortSteps'
 
 const algoMap = {
   bubble,
@@ -23,6 +24,7 @@ const algoMap = {
   heap,
   counting,
   radix,
+  shell,
 }
 
 const createRandomArray = () =>
@@ -56,7 +58,7 @@ export default function Visualizer() {
 
   const algorithmOptions = {
     simple: ['bubble', 'selection', 'insertion'],
-    complex: ['quick', 'merge', 'heap'],
+    complex: ['quick', 'merge', 'heap', 'shell'],
     integer: ['counting', 'radix'],
   }
 
