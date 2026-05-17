@@ -103,7 +103,12 @@ const ALGORITHMS = [
     name: "Kadane's Algorithm",
     category: 'Dynamic Programming',
     route: '/kadane',
-    keywords: ['kadane', 'maximum subarray', 'max subarray', 'dynamic programming'],
+    keywords: [
+      'kadane',
+      'maximum subarray',
+      'max subarray',
+      'dynamic programming',
+    ],
   },
   // ADTs
   {
@@ -145,7 +150,7 @@ const SearchBar = () => {
   // Initialize Fuse.js
   const fuse = useMemo(() => {
     return new Fuse(ALGORITHMS, {
-      keys: ['name', 'category','keywords'],
+      keys: ['name', 'category', 'keywords'],
       threshold: 0.4,
       includeMatches: true,
     })
