@@ -193,7 +193,7 @@ export default function Visualizer() {
                     Step Insight
                   </p>
                   <h3 className="mt-2 text-lg sm:text-xl font-semibold text-slate-100">
-                    {currentStep?.message ??
+                    {currentStep?.message?.replace('!', '.') ??
                       `Enter a target and start to see steps.`}
                   </h3>
                   <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
