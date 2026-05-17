@@ -365,7 +365,7 @@ export const CanvasShortestPath = ({
   }, [runKey, algorithm, source, target, speed])
 
   return (
-    <div className="w-full relative">
+    <div className="w-full flex flex-col gap-2">
       <div className="relative rounded-lg border border-white/10 shadow-lg overflow-hidden h-[50vh] min-h-[350px] max-h-[650px] bg-slate-900/50 backdrop-blur-sm">
         <div
           id="cy-sp"

@@ -73,4 +73,9 @@ export const complexityMap = {
     time: 'O(log n)',
     space: 'O(1)',
   },
+
+  shell: {
+    time: 'O(n log n) - O(n²)',
+    space: 'O(1)',
+  },
 }
