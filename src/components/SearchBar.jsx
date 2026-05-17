@@ -28,6 +28,7 @@ const ALGORITHMS = [
     route: '/sort',
   },
   { id: 'radix', name: 'Radix Sort', category: 'Sorting', route: '/sort' },
+  { id: 'shell', name: 'Shell Sort', category: 'Sorting', route: '/sort' },
   // Searching (Graph)
   {
     id: 'bfs',

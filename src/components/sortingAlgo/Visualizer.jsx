@@ -13,6 +13,7 @@ import * as merge from '../../algorithms/sorting/mergeSortSteps'
 import * as heap from '../../algorithms/sorting/heapSortSteps'
 import * as counting from '../../algorithms/sorting/countingSortSteps'
 import * as radix from '../../algorithms/sorting/radixSortSteps'
+import * as shell from '../../algorithms/sorting/shellSortSteps'
 
 const algoMap = {
   bubble,
@@ -23,6 +24,7 @@ const algoMap = {
   heap,
   counting,
   radix,
+  shell,
 }
 
 const createRandomArray = () =>
@@ -56,15 +58,14 @@ export default function Visualizer() {
 
   const algorithmOptions = {
     simple: ['bubble', 'selection', 'insertion'],
-    complex: ['quick', 'merge', 'heap'],
+    complex: ['quick', 'merge', 'heap', 'shell'],
     integer: ['counting', 'radix'],
   }
 
   const handleSort = () => {
     if (selectedAlgorithm && algoMap[selectedAlgorithm]) {
-      const generatorName = `generate${
-        selectedAlgorithm.charAt(0).toUpperCase() + selectedAlgorithm.slice(1)
-      }SortSteps`
+      const generatorName = `generate${selectedAlgorithm.charAt(0).toUpperCase() + selectedAlgorithm.slice(1)
+        }SortSteps`
       const generator = algoMap[selectedAlgorithm][generatorName]
       if (generator) {
         clearPlayback()
@@ -86,9 +87,8 @@ export default function Visualizer() {
 
   const currentAlgoSource = useMemo(() => {
     if (!selectedAlgorithm || !algoMap[selectedAlgorithm]) return null
-    const methodName = `get${
-      selectedAlgorithm.charAt(0).toUpperCase() + selectedAlgorithm.slice(1)
-    }SortSource`
+    const methodName = `get${selectedAlgorithm.charAt(0).toUpperCase() + selectedAlgorithm.slice(1)
+      }SortSource`
     const getSource = algoMap[selectedAlgorithm][methodName]
     return getSource ? getSource(language) : null
   }, [selectedAlgorithm, language])
@@ -101,9 +101,8 @@ export default function Visualizer() {
     ) {
       return undefined
     }
-    const methodName = `resolve${
-      selectedAlgorithm.charAt(0).toUpperCase() + selectedAlgorithm.slice(1)
-    }SortLine`
+    const methodName = `resolve${selectedAlgorithm.charAt(0).toUpperCase() + selectedAlgorithm.slice(1)
+      }SortLine`
     const resolveLine = algoMap[selectedAlgorithm][methodName]
     return resolveLine ? resolveLine(language, currentStep.lineKey) : undefined
   }, [selectedAlgorithm, currentStep, language])
@@ -275,10 +274,9 @@ export default function Visualizer() {
                   </p>
                   <h3 className="mt-2 text-lg sm:text-xl font-semibold text-slate-100">
                     {currentStep?.message ??
-                      `Select ${
-                        selectedAlgorithm
-                          ? selectedAlgorithm + ' sort'
-                          : 'an algorithm'
+                      `Select ${selectedAlgorithm
+                        ? selectedAlgorithm + ' sort'
+                        : 'an algorithm'
                       } and start to see steps.`}
                   </h3>
 
@@ -308,8 +306,8 @@ export default function Visualizer() {
                       <p className="mt-1 sm:mt-2 font-mono text-xs sm:text-sm text-slate-100 break-words">
                         {currentStep?.variables
                           ? Object.entries(currentStep.variables)
-                              .map(([key, value]) => `${key}: ${value}`)
-                              .join('  ')
+                            .map(([key, value]) => `${key}: ${value}`)
+                            .join('  ')
                           : 'n/a'}
                       </p>
                     </div>
@@ -318,12 +316,11 @@ export default function Visualizer() {
 
                 <div className="min-w-0">
                   <CodePanel
-                    title={`${
-                      selectedAlgorithm
+                    title={`${selectedAlgorithm
                         ? selectedAlgorithm.charAt(0).toUpperCase() +
-                          selectedAlgorithm.slice(1)
+                        selectedAlgorithm.slice(1)
                         : ''
-                    } Sort`}
+                      } Sort`}
                     code={
                       currentAlgoSource?.code ??
                       '// Select algorithm to see code'
@@ -354,18 +351,16 @@ export default function Visualizer() {
                   return (
                     <div key={step} className="flex items-center gap-3">
                       <span
-                        className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-colors duration-300 ${
-                          done
+                        className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-colors duration-300 ${done
                             ? 'bg-cyan-500 text-white'
                             : 'bg-slate-700 text-slate-400'
-                        }`}
+                          }`}
                       >
                         {done ? '✓' : step}
                       </span>
                       <span
-                        className={`text-sm transition-colors duration-300 ${
-                          done ? 'text-slate-200' : 'text-slate-500'
-                        }`}
+                        className={`text-sm transition-colors duration-300 ${done ? 'text-slate-200' : 'text-slate-500'
+                          }`}
                       >
                         {label}
                       </span>
