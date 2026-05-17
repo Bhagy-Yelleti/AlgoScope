@@ -22,7 +22,10 @@ export default function VisualizerPage() {
         {/* Tab switcher */}
         <div
           className="flex rounded-xl p-1 gap-1 self-start sm:self-auto"
-          style={{ background: 'rgba(15,23,42,0.8)', border: '1px solid rgba(51,65,85,0.6)' }}
+          style={{
+            background: 'rgba(15,23,42,0.8)',
+            border: '1px solid rgba(51,65,85,0.6)',
+          }}
         >
           <button
             onClick={() => setActiveTab('solo')}
@@ -33,7 +36,10 @@ export default function VisualizerPage() {
               <motion.div
                 layoutId="tab-bg"
                 className="absolute inset-0 rounded-lg"
-                style={{ background: 'rgba(6,182,212,0.2)', border: '1px solid rgba(6,182,212,0.4)' }}
+                style={{
+                  background: 'rgba(6,182,212,0.2)',
+                  border: '1px solid rgba(6,182,212,0.4)',
+                }}
                 transition={{ type: 'spring', bounce: 0.2, duration: 0.4 }}
               />
             )}
@@ -48,7 +54,10 @@ export default function VisualizerPage() {
               <motion.div
                 layoutId="tab-bg"
                 className="absolute inset-0 rounded-lg"
-                style={{ background: 'rgba(6,182,212,0.2)', border: '1px solid rgba(6,182,212,0.4)' }}
+                style={{
+                  background: 'rgba(6,182,212,0.2)',
+                  border: '1px solid rgba(6,182,212,0.4)',
+                }}
                 transition={{ type: 'spring', bounce: 0.2, duration: 0.4 }}
               />
             )}

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react'
+import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { complexityMap } from '../../data/complexityMap'
 
@@ -64,7 +64,10 @@ const ALGO_META = {
 const ALL_ALGOS = Object.keys(ALGO_META)
 
 function createRandomArray(size) {
-  return Array.from({ length: size }, () => Math.floor(Math.random() * 170) + 30)
+  return Array.from(
+    { length: size },
+    () => Math.floor(Math.random() * 170) + 30
+  )
 }
 
 function countStepMetrics(steps) {
@@ -77,62 +80,55 @@ function countStepMetrics(steps) {
   return { comparisons, swaps }
 }
 
-function AlgoPanel({ algoKey, baseArray, speed, globalTrigger, onComplete, isWinner }) {
+function AlgoPanel({
+  algoKey,
+  baseArray,
+  speed,
+  globalTrigger,
+  onComplete,
+  isWinner,
+}) {
   const meta = ALGO_META[algoKey]
-  const [stepIndex, setStepIndex] = useState(-1)
-  const [steps, setSteps] = useState([])
-  const [isPlaying, setIsPlaying] = useState(false)
+  const steps = useMemo(() => {
+    if (globalTrigger === 0) return []
+    return meta.generate([...baseArray])
+  }, [baseArray, globalTrigger, meta])
+  const [stepIndex, setStepIndex] = useState(() => (steps.length > 0 ? 0 : -1))
+  const [isPlaying, setIsPlaying] = useState(() => steps.length > 0)
   const [isFinished, setIsFinished] = useState(false)
   const [elapsedMs, setElapsedMs] = useState(null)
   const [liveComparisons, setLiveComparisons] = useState(0)
   const [liveSwaps, setLiveSwaps] = useState(0)
   const timeoutRef = useRef(null)
   const startTimeRef = useRef(null)
-  const stepsRef = useRef([])
-  const stepIndexRef = useRef(-1)
+  const stepIndexRef = useRef(steps.length > 0 ? 0 : -1)
 
   useEffect(() => {
-    if (globalTrigger === 0) return
-    // reset
-    clearTimeout(timeoutRef.current)
-    const generated = meta.generate([...baseArray])
-    stepsRef.current = generated
-    setSteps(generated)
-    setStepIndex(0)
-    stepIndexRef.current = 0
-    setIsPlaying(true)
-    setIsFinished(false)
-    setElapsedMs(null)
-    setLiveComparisons(0)
-    setLiveSwaps(0)
-    startTimeRef.current = performance.now()
-  }, [globalTrigger])
-
-  useEffect(() => {
-    if (!isPlaying || stepsRef.current.length === 0) return
+    if (!isPlaying || steps.length === 0) return
+    if (startTimeRef.current === null) startTimeRef.current = performance.now()
 
     const advance = () => {
-      const current = stepsRef.current[stepIndexRef.current]
+      const current = steps[stepIndexRef.current]
       const delay = calculateStepDelay(current?.duration, speed)
 
       timeoutRef.current = setTimeout(() => {
         const nextIdx = stepIndexRef.current + 1
-        if (nextIdx >= stepsRef.current.length) {
+        if (nextIdx >= steps.length) {
           setIsPlaying(false)
           setIsFinished(true)
           setElapsedMs(Math.round(performance.now() - startTimeRef.current))
-          setStepIndex(stepsRef.current.length - 1)
-          stepIndexRef.current = stepsRef.current.length - 1
+          setStepIndex(steps.length - 1)
+          stepIndexRef.current = steps.length - 1
           onComplete(algoKey)
           return
         }
 
-        const nextStep = stepsRef.current[nextIdx]
+        const nextStep = steps[nextIdx]
         stepIndexRef.current = nextIdx
         setStepIndex(nextIdx)
 
-        if (nextStep?.type === 'compare') setLiveComparisons(c => c + 1)
-        if (nextStep?.type === 'swap') setLiveSwaps(s => s + 1)
+        if (nextStep?.type === 'compare') setLiveComparisons((c) => c + 1)
+        if (nextStep?.type === 'swap') setLiveSwaps((s) => s + 1)
 
         advance()
       }, delay)
@@ -140,7 +136,7 @@ function AlgoPanel({ algoKey, baseArray, speed, globalTrigger, onComplete, isWin
 
     advance()
     return () => clearTimeout(timeoutRef.current)
-  }, [isPlaying, speed, algoKey])
+  }, [algoKey, isPlaying, onComplete, speed, steps])
 
   const currentStep = steps[stepIndex] ?? null
   const visualArray = currentStep?.array ?? baseArray
@@ -167,11 +163,11 @@ function AlgoPanel({ algoKey, baseArray, speed, globalTrigger, onComplete, isWin
     return 'none'
   }
 
-  const { comparisons: totalComparisons, swaps: totalSwaps } = steps.length > 0
-    ? countStepMetrics(steps)
-    : { comparisons: 0, swaps: 0 }
+  const { comparisons: totalComparisons, swaps: totalSwaps } =
+    steps.length > 0 ? countStepMetrics(steps) : { comparisons: 0, swaps: 0 }
 
-  const progress = steps.length > 0 ? Math.round((stepIndex / (steps.length - 1)) * 100) : 0
+  const progress =
+    steps.length > 0 ? Math.round((stepIndex / (steps.length - 1)) * 100) : 0
   const complexity = complexityMap[algoKey]
 
   return (
@@ -186,7 +182,9 @@ function AlgoPanel({ algoKey, baseArray, speed, globalTrigger, onComplete, isWin
         border: isWinner
           ? `1px solid ${meta.accent}`
           : '1px solid rgba(51,65,85,0.8)',
-        boxShadow: isWinner ? `0 0 24px ${meta.glowColor}, inset 0 0 40px ${meta.accentBg}` : 'none',
+        boxShadow: isWinner
+          ? `0 0 24px ${meta.glowColor}, inset 0 0 40px ${meta.accentBg}`
+          : 'none',
       }}
       className="rounded-2xl flex flex-col overflow-hidden transition-all duration-500"
     >
@@ -203,7 +201,9 @@ function AlgoPanel({ algoKey, baseArray, speed, globalTrigger, onComplete, isWin
               boxShadow: `0 0 8px ${meta.glowColor}`,
             }}
           />
-          <span className="text-xs font-bold tracking-wide text-white">{meta.label}</span>
+          <span className="text-xs font-bold tracking-wide text-white">
+            {meta.label}
+          </span>
           {isWinner && (
             <motion.span
               initial={{ scale: 0 }}
@@ -221,8 +221,8 @@ function AlgoPanel({ algoKey, baseArray, speed, globalTrigger, onComplete, isWin
             background: isFinished
               ? meta.accentBg
               : isPlaying
-              ? 'rgba(16,185,129,0.15)'
-              : 'rgba(51,65,85,0.5)',
+                ? 'rgba(16,185,129,0.15)'
+                : 'rgba(51,65,85,0.5)',
             color: isFinished ? meta.accent : isPlaying ? '#34d399' : '#94a3b8',
             border: `1px solid ${isFinished ? meta.accentBorder : isPlaying ? 'rgba(52,211,153,0.3)' : 'rgba(51,65,85,0.5)'}`,
           }}
@@ -270,7 +270,9 @@ function AlgoPanel({ algoKey, baseArray, speed, globalTrigger, onComplete, isWin
           />
         </div>
         <div className="flex justify-between mt-0.5">
-          <span className="text-[9px] text-slate-500">Step {Math.max(0, stepIndex)} / {Math.max(0, steps.length - 1)}</span>
+          <span className="text-[9px] text-slate-500">
+            Step {Math.max(0, stepIndex)} / {Math.max(0, steps.length - 1)}
+          </span>
           <span className="text-[9px] text-slate-500">{progress}%</span>
         </div>
       </div>
@@ -279,36 +281,62 @@ function AlgoPanel({ algoKey, baseArray, speed, globalTrigger, onComplete, isWin
       <div className="px-3 pb-3 grid grid-cols-2 gap-2">
         <div
           className="rounded-lg p-2"
-          style={{ background: 'rgba(2,6,23,0.7)', border: '1px solid rgba(30,41,59,0.8)' }}
+          style={{
+            background: 'rgba(2,6,23,0.7)',
+            border: '1px solid rgba(30,41,59,0.8)',
+          }}
         >
-          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">Comparisons</p>
-          <p className="font-mono text-sm font-bold" style={{ color: meta.accent }}>
+          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
+            Comparisons
+          </p>
+          <p
+            className="font-mono text-sm font-bold"
+            style={{ color: meta.accent }}
+          >
             {isFinished ? totalComparisons : liveComparisons}
           </p>
         </div>
         <div
           className="rounded-lg p-2"
-          style={{ background: 'rgba(2,6,23,0.7)', border: '1px solid rgba(30,41,59,0.8)' }}
+          style={{
+            background: 'rgba(2,6,23,0.7)',
+            border: '1px solid rgba(30,41,59,0.8)',
+          }}
         >
-          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">Swaps</p>
-          <p className="font-mono text-sm font-bold" style={{ color: meta.accent }}>
+          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
+            Swaps
+          </p>
+          <p
+            className="font-mono text-sm font-bold"
+            style={{ color: meta.accent }}
+          >
             {isFinished ? totalSwaps : liveSwaps}
           </p>
         </div>
         <div
           className="rounded-lg p-2"
-          style={{ background: 'rgba(2,6,23,0.7)', border: '1px solid rgba(30,41,59,0.8)' }}
+          style={{
+            background: 'rgba(2,6,23,0.7)',
+            border: '1px solid rgba(30,41,59,0.8)',
+          }}
         >
-          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">Time</p>
+          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
+            Time
+          </p>
           <p className="font-mono text-sm font-bold text-white">
             {elapsedMs !== null ? `${elapsedMs}ms` : '—'}
           </p>
         </div>
         <div
           className="rounded-lg p-2"
-          style={{ background: 'rgba(2,6,23,0.7)', border: '1px solid rgba(30,41,59,0.8)' }}
+          style={{
+            background: 'rgba(2,6,23,0.7)',
+            border: '1px solid rgba(30,41,59,0.8)',
+          }}
         >
-          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">Space</p>
+          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
+            Space
+          </p>
           <p className="font-mono text-sm font-bold text-white">
             {complexity?.space ?? '—'}
           </p>
@@ -316,15 +344,17 @@ function AlgoPanel({ algoKey, baseArray, speed, globalTrigger, onComplete, isWin
       </div>
 
       {/* Current step message */}
-      <div
-        className="px-3 pb-3"
-      >
+      <div className="px-3 pb-3">
         <div
           className="rounded-lg px-2 py-1.5 min-h-[28px]"
-          style={{ background: 'rgba(2,6,23,0.5)', border: '1px solid rgba(30,41,59,0.6)' }}
+          style={{
+            background: 'rgba(2,6,23,0.5)',
+            border: '1px solid rgba(30,41,59,0.6)',
+          }}
         >
           <p className="text-[9px] text-slate-500 leading-relaxed line-clamp-2">
-            {currentStep?.message || (isFinished ? 'Sorting complete!' : 'Waiting to start...')}
+            {currentStep?.message ||
+              (isFinished ? 'Sorting complete!' : 'Waiting to start...')}
           </p>
         </div>
       </div>
@@ -333,7 +363,12 @@ function AlgoPanel({ algoKey, baseArray, speed, globalTrigger, onComplete, isWin
 }
 
 export default function ComparisonMode() {
-  const [selectedAlgos, setSelectedAlgos] = useState(['bubble', 'selection', 'merge', 'quick'])
+  const [selectedAlgos, setSelectedAlgos] = useState([
+    'bubble',
+    'selection',
+    'merge',
+    'quick',
+  ])
   const [arraySize, setArraySize] = useState(12)
   const [speed, setSpeed] = useState(2)
   const [baseArray, setBaseArray] = useState(() => createRandomArray(12))
@@ -363,7 +398,7 @@ export default function ComparisonMode() {
     setWinner(null)
     setCompletedAlgos(new Set())
     setHasStarted(true)
-    setGlobalTrigger(t => t + 1)
+    setGlobalTrigger((t) => t + 1)
   }
 
   const handleReset = () => {
@@ -375,19 +410,19 @@ export default function ComparisonMode() {
   }
 
   const handleComplete = useCallback((algoKey) => {
-    setCompletedAlgos(prev => {
+    setCompletedAlgos((prev) => {
       const next = new Set(prev)
       next.add(algoKey)
       return next
     })
-    setWinner(prev => prev ?? algoKey)
+    setWinner((prev) => prev ?? algoKey)
   }, [])
 
   const toggleAlgo = (algoKey) => {
-    setSelectedAlgos(prev => {
+    setSelectedAlgos((prev) => {
       if (prev.includes(algoKey)) {
         if (prev.length <= 2) return prev
-        return prev.filter(k => k !== algoKey)
+        return prev.filter((k) => k !== algoKey)
       }
       if (prev.length >= 6) return prev
       return [...prev, algoKey]
@@ -398,15 +433,16 @@ export default function ComparisonMode() {
     setHasStarted(false)
   }
 
-  const gridCols = selectedAlgos.length <= 2
-    ? 'grid-cols-1 sm:grid-cols-2'
-    : selectedAlgos.length === 3
-    ? 'grid-cols-1 sm:grid-cols-3'
-    : selectedAlgos.length <= 4
-    ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-4'
-    : selectedAlgos.length === 5
-    ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5'
-    : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6'
+  const gridCols =
+    selectedAlgos.length <= 2
+      ? 'grid-cols-1 sm:grid-cols-2'
+      : selectedAlgos.length === 3
+        ? 'grid-cols-1 sm:grid-cols-3'
+        : selectedAlgos.length <= 4
+          ? 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-4'
+          : selectedAlgos.length === 5
+            ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-5'
+            : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6'
 
   return (
     <div className="flex flex-col gap-4 p-3 sm:p-5">
@@ -422,7 +458,7 @@ export default function ComparisonMode() {
               Select Algorithms (2–6)
             </p>
             <div className="flex flex-wrap gap-2">
-              {ALL_ALGOS.map(key => {
+              {ALL_ALGOS.map((key) => {
                 const isSelected = selectedAlgos.includes(key)
                 const meta = ALGO_META[key]
                 return (
@@ -431,10 +467,16 @@ export default function ComparisonMode() {
                     onClick={() => toggleAlgo(key)}
                     className="text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all duration-200"
                     style={{
-                      background: isSelected ? meta.accentBg : 'rgba(30,41,59,0.5)',
-                      borderColor: isSelected ? meta.accent : 'rgba(51,65,85,0.8)',
+                      background: isSelected
+                        ? meta.accentBg
+                        : 'rgba(30,41,59,0.5)',
+                      borderColor: isSelected
+                        ? meta.accent
+                        : 'rgba(51,65,85,0.8)',
                       color: isSelected ? meta.accent : '#64748b',
-                      boxShadow: isSelected ? `0 0 8px ${meta.glowColor}` : 'none',
+                      boxShadow: isSelected
+                        ? `0 0 8px ${meta.glowColor}`
+                        : 'none',
                     }}
                   >
                     {meta.label}
@@ -452,14 +494,18 @@ export default function ComparisonMode() {
                 Array Size
               </p>
               <div className="flex gap-1.5">
-                {[8, 12, 16, 20].map(s => (
+                {[8, 12, 16, 20].map((s) => (
                   <button
                     key={s}
                     onClick={() => handleArraySizeChange(s)}
                     className="w-10 h-8 rounded-lg text-xs font-bold border transition-all"
                     style={{
-                      background: arraySize === s ? 'rgba(6,182,212,0.15)' : 'rgba(30,41,59,0.5)',
-                      borderColor: arraySize === s ? '#06b6d4' : 'rgba(51,65,85,0.8)',
+                      background:
+                        arraySize === s
+                          ? 'rgba(6,182,212,0.15)'
+                          : 'rgba(30,41,59,0.5)',
+                      borderColor:
+                        arraySize === s ? '#06b6d4' : 'rgba(51,65,85,0.8)',
                       color: arraySize === s ? '#06b6d4' : '#64748b',
                     }}
                   >
@@ -475,14 +521,23 @@ export default function ComparisonMode() {
                 Speed
               </p>
               <div className="flex gap-1.5">
-                {[{ label: '0.5×', val: 0.5 }, { label: '1×', val: 1 }, { label: '2×', val: 2 }, { label: '4×', val: 4 }].map(({ label, val }) => (
+                {[
+                  { label: '0.5×', val: 0.5 },
+                  { label: '1×', val: 1 },
+                  { label: '2×', val: 2 },
+                  { label: '4×', val: 4 },
+                ].map(({ label, val }) => (
                   <button
                     key={val}
                     onClick={() => setSpeed(val)}
                     className="w-10 h-8 rounded-lg text-xs font-bold border transition-all"
                     style={{
-                      background: speed === val ? 'rgba(6,182,212,0.15)' : 'rgba(30,41,59,0.5)',
-                      borderColor: speed === val ? '#06b6d4' : 'rgba(51,65,85,0.8)',
+                      background:
+                        speed === val
+                          ? 'rgba(6,182,212,0.15)'
+                          : 'rgba(30,41,59,0.5)',
+                      borderColor:
+                        speed === val ? '#06b6d4' : 'rgba(51,65,85,0.8)',
                       color: speed === val ? '#06b6d4' : '#64748b',
                     }}
                   >
@@ -510,7 +565,9 @@ export default function ComparisonMode() {
                     : 'rgba(6,182,212,0.85)',
                   color: hasStarted ? '#f43f5e' : '#000',
                   border: hasStarted ? '1px solid rgba(244,63,94,0.5)' : 'none',
-                  boxShadow: hasStarted ? 'none' : '0 0 16px rgba(6,182,212,0.4)',
+                  boxShadow: hasStarted
+                    ? 'none'
+                    : '0 0 16px rgba(6,182,212,0.4)',
                 }}
               >
                 {hasStarted ? 'Reset' : '▶ Start Race'}
@@ -536,11 +593,15 @@ export default function ComparisonMode() {
           >
             <span className="text-lg">🏆</span>
             <div>
-              <p className="text-xs font-bold" style={{ color: ALGO_META[winner].accent }}>
+              <p
+                className="text-xs font-bold"
+                style={{ color: ALGO_META[winner].accent }}
+              >
                 {ALGO_META[winner].label} finished first!
               </p>
               <p className="text-[10px] text-slate-400">
-                {completedAlgos.size} of {selectedAlgos.length} algorithms complete
+                {completedAlgos.size} of {selectedAlgos.length} algorithms
+                complete
               </p>
             </div>
           </motion.div>
@@ -549,9 +610,9 @@ export default function ComparisonMode() {
 
       {/* Panels Grid */}
       <div className={`grid gap-3 ${gridCols}`}>
-        {selectedAlgos.map(algoKey => (
+        {selectedAlgos.map((algoKey) => (
           <AlgoPanel
-            key={algoKey}
+            key={`${algoKey}-${globalTrigger}`}
             algoKey={algoKey}
             baseArray={baseArray}
             speed={speed}
@@ -565,9 +626,14 @@ export default function ComparisonMode() {
       {/* Legend */}
       <div
         className="rounded-xl p-3 flex flex-wrap gap-x-4 gap-y-1"
-        style={{ background: 'rgba(15,23,42,0.6)', border: '1px solid rgba(30,41,59,0.6)' }}
+        style={{
+          background: 'rgba(15,23,42,0.6)',
+          border: '1px solid rgba(30,41,59,0.6)',
+        }}
       >
-        <p className="text-[9px] font-bold uppercase tracking-widest text-slate-500 w-full mb-1">Bar Color Legend</p>
+        <p className="text-[9px] font-bold uppercase tracking-widest text-slate-500 w-full mb-1">
+          Bar Color Legend
+        </p>
         {[
           { color: 'rgba(96,165,250,0.9)', label: 'Comparing' },
           { color: '#f59e0b', label: 'Swapping' },
@@ -579,7 +645,11 @@ export default function ComparisonMode() {
           <div key={label} className="flex items-center gap-1.5">
             <div
               className="w-3 h-3 rounded-sm"
-              style={{ background: gradient ? 'linear-gradient(90deg, #06b6d4, #8b5cf6, #10b981)' : color }}
+              style={{
+                background: gradient
+                  ? 'linear-gradient(90deg, #06b6d4, #8b5cf6, #10b981)'
+                  : color,
+              }}
             />
             <span className="text-[9px] text-slate-400">{label}</span>
           </div>

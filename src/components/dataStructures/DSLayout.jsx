@@ -98,7 +98,6 @@ export const DSLayout = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto flex flex-col gap-6 text-slate-200">
-
       {/* Tabs */}
       <div className="flex flex-wrap gap-2 justify-center p-2 bg-slate-900/50 rounded-xl border border-white/5 backdrop-blur-sm">
         {tabs.map((tab) => (
@@ -173,9 +172,7 @@ export const DSLayout = () => {
         )}
 
         {/* Comparison Mode */}
-        {activeTab !== 'graph' && mode === 'compare' && (
-          <ComparisonMode />
-        )}
+        {activeTab !== 'graph' && mode === 'compare' && <ComparisonMode />}
       </div>
 
       {/* Code Panel */}

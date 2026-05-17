@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 // Fixed graph used by existing CanvasSearching
@@ -53,23 +53,48 @@ function generateBFSSteps(startNode) {
   const visited = new Set()
   const queue = [startNode]
   visited.add(startNode)
-  steps.push({ visited: new Set(visited), current: null, queue: [...queue], frontier: new Set([startNode]), order: [] })
+  steps.push({
+    visited: new Set(visited),
+    current: null,
+    queue: [...queue],
+    frontier: new Set([startNode]),
+    order: [],
+  })
 
   const order = []
   while (queue.length > 0) {
     const node = queue.shift()
     order.push(node)
-    steps.push({ visited: new Set(visited), current: node, queue: [...queue], frontier: new Set(queue), order: [...order] })
+    steps.push({
+      visited: new Set(visited),
+      current: node,
+      queue: [...queue],
+      frontier: new Set(queue),
+      order: [...order],
+    })
 
-    for (const neighbor of (GRAPH[node] || [])) {
+    for (const neighbor of GRAPH[node] || []) {
       if (!visited.has(neighbor)) {
         visited.add(neighbor)
         queue.push(neighbor)
-        steps.push({ visited: new Set(visited), current: node, queue: [...queue], frontier: new Set(queue), order: [...order] })
+        steps.push({
+          visited: new Set(visited),
+          current: node,
+          queue: [...queue],
+          frontier: new Set(queue),
+          order: [...order],
+        })
       }
     }
   }
-  steps.push({ visited: new Set(visited), current: null, queue: [], frontier: new Set(), order: [...order], done: true })
+  steps.push({
+    visited: new Set(visited),
+    current: null,
+    queue: [],
+    frontier: new Set(),
+    order: [...order],
+    done: true,
+  })
   return steps
 }
 
@@ -81,9 +106,15 @@ function generateDFSSteps(startNode) {
   function dfs(node) {
     visited.add(node)
     order.push(node)
-    steps.push({ visited: new Set(visited), current: node, stack: [...order], frontier: new Set(), order: [...order] })
+    steps.push({
+      visited: new Set(visited),
+      current: node,
+      stack: [...order],
+      frontier: new Set(),
+      order: [...order],
+    })
 
-    for (const neighbor of (GRAPH[node] || [])) {
+    for (const neighbor of GRAPH[node] || []) {
       if (!visited.has(neighbor)) {
         dfs(neighbor)
       }
@@ -91,44 +122,49 @@ function generateDFSSteps(startNode) {
   }
 
   dfs(startNode)
-  steps.push({ visited: new Set(visited), current: null, stack: [], frontier: new Set(), order: [...order], done: true })
+  steps.push({
+    visited: new Set(visited),
+    current: null,
+    stack: [],
+    frontier: new Set(),
+    order: [...order],
+    done: true,
+  })
   return steps
 }
 
-function GraphPanel({ algoKey, startNode, speed, trigger, onComplete, isWinner }) {
+function GraphPanel({
+  algoKey,
+  startNode,
+  speed,
+  trigger,
+  onComplete,
+  isWinner,
+}) {
   const meta = ALGO_META[algoKey]
-  const [stepIndex, setStepIndex] = useState(-1)
-  const [steps, setSteps] = useState([])
-  const [isPlaying, setIsPlaying] = useState(false)
+  const steps = useMemo(() => {
+    if (trigger === 0 || !startNode) return []
+    return algoKey === 'bfs'
+      ? generateBFSSteps(startNode)
+      : generateDFSSteps(startNode)
+  }, [algoKey, startNode, trigger])
+  const [stepIndex, setStepIndex] = useState(() => (steps.length > 0 ? 0 : -1))
+  const [isPlaying, setIsPlaying] = useState(() => steps.length > 0)
   const [isFinished, setIsFinished] = useState(false)
   const [elapsedMs, setElapsedMs] = useState(null)
   const timeoutRef = useRef(null)
   const startTimeRef = useRef(null)
-  const stepsRef = useRef([])
-  const stepIdxRef = useRef(-1)
+  const stepIdxRef = useRef(steps.length > 0 ? 0 : -1)
 
   useEffect(() => {
-    if (trigger === 0 || !startNode) return
-    clearTimeout(timeoutRef.current)
-    const generated = algoKey === 'bfs' ? generateBFSSteps(startNode) : generateDFSSteps(startNode)
-    stepsRef.current = generated
-    setSteps(generated)
-    setStepIndex(0)
-    stepIdxRef.current = 0
-    setIsPlaying(true)
-    setIsFinished(false)
-    setElapsedMs(null)
-    startTimeRef.current = performance.now()
-  }, [trigger, startNode, algoKey])
-
-  useEffect(() => {
-    if (!isPlaying || stepsRef.current.length === 0) return
+    if (!isPlaying || steps.length === 0) return
+    if (startTimeRef.current === null) startTimeRef.current = performance.now()
 
     const advance = () => {
       const delay = Math.max(120, Math.round(600 / speed))
       timeoutRef.current = setTimeout(() => {
         const nextIdx = stepIdxRef.current + 1
-        if (nextIdx >= stepsRef.current.length) {
+        if (nextIdx >= steps.length) {
           setIsPlaying(false)
           setIsFinished(true)
           setElapsedMs(Math.round(performance.now() - startTimeRef.current))
@@ -143,7 +179,7 @@ function GraphPanel({ algoKey, startNode, speed, trigger, onComplete, isWinner }
 
     advance()
     return () => clearTimeout(timeoutRef.current)
-  }, [isPlaying, speed, algoKey])
+  }, [algoKey, isPlaying, onComplete, speed, steps])
 
   const currentStep = steps[stepIndex] ?? null
   const visitedNodes = currentStep?.visited ?? new Set()
@@ -166,7 +202,8 @@ function GraphPanel({ algoKey, startNode, speed, trigger, onComplete, isWinner }
 
   const isEdgeVisited = (a, b) => visitedNodes.has(a) && visitedNodes.has(b)
 
-  const W = 360, H = 480
+  const W = 360,
+    H = 480
 
   return (
     <motion.div
@@ -182,50 +219,77 @@ function GraphPanel({ algoKey, startNode, speed, trigger, onComplete, isWinner }
       className="rounded-2xl flex flex-col overflow-hidden transition-all duration-500"
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700/50"
-        style={{ background: isWinner ? meta.accentBg : 'rgba(15,23,42,0.6)' }}>
+      <div
+        className="flex items-center justify-between px-4 py-3 border-b border-slate-700/50"
+        style={{ background: isWinner ? meta.accentBg : 'rgba(15,23,42,0.6)' }}
+      >
         <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded-full" style={{ background: meta.accent, boxShadow: `0 0 8px ${meta.glow}` }} />
+          <div
+            className="w-2.5 h-2.5 rounded-full"
+            style={{
+              background: meta.accent,
+              boxShadow: `0 0 8px ${meta.glow}`,
+            }}
+          />
           <div>
             <p className="text-xs font-bold text-white">{meta.label}</p>
             <p className="text-[10px] text-slate-500">{meta.description}</p>
           </div>
           {isWinner && (
-            <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}
+            <motion.span
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
               className="text-[10px] font-bold px-1.5 py-0.5 rounded-md ml-1"
-              style={{ background: meta.accent, color: '#000' }}>
+              style={{ background: meta.accent, color: '#000' }}
+            >
               🏆 First
             </motion.span>
           )}
         </div>
-        <span className="text-[10px] font-medium px-2 py-0.5 rounded-full"
+        <span
+          className="text-[10px] font-medium px-2 py-0.5 rounded-full"
           style={{
-            background: isFinished ? meta.accentBg : isPlaying ? 'rgba(16,185,129,0.15)' : 'rgba(51,65,85,0.5)',
+            background: isFinished
+              ? meta.accentBg
+              : isPlaying
+                ? 'rgba(16,185,129,0.15)'
+                : 'rgba(51,65,85,0.5)',
             color: isFinished ? meta.accent : isPlaying ? '#34d399' : '#94a3b8',
             border: `1px solid ${isFinished ? meta.accentBorder : isPlaying ? 'rgba(52,211,153,0.3)' : 'rgba(51,65,85,0.5)'}`,
-          }}>
+          }}
+        >
           {isFinished ? 'Done' : isPlaying ? 'Traversing…' : 'Ready'}
         </span>
       </div>
 
       {/* Graph SVG */}
       <div className="flex-1 flex items-center justify-center p-2">
-        <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ maxHeight: '340px' }}>
+        <svg
+          viewBox={`0 0 ${W} ${H}`}
+          width="100%"
+          style={{ maxHeight: '340px' }}
+        >
           {/* Edges */}
           {Object.entries(GRAPH).flatMap(([from, neighbors]) =>
-            neighbors.filter(to => parseInt(from) < to).map(to => {
-              const f = NODE_POSITIONS[parseInt(from)]
-              const t = NODE_POSITIONS[to]
-              const visited = isEdgeVisited(parseInt(from), to)
-              return (
-                <line key={`${from}-${to}`}
-                  x1={f.x} y1={f.y} x2={t.x} y2={t.y}
-                  stroke={visited ? meta.accentBorder : 'rgba(51,65,85,0.5)'}
-                  strokeWidth={visited ? 2 : 1}
-                  strokeOpacity={0.8}
-                />
-              )
-            })
+            neighbors
+              .filter((to) => parseInt(from) < to)
+              .map((to) => {
+                const f = NODE_POSITIONS[parseInt(from)]
+                const t = NODE_POSITIONS[to]
+                const visited = isEdgeVisited(parseInt(from), to)
+                return (
+                  <line
+                    key={`${from}-${to}`}
+                    x1={f.x}
+                    y1={f.y}
+                    x2={t.x}
+                    y2={t.y}
+                    stroke={visited ? meta.accentBorder : 'rgba(51,65,85,0.5)'}
+                    strokeWidth={visited ? 2 : 1}
+                    strokeOpacity={0.8}
+                  />
+                )
+              })
           )}
           {/* Nodes */}
           {Object.entries(NODE_POSITIONS).map(([id, pos]) => {
@@ -234,14 +298,29 @@ function GraphPanel({ algoKey, startNode, speed, trigger, onComplete, isWinner }
             return (
               <g key={id}>
                 <circle
-                  cx={pos.x} cy={pos.y} r={isCurrent ? 18 : 14}
+                  cx={pos.x}
+                  cy={pos.y}
+                  r={isCurrent ? 18 : 14}
                   fill={getNodeColor(nodeId)}
                   stroke={getNodeStroke(nodeId)}
                   strokeWidth={isCurrent ? 2.5 : 1.5}
-                  style={{ transition: 'all 0.3s ease', filter: isCurrent ? `drop-shadow(0 0 8px ${meta.accent})` : 'none' }}
+                  style={{
+                    transition: 'all 0.3s ease',
+                    filter: isCurrent
+                      ? `drop-shadow(0 0 8px ${meta.accent})`
+                      : 'none',
+                  }}
                 />
-                <text x={pos.x} y={pos.y + 1} textAnchor="middle" dominantBaseline="middle"
-                  fill="white" fontSize={isCurrent ? 11 : 9} fontWeight="bold" fontFamily="monospace">
+                <text
+                  x={pos.x}
+                  y={pos.y + 1}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  fill="white"
+                  fontSize={isCurrent ? 11 : 9}
+                  fontWeight="bold"
+                  fontFamily="monospace"
+                >
                   {id}
                 </text>
               </g>
@@ -258,7 +337,10 @@ function GraphPanel({ algoKey, startNode, speed, trigger, onComplete, isWinner }
           { color: meta.accentBorder.replace('0.3', '0.8'), label: 'Visited' },
         ].map(({ color, label }) => (
           <div key={label} className="flex items-center gap-1">
-            <div className="w-2.5 h-2.5 rounded-full" style={{ background: color }} />
+            <div
+              className="w-2.5 h-2.5 rounded-full"
+              style={{ background: color }}
+            />
             <span className="text-[9px] text-slate-400">{label}</span>
           </div>
         ))}
@@ -271,24 +353,49 @@ function GraphPanel({ algoKey, startNode, speed, trigger, onComplete, isWinner }
           { label: 'Steps', value: Math.max(0, stepIndex) },
           { label: 'Time', value: elapsedMs !== null ? `${elapsedMs}ms` : '—' },
         ].map(({ label, value }) => (
-          <div key={label} className="rounded-lg p-2" style={{ background: 'rgba(2,6,23,0.7)', border: '1px solid rgba(30,41,59,0.8)' }}>
-            <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">{label}</p>
-            <p className="font-mono text-sm font-bold" style={{ color: meta.accent }}>{value}</p>
+          <div
+            key={label}
+            className="rounded-lg p-2"
+            style={{
+              background: 'rgba(2,6,23,0.7)',
+              border: '1px solid rgba(30,41,59,0.8)',
+            }}
+          >
+            <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
+              {label}
+            </p>
+            <p
+              className="font-mono text-sm font-bold"
+              style={{ color: meta.accent }}
+            >
+              {value}
+            </p>
           </div>
         ))}
       </div>
 
       {/* Visit order */}
       <div className="px-4 pb-3">
-        <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-1">Traversal Order</p>
+        <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-1">
+          Traversal Order
+        </p>
         <div className="flex flex-wrap gap-1">
           {visitOrder.map((n, i) => (
-            <span key={i} className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded"
-              style={{ background: meta.accentBg, color: meta.accent, border: `1px solid ${meta.accentBorder}` }}>
+            <span
+              key={i}
+              className="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded"
+              style={{
+                background: meta.accentBg,
+                color: meta.accent,
+                border: `1px solid ${meta.accentBorder}`,
+              }}
+            >
               {n}
             </span>
           ))}
-          {visitOrder.length === 0 && <span className="text-[9px] text-slate-600">—</span>}
+          {visitOrder.length === 0 && (
+            <span className="text-[9px] text-slate-600">—</span>
+          )}
         </div>
       </div>
     </motion.div>
@@ -303,13 +410,13 @@ export default function GraphSearchComparison() {
   const [hasStarted, setHasStarted] = useState(false)
 
   const handleComplete = useCallback((algoKey) => {
-    setWinner(prev => prev ?? algoKey)
+    setWinner((prev) => prev ?? algoKey)
   }, [])
 
   const handleStart = () => {
     setWinner(null)
     setHasStarted(true)
-    setTrigger(t => t + 1)
+    setTrigger((t) => t + 1)
   }
 
   const handleReset = () => {
@@ -321,50 +428,82 @@ export default function GraphSearchComparison() {
   return (
     <div className="flex flex-col gap-4 p-4 sm:p-6">
       {/* Controls */}
-      <div className="rounded-2xl border border-slate-700/60 p-4" style={{ background: 'rgba(15,23,42,0.8)' }}>
+      <div
+        className="rounded-2xl border border-slate-700/60 p-4"
+        style={{ background: 'rgba(15,23,42,0.8)' }}
+      >
         <div className="flex flex-wrap gap-4 items-end justify-between">
           <div className="flex flex-wrap gap-4 items-end">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-cyan-400/80 mb-2">Start Node</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-cyan-400/80 mb-2">
+                Start Node
+              </p>
               <div className="flex gap-1.5 flex-wrap">
-                {[1,2,3,4,5,6,7,8,9].map(n => (
-                  <button key={n} onClick={() => { setStartNode(n); handleReset() }}
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+                  <button
+                    key={n}
+                    onClick={() => {
+                      setStartNode(n)
+                      handleReset()
+                    }}
                     className="w-9 h-9 rounded-lg text-xs font-bold border transition-all"
                     style={{
-                      background: startNode === n ? 'rgba(6,182,212,0.15)' : 'rgba(30,41,59,0.5)',
-                      borderColor: startNode === n ? '#06b6d4' : 'rgba(51,65,85,0.8)',
+                      background:
+                        startNode === n
+                          ? 'rgba(6,182,212,0.15)'
+                          : 'rgba(30,41,59,0.5)',
+                      borderColor:
+                        startNode === n ? '#06b6d4' : 'rgba(51,65,85,0.8)',
                       color: startNode === n ? '#06b6d4' : '#64748b',
-                    }}>
+                    }}
+                  >
                     {n}
                   </button>
                 ))}
               </div>
             </div>
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400 mb-2">Speed</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400 mb-2">
+                Speed
+              </p>
               <div className="flex gap-1.5">
-                {[{ label: '1×', val: 1 }, { label: '2×', val: 2 }, { label: '4×', val: 4 }].map(({ label, val }) => (
-                  <button key={val} onClick={() => setSpeed(val)}
+                {[
+                  { label: '1×', val: 1 },
+                  { label: '2×', val: 2 },
+                  { label: '4×', val: 4 },
+                ].map(({ label, val }) => (
+                  <button
+                    key={val}
+                    onClick={() => setSpeed(val)}
                     className="px-3 h-9 rounded-lg text-xs font-bold border transition-all"
                     style={{
-                      background: speed === val ? 'rgba(6,182,212,0.15)' : 'rgba(30,41,59,0.5)',
-                      borderColor: speed === val ? '#06b6d4' : 'rgba(51,65,85,0.8)',
+                      background:
+                        speed === val
+                          ? 'rgba(6,182,212,0.15)'
+                          : 'rgba(30,41,59,0.5)',
+                      borderColor:
+                        speed === val ? '#06b6d4' : 'rgba(51,65,85,0.8)',
                       color: speed === val ? '#06b6d4' : '#64748b',
-                    }}>
+                    }}
+                  >
                     {label}
                   </button>
                 ))}
               </div>
             </div>
           </div>
-          <button onClick={hasStarted ? handleReset : handleStart}
+          <button
+            onClick={hasStarted ? handleReset : handleStart}
             className="h-9 px-5 rounded-xl text-xs font-bold transition-all"
             style={{
-              background: hasStarted ? 'rgba(244,63,94,0.2)' : 'rgba(6,182,212,0.85)',
+              background: hasStarted
+                ? 'rgba(244,63,94,0.2)'
+                : 'rgba(6,182,212,0.85)',
               color: hasStarted ? '#f43f5e' : '#000',
               border: hasStarted ? '1px solid rgba(244,63,94,0.5)' : 'none',
               boxShadow: hasStarted ? 'none' : '0 0 16px rgba(6,182,212,0.4)',
-            }}>
+            }}
+          >
             {hasStarted ? 'Reset' : '▶ Start Race'}
           </button>
         </div>
@@ -372,27 +511,51 @@ export default function GraphSearchComparison() {
 
       <AnimatePresence>
         {winner && (
-          <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
             className="rounded-xl px-4 py-2.5 flex items-center gap-3"
-            style={{ background: ALGO_META[winner].accentBg, border: `1px solid ${ALGO_META[winner].accentBorder}`, boxShadow: `0 0 20px ${ALGO_META[winner].glow}` }}>
+            style={{
+              background: ALGO_META[winner].accentBg,
+              border: `1px solid ${ALGO_META[winner].accentBorder}`,
+              boxShadow: `0 0 20px ${ALGO_META[winner].glow}`,
+            }}
+          >
             <span className="text-lg">🏆</span>
-            <p className="text-xs font-bold" style={{ color: ALGO_META[winner].accent }}>
-              {ALGO_META[winner].label} completed traversal first from node {startNode}!
+            <p
+              className="text-xs font-bold"
+              style={{ color: ALGO_META[winner].accent }}
+            >
+              {ALGO_META[winner].label} completed traversal first from node{' '}
+              {startNode}!
             </p>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Info callout */}
-      <div className="rounded-xl px-4 py-3 text-xs text-slate-400 border border-slate-700/40"
-        style={{ background: 'rgba(15,23,42,0.6)' }}>
-        <strong className="text-slate-300">How they differ:</strong> BFS uses a queue — it visits all neighbors before going deeper, guaranteeing the shortest path in unweighted graphs. DFS uses a stack (or recursion) — it dives deep first, useful for cycle detection and topological sort.
+      <div
+        className="rounded-xl px-4 py-3 text-xs text-slate-400 border border-slate-700/40"
+        style={{ background: 'rgba(15,23,42,0.6)' }}
+      >
+        <strong className="text-slate-300">How they differ:</strong> BFS uses a
+        queue — it visits all neighbors before going deeper, guaranteeing the
+        shortest path in unweighted graphs. DFS uses a stack (or recursion) — it
+        dives deep first, useful for cycle detection and topological sort.
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {Object.keys(ALGO_META).map(key => (
-          <GraphPanel key={key} algoKey={key} startNode={startNode} speed={speed}
-            trigger={trigger} onComplete={handleComplete} isWinner={winner === key} />
+        {Object.keys(ALGO_META).map((key) => (
+          <GraphPanel
+            key={`${key}-${trigger}`}
+            algoKey={key}
+            startNode={startNode}
+            speed={speed}
+            trigger={trigger}
+            onComplete={handleComplete}
+            isWinner={winner === key}
+          />
         ))}
       </div>
     </div>

@@ -61,7 +61,6 @@ export const ShortestPathPage = () => {
     >
       {/* LEFT PANEL */}
       <div className="w-full lg:w-1/4 p-4 flex flex-col gap-6 bg-slate-900/80 shadow-xl rounded-xl border border-white/5 backdrop-blur-sm overflow-y-auto">
-
         {/* Header */}
         <div className="border-b border-white/10 pb-4">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80 text-center mb-1">
@@ -172,7 +171,6 @@ export const ShortestPathPage = () => {
 
       {/* RIGHT PANEL */}
       <div className="w-full lg:w-3/4 flex flex-col gap-6">
-
         {mode === 'solo' ? (
           <>
             <div className="rounded-xl overflow-hidden border border-white/10 shadow-lg">
