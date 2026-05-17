@@ -216,10 +216,10 @@ export function generateShellSortSteps(inputArray) {
         })
       )
     }
-    
+
     // In the last pass (gap=1), we can start marking elements as sorted
     if (gap === 1) {
-       // All elements are essentially sorted after gap 1 pass
+      // All elements are essentially sorted after gap 1 pass
     }
   }
 
