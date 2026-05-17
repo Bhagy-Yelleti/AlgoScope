@@ -22,7 +22,7 @@ const containerVariants = {
 const ALGORITHMS = [
   {
     title: 'Sorting',
-    description: 'Visualizing Bubble, Merge, Quick, and Heap Sort.',
+    description: 'Visualizing Bubble, Merge, Quick, Heap, and Shell Sort.',
     color: 'bg-slate-900/50 border-blue-500/30 hover:border-blue-400',
     link: '/sort',
     image: SortingImg,
