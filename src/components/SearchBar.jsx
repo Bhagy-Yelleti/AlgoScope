@@ -98,6 +98,18 @@ const ALGORITHMS = [
     category: 'Array Search',
     route: '/ldssearch?algo=binary',
   },
+  {
+    id: 'kadane',
+    name: "Kadane's Algorithm",
+    category: 'Dynamic Programming',
+    route: '/kadane',
+    keywords: [
+      'kadane',
+      'maximum subarray',
+      'max subarray',
+      'dynamic programming',
+    ],
+  },
   // ADTs
   {
     id: 'stack',
@@ -138,7 +150,7 @@ const SearchBar = () => {
   // Initialize Fuse.js
   const fuse = useMemo(() => {
     return new Fuse(ALGORITHMS, {
-      keys: ['name', 'category'],
+      keys: ['name', 'category', 'keywords'],
       threshold: 0.4,
       includeMatches: true,
     })
