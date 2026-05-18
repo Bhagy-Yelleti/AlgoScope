@@ -72,7 +72,7 @@ Learning Data Structures and Algorithms (DSA) is often a daunting task for stude
 | **Real-time Visualization** | Watch algorithms come alive with smooth, step-by-step animations using Framer Motion and Anime.js.                                              |
 | **Adjustable Speed**        | Full control over animation speed with +/- precision buttons and input data to learn at your own pace.                                          |
 | **Algorithm Coverage**      | Support for Sorting (Quick, Merge, Shell), Searching (Linear, Binary), Graph (BFS, DFS, Dijkstra), and Dynamic Programming (Kadane's, Moore's). |
-| **Comparison Mode**         | Side-by-side visualization of multiple algorithms to compare their efficiency and execution patterns in real-time.               |
+| **Comparison Mode**         | Side-by-side visualization of multiple algorithms to compare their efficiency and execution patterns in real-time.                              |
 | **Code Insights**           | See implementations in C++, Java, Python, and JS with a multi-language viewer and one-click copy functionality.                                 |
 | **Complexity Analysis**     | Interactive performance graphs and complexity cards to visualize Big O notations and scaling behavior.                                          |
 | **URL Persistence**         | Shareable links that preserve the current algorithm state and parameters using URL search params.                                               |

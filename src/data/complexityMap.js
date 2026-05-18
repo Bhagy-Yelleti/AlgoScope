@@ -1,81 +1,113 @@
 export const complexityMap = {
   dijkstra: {
-    time: 'O((V + E) log V)',
+    best: 'O((V + E) log V)',
+    average: 'O((V + E) log V)',
+    worst: 'O((V + E) log V)',
     space: 'O(V)',
   },
 
   bellmanford: {
-    time: 'O(V * E)',
+    best: 'O(V * E)',
+    average: 'O(V * E)',
+    worst: 'O(V * E)',
     space: 'O(V)',
   },
 
   floydwarshall: {
-    time: 'O(V^3)',
-    space: 'O(V^2)',
+    best: 'O(V³)',
+    average: 'O(V³)',
+    worst: 'O(V³)',
+    space: 'O(V²)',
   },
 
   bfs: {
-    time: 'O(V + E)',
+    best: 'O(V + E)',
+    average: 'O(V + E)',
+    worst: 'O(V + E)',
     space: 'O(V)',
   },
 
   dfs: {
-    time: 'O(V + E)',
+    best: 'O(V + E)',
+    average: 'O(V + E)',
+    worst: 'O(V + E)',
     space: 'O(V)',
   },
 
   bubble: {
-    time: 'O(n²)',
+    best: 'O(n)',
+    average: 'O(n²)',
+    worst: 'O(n²)',
     space: 'O(1)',
   },
 
   selection: {
-    time: 'O(n²)',
+    best: 'O(n²)',
+    average: 'O(n²)',
+    worst: 'O(n²)',
     space: 'O(1)',
   },
 
   insertion: {
-    time: 'O(n²)',
+    best: 'O(n)',
+    average: 'O(n²)',
+    worst: 'O(n²)',
     space: 'O(1)',
   },
 
   quick: {
-    time: 'O(n log n) avg, O(n²) worst',
+    best: 'O(n log n)',
+    average: 'O(n log n)',
+    worst: 'O(n²)',
     space: 'O(log n)',
   },
 
   merge: {
-    time: 'O(n log n)',
+    best: 'O(n log n)',
+    average: 'O(n log n)',
+    worst: 'O(n log n)',
     space: 'O(n)',
   },
 
   heap: {
-    time: 'O(n log n)',
+    best: 'O(n log n)',
+    average: 'O(n log n)',
+    worst: 'O(n log n)',
     space: 'O(1)',
   },
 
   counting: {
-    time: 'O(n + k)',
+    best: 'O(n + k)',
+    average: 'O(n + k)',
+    worst: 'O(n + k)',
     space: 'O(k)',
   },
 
   radix: {
-    time: 'O(nk)',
+    best: 'O(nk)',
+    average: 'O(nk)',
+    worst: 'O(nk)',
     space: 'O(n + k)',
   },
 
   linear: {
-    time: 'O(n)',
+    best: 'O(1)',
+    average: 'O(n)',
+    worst: 'O(n)',
     space: 'O(1)',
   },
 
   binary: {
-    time: 'O(log n)',
+    best: 'O(1)',
+    average: 'O(log n)',
+    worst: 'O(log n)',
     space: 'O(1)',
   },
 
   shell: {
-    time: 'O(n log n) - O(n²)',
+    best: 'O(n log n)',
+    average: 'O(n log² n)',
+    worst: 'O(n²)',
     space: 'O(1)',
   },
 }
