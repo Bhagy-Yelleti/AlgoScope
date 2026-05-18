@@ -138,7 +138,7 @@ function generateAutoSection(tag, previousTag) {
 // ----------------------- main -----------------------
 const tagArg = process.argv[2];
 if (!tagArg) {
-  console.error('Usage: node scripts/append-file-tree.js <tag>');
+  console.error('Usage: node scripts/append-file-tree.cjs <tag>');
   process.exit(1);
 }
 const newTag = tagArg; // e.g. v1.1.0
