@@ -25,7 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Java code implementations for BFS, DFS, and Shortest Path algorithms ([@gaurav123-4](https://github.com/gaurav123-4)).
 - multi-language support across searching, sorting, and other modules ([@Bhagy-Yelleti](https://github.com/Bhagy-Yelleti)).
 
-
 ### Changed
 
 - Improved UI layout and UX across visualizer pages ([@Tilakraj1491](https://github.com/Tilakraj1491)).
@@ -40,8 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- the double-rendering bug in the sorting visualizer components  ([@adityapaul26](https://github.com/adityapaul26)).
-- linting errors caused by unescaped characters in selection menus  ([@adityapaul26](https://github.com/adityapaul26)).
+- the double-rendering bug in the sorting visualizer components ([@adityapaul26](https://github.com/adityapaul26)).
+- linting errors caused by unescaped characters in selection menus ([@adityapaul26](https://github.com/adityapaul26)).
 - Improved rendering performance across the main dashboard.
 - brightness and saturation levels of the Practice button ([@Yash13670](https://github.com/Yash13670)).
 - missing Kadane’s Algorithm entry in the search bar ([@azaanhusain777](https://github.com/azaanhusain777)).
