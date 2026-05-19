@@ -16,9 +16,14 @@ export default function AppLayout({ children, showBackground = true }) {
   const location = useLocation()
 
   const [history, setHistory] = useState(() => {
-    const saved = localStorage.getItem('algo-history')
-    return saved ? JSON.parse(saved) : []
-  })
+  try {
+    const saved = localStorage.getItem('algo-history');
+    return saved ? JSON.parse(saved) : [];
+  } catch (error) {
+    console.error('Failed to parse algo-history:', error);
+    return [];
+  }
+});
   const pathMap = {
     Search: '/search',
     'Shortest Path': '/spath',
@@ -83,7 +88,7 @@ export default function AppLayout({ children, showBackground = true }) {
               ) : (
                 history.map((item, index) => (
                   <Link
-                    key={index}
+                    key={item}
                     to={pathMap[item]}
                     className="rounded-xl bg-white/5 px-4 py-3 text-sm text-slate-200 border border-white/5 hover:bg-white/10 hover:border-cyan-400/30 hover:translate-x-1 transition-all duration-200 cursor-pointer"
                   >
