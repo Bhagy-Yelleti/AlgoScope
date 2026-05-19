@@ -31,6 +31,67 @@ const algoMap = {
 const createRandomArray = () =>
   Array.from({ length: 8 }, () => Math.floor(Math.random() * 200) + 50)
 
+const STATE_COLORS = {
+  compare: { bg: '#2563eb', border: '#60a5fa' },
+  swap: { bg: '#f59e0b', border: '#d97706' },
+  pivot: { bg: '#f43f5e', border: '#e11d48' },
+  min: { bg: '#8b5cf6', border: '#7c3aed' },
+  sorted: { bg: '#0891b2', border: '#06b6d4' },
+  active: { bg: '#10b981', border: '#059669' },
+}
+
+const STATE_STYLE_PRESETS = {
+  compare: {
+    bar: {
+      boxShadow: '0 0 18px rgba(59, 130, 246, 0.55)',
+      transform: 'translateY(-4px)',
+    },
+    element: {
+      transform: 'scale(1.12)',
+      boxShadow:
+        '0 0 0 1px rgba(147, 197, 253, 0.55), 0 0 18px rgba(59, 130, 246, 0.35)',
+    },
+  },
+  swap: {
+    bar: {
+      boxShadow: '0 0 15px rgba(245, 158, 11, 0.45)',
+    },
+    element: {
+      transform: 'scale(1.1)',
+    },
+  },
+  pivot: {
+    bar: {
+      boxShadow: '0 0 15px rgba(244, 63, 94, 0.5)',
+    },
+    element: {
+      transform: 'scale(1.1)',
+    },
+  },
+  min: {
+    bar: {
+      boxShadow: '0 0 15px rgba(139, 92, 246, 0.5)',
+    },
+    element: {
+      transform: 'scale(1.1)',
+    },
+  },
+  sorted: {
+    bar: {
+      boxShadow: '0 0 15px rgba(6, 182, 212, 0.45)',
+    },
+    element: {},
+  },
+  active: {
+    bar: {
+      boxShadow: '0 0 15px rgba(16, 185, 129, 0.5)',
+    },
+    element: {
+      transform: 'scale(1.1)',
+    },
+  },
+}
+
 export default function Visualizer() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [baseArray, setBaseArray] = useState([50, 120, 70, 30, 200, 90, 160])
@@ -124,92 +185,31 @@ export default function Visualizer() {
     return ''
   }
 
-  const getBarStyle = (index, value) => {
+  const getStateStyle = (index, variant) => {
     const stateClass = getStateClass(index)
+    if (!stateClass) return undefined
+
+    const color = STATE_COLORS[stateClass]
+    const preset = STATE_STYLE_PRESETS[stateClass]?.[variant] ?? {}
+
+    return {
+      background: color.bg,
+      borderColor: color.border,
+      color: variant === 'element' ? '#fff' : undefined,
+      ...preset,
+    }
+  }
+
+  const getBarStyle = (index, value) => {
     const baseStyle = {
       height: `${value}px`,
       background: 'rgba(6, 182, 212, 0.8)',
     }
-
-    const styles = {
-      compare: {
-        background: '#2563eb',
-        borderColor: '#60a5fa',
-        boxShadow: '0 0 18px rgba(59, 130, 246, 0.55)',
-        transform: 'translateY(-4px)',
-      },
-      swap: {
-        background: '#f59e0b',
-        borderColor: '#d97706',
-        boxShadow: '0 0 15px rgba(245, 158, 11, 0.45)',
-      },
-      pivot: {
-        background: '#f43f5e',
-        borderColor: '#e11d48',
-        boxShadow: '0 0 15px rgba(244, 63, 94, 0.5)',
-      },
-      min: {
-        background: '#8b5cf6',
-        borderColor: '#7c3aed',
-        boxShadow: '0 0 15px rgba(139, 92, 246, 0.5)',
-      },
-      sorted: {
-        background: '#0891b2',
-        borderColor: '#06b6d4',
-        boxShadow: '0 0 15px rgba(6, 182, 212, 0.45)',
-      },
-      active: {
-        background: '#10b981',
-        borderColor: '#059669',
-        boxShadow: '0 0 15px rgba(16, 185, 129, 0.5)',
-      },
-    }
-
-    return stateClass ? { ...baseStyle, ...styles[stateClass] } : baseStyle
+    return { ...baseStyle, ...getStateStyle(index, 'bar') }
   }
 
   const getElementStyle = (index) => {
-    const stateClass = getStateClass(index)
-    const styles = {
-      compare: {
-        background: '#2563eb',
-        color: '#fff',
-        borderColor: '#60a5fa',
-        transform: 'scale(1.12)',
-        boxShadow:
-          '0 0 0 1px rgba(147, 197, 253, 0.55), 0 0 18px rgba(59, 130, 246, 0.35)',
-      },
-      swap: {
-        background: '#f59e0b',
-        color: '#fff',
-        borderColor: '#d97706',
-        transform: 'scale(1.1)',
-      },
-      pivot: {
-        background: '#f43f5e',
-        color: '#fff',
-        borderColor: '#e11d48',
-        transform: 'scale(1.1)',
-      },
-      min: {
-        background: '#8b5cf6',
-        color: '#fff',
-        borderColor: '#7c3aed',
-        transform: 'scale(1.1)',
-      },
-      sorted: {
-        background: '#0891b2',
-        color: '#fff',
-        borderColor: '#06b6d4',
-      },
-      active: {
-        background: '#10b981',
-        color: '#fff',
-        borderColor: '#059669',
-        transform: 'scale(1.1)',
-      },
-    }
-    return stateClass ? styles[stateClass] : undefined
+    return getStateStyle(index, 'element')
   }
 
   const handleAlgorithmChange = (event) => {
@@ -537,27 +537,6 @@ export default function Visualizer() {
         </div>
       </div>
 
-      <style>{`
-        .array-ele.active { background: #10b981 !important; color: white; border-color: #059669; transform: scale(1.1); }
-        .array-ele.compare { background: #2563eb !important; color: white; border-color: #3b82f6; transform: scale(1.12); box-shadow: 0 0 0 1px rgba(147, 197, 253, 0.55), 0 0 18px rgba(59, 130, 246, 0.35); }
-        .array-ele.swap { background: #f59e0b !important; color: white; border-color: #d97706; transform: scale(1.1); }
-        .array-ele.sorted { background: #0891b2 !important; color: white; border-color: #06b6d4; }
-        .array-ele.pivot { background: #f43f5e !important; color: white; border-color: #e11d48; transform: scale(1.1); }
-        .array-ele.min { background: #8b5cf6 !important; color: white; border-color: #7c3aed; transform: scale(1.1); }
-        
-        .bar.active { background: #10b981 !important; box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); border-color: #059669; }
-        .bar.compare { background: #2563eb !important; box-shadow: 0 0 18px rgba(59, 130, 246, 0.55); border-color: #60a5fa; transform: translateY(-4px); }
-        .bar.swap { background: #f59e0b !important; box-shadow: 0 0 15px rgba(245, 158, 11, 0.45); border-color: #d97706; }
-        .bar.sorted { background: #0891b2 !important; box-shadow: 0 0 15px rgba(6, 182, 212, 0.45); border-color: #06b6d4; }
-        .bar.pivot { background: #f43f5e !important; box-shadow: 0 0 15px rgba(244, 63, 94, 0.5); border-color: #e11d48; }
-        .bar.min { background: #8b5cf6 !important; box-shadow: 0 0 15px rgba(139, 92, 246, 0.5); border-color: #7c3aed; }
-        
-        .bar-val { 
-          display: flex; justify-content: center; 
-          color: rgba(255,255,255,0.9); font-size: 10px; font-weight: bold; 
-          padding-top: 4px;
-        }
-      `}</style>
     </div>
   )
 }
