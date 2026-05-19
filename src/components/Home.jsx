@@ -6,6 +6,7 @@ import LinearSearchImg from '../assets/new-home-images/search.png'
 import GraphAlgoImg from '../assets/new-home-images/shortestPath.png'
 import KadaneImg from '../assets/new-home-images/KadaneImg.png'
 import MooreVotingImg from '../assets/new-home-images/MooreVoting.png'
+import { MathSoloVisualizer } from './MathTheory/MathSoloVisualizer'
 import adt from '../assets/new-home-images/adt.png'
 import { motion } from 'framer-motion'
 
@@ -80,6 +81,15 @@ const ALGORITHMS = [
     image: MooreVotingImg,
     imageAlt:
       "Moore's Voting algorithm visualization for finding the majority element",
+  },
+  {
+    title: 'Math Theory',
+    description:
+      'Visualize GCD, Fast Exponentiation, and Bit Manipulation step-by-step.',
+    color: 'bg-slate-900/50 border-indigo-500/30 hover:border-indigo-400',
+    link: '/math-theory',
+    image: KadaneImg, // or create/import a proper Math image if you have one
+    imageAlt: 'Mathematical algorithms visualization',
   },
 ]
 

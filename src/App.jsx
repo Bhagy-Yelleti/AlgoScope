@@ -15,6 +15,12 @@ const VisualizerPage = lazy(() =>
     default: module.VisualizerPage,
   }))
 )
+
+const MathTheory = lazy(() =>
+  import('./components/MathTheory/MathSoloVisualizer').then((module) => ({
+    default: module.MathSoloVisualizer,
+  }))
+)
 const ShortestPathPage = lazy(() =>
   import('./components/shortestPathAlgo/ShortestPathPage').then((module) => ({
     default: module.ShortestPathPage,
@@ -66,6 +72,16 @@ function App() {
         <Suspense fallback={<PageLoader />}>
           <AppLayout>
             <VisualizerPage />
+          </AppLayout>
+        </Suspense>
+      ),
+    },
+    {
+      path: '/math-theory',
+      element: (
+        <Suspense fallback={<PageLoader />}>
+          <AppLayout>
+            <MathTheory />
           </AppLayout>
         </Suspense>
       ),
