@@ -1,14 +1,14 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 const ROWS = 20
 const COLS = 30
 const START_ROW = 5
 const START_COL = 5
-const TARGET_ROW = 14
+const TARGET_ROW = 15
 const TARGET_COL = 25
 
 const createInitialGrid = () => {
-  const grid = []
+  const initialGrid = []
   for (let r = 0; r < ROWS; r++) {
     const currentRow = []
     for (let c = 0; c < COLS; c++) {
@@ -23,73 +23,99 @@ const createInitialGrid = () => {
         isShortestPath: false,
       })
     }
-    grid.push(currentRow)
+    initialGrid.push(currentRow)
   }
-  return grid
+  return initialGrid
 }
 
 export const GridVisualizer = ({ algorithm, speed }) => {
-  const [grid, setGrid] = useState(createInitialGrid)
+  const [grid, setGrid] = useState(createInitialGrid())
   const [isVisualizing, setIsVisualizing] = useState(false)
   const [toolMode, setToolMode] = useState('wall')
-  const isMousePressed = useRef(false)
+  const isMouseDown = useRef(false)
 
-  const handleMouseDown = (row, col) => {
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+  const clearVisualizationState = (currentGrid) => {
+    return currentGrid.map((r) =>
+      r.map((c) => ({
+        ...c,
+        isVisited: false,
+        isShortestPath: false,
+      }))
+    )
+  }
+
+  const handleCellModify = (row, col, shouldClearPath = false) => {
     if (isVisualizing) return
-    isMousePressed.current = true
-    handleCellModify(row, col)
-  }
 
-  const handleMouseEnter = (row, col) => {
-    if (!isMousePressed.current || isVisualizing) return
-    handleCellModify(row, col)
-  }
-
-  const handleMouseUp = () => {
-    isMousePressed.current = false
-  }
-
-  const handleKeyDown = (e, row, col) => {
-    if (isVisualizing) return
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      handleCellModify(row, col)
-    }
-  }
-
-  const handleCellModify = (row, col) => {
     setGrid((prevGrid) => {
-      const cell = prevGrid[row][col]
-      if (cell.isStart || cell.isTarget) return prevGrid
+      if (prevGrid[row][col].isStart || prevGrid[row][col].isTarget)
+        return prevGrid
 
-      const newGrid = prevGrid.map((r) => r.map((c) => ({ ...c })))
-      const targetCell = newGrid[row][col]
+      let baseGrid = shouldClearPath
+        ? clearVisualizationState(prevGrid)
+        : prevGrid
 
-      if (toolMode === 'wall') {
-        targetCell.isWall = !targetCell.isWall
-        targetCell.weight = 1
-      } else if (toolMode === 'weight') {
-        if (!targetCell.isWall) {
-          targetCell.weight = targetCell.weight === 5 ? 1 : 5
-        }
-      }
-      return newGrid
+      return baseGrid.map((r, rIdx) => {
+        if (rIdx !== row) return r
+        return r.map((c, cIdx) => {
+          if (cIdx !== col) return c
+
+          const updatedCell = { ...c }
+          if (toolMode === 'wall') {
+            updatedCell.isWall = !updatedCell.isWall
+            updatedCell.weight = 1
+          } else if (toolMode === 'swamp') {
+            if (!updatedCell.isWall) {
+              updatedCell.weight = updatedCell.weight === 5 ? 1 : 5
+            }
+          }
+          return updatedCell
+        })
+      })
     })
   }
 
-  const handleClearGrid = () => {
+  const handleMouseDown = (row, col) => {
+    isMouseDown.current = true
+    handleCellModify(row, col, true)
+  }
+
+  const handleMouseEnter = (row, col) => {
+    if (!isMouseDown.current) return
+    handleCellModify(row, col, false)
+  }
+
+  const handleMouseUp = () => {
+    isMouseDown.current = false
+  }
+
+  const handleKeyDown = (e, row, col) => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault()
+      handleCellModify(row, col, true)
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('mouseup', handleMouseUp)
+    return () => window.removeEventListener('mouseup', handleMouseUp)
+  }, [])
+
+  const clearBoard = () => {
     if (isVisualizing) return
     setGrid(createInitialGrid())
   }
 
-  const handleGenerateMaze = () => {
+  const generateWeightedMaze = () => {
     if (isVisualizing) return
     setGrid((prevGrid) => {
-      return prevGrid.map((row) =>
-        row.map((cell) => {
-          if (cell.isStart || cell.isTarget) {
+      return prevGrid.map((r) =>
+        r.map((c) => {
+          if (c.isStart || c.isTarget) {
             return {
-              ...cell,
+              ...c,
               isWall: false,
               weight: 1,
               isVisited: false,
@@ -99,11 +125,13 @@ export const GridVisualizer = ({ algorithm, speed }) => {
           const rand = Math.random()
           let isWall = false
           let weight = 1
-          if (rand < 0.25) isWall = true
-          else if (rand < 0.4) weight = 5
-
+          if (rand < 0.22) {
+            isWall = true
+          } else if (rand < 0.45) {
+            weight = 5
+          }
           return {
-            ...cell,
+            ...c,
             isWall,
             weight,
             isVisited: false,
@@ -114,105 +142,30 @@ export const GridVisualizer = ({ algorithm, speed }) => {
     })
   }
 
-  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-
   const runPathfinding = async () => {
-    if (isVisualizing) return
+    if (isVisualizing || !algorithm) return
     setIsVisualizing(true)
 
-    const cleanGrid = grid.map((row) =>
-      row.map((cell) => ({
-        ...cell,
-        isVisited: false,
-        isShortestPath: false,
-      }))
-    )
-    setGrid(cleanGrid)
+    let currentGrid = []
+    setGrid((prev) => {
+      const cleared = clearVisualizationState(prev)
+      currentGrid = cleared
+      return cleared
+    })
 
-    const delay = Math.max(2, 30 / (speed || 1.0))
-    const currentAlgo = algorithm ? algorithm.toLowerCase() : 'dijkstra'
-
+    const delay = Math.max(5, Math.floor(40 / speed))
+    let visitedNodesInOrder = []
     let parentMap = {}
     let foundTarget = false
 
-    if (currentAlgo === 'bellmanford') {
-      const distances = {}
-      for (let r = 0; r < ROWS; r++) {
-        for (let c = 0; c < COLS; c++) {
-          distances[`${r}-${c}`] = Infinity
-        }
-      }
-      distances[`${START_ROW}-${START_COL}`] = 0
-
-      for (let i = 0; i < ROWS * COLS - 1; i++) {
-        let changed = false
-        const relaxedInThisPass = []
-
-        for (let r = 0; r < ROWS; r++) {
-          for (let c = 0; c < COLS; c++) {
-            const uKey = `${r}-${c}`
-            if (distances[uKey] === Infinity || cleanGrid[r][c].isWall) continue
-
-            const directions = [
-              [-1, 0],
-              [1, 0],
-              [0, -1],
-              [0, 1],
-            ]
-            for (const [dr, dc] of directions) {
-              const nr = r + dr
-              const nc = c + dc
-              if (
-                nr >= 0 &&
-                nr < ROWS &&
-                nc >= 0 &&
-                nc < COLS &&
-                !cleanGrid[nr][nc].isWall
-              ) {
-                const vKey = `${nr}-${nc}`
-                const weight = cleanGrid[nr][nc].weight
-                if (distances[uKey] + weight < distances[vKey]) {
-                  distances[vKey] = distances[uKey] + weight
-                  parentMap[vKey] = [r, c]
-                  changed = true
-
-                  if (
-                    !(nr === TARGET_ROW && nc === TARGET_COL) &&
-                    !(nr === START_ROW && nc === START_COL)
-                  ) {
-                    relaxedInThisPass.push([nr, nc])
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        if (relaxedInThisPass.length > 0) {
-          setGrid((prev) => {
-            const updated = prev.map((rowArr) =>
-              rowArr.map((cellObj) => ({ ...cellObj }))
-            )
-            for (const [nr, nc] of relaxedInThisPass) {
-              updated[nr][nc].isVisited = true
-            }
-            return updated
-          })
-        }
-
-        if (!changed) break
-        await sleep(delay)
-      }
-      if (distances[`${TARGET_ROW}-${TARGET_COL}`] !== Infinity) {
-        foundTarget = true
-      }
-    } else {
+    if (algorithm === 'dijkstra') {
       const distances = {}
       const pq = []
 
       for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
-          distances[`${r}-${c}`] = Infinity
+          const key = `${r}-${c}`
+          distances[key] = Infinity
         }
       }
 
@@ -232,12 +185,7 @@ export const GridVisualizer = ({ algorithm, speed }) => {
         }
 
         if (!(currRow === START_ROW && currCol === START_COL)) {
-          setGrid((prev) => {
-            const updated = prev.map((r) => r.map((c) => ({ ...c })))
-            updated[currRow][currCol].isVisited = true
-            return updated
-          })
-          await sleep(delay)
+          visitedNodesInOrder.push({ row: currRow, col: currCol })
         }
 
         const directions = [
@@ -246,47 +194,113 @@ export const GridVisualizer = ({ algorithm, speed }) => {
           [0, -1],
           [0, 1],
         ]
+
         for (const [dr, dc] of directions) {
-          const nextRow = currRow + dr
-          const nextCol = currCol + dc
-          const nextKey = `${nextRow}-${nextCol}`
+          const nr = currRow + dr
+          const nc = currCol + dc
 
-          if (
-            nextRow >= 0 &&
-            nextRow < ROWS &&
-            nextCol >= 0 &&
-            nextCol < COLS &&
-            !cleanGrid[nextRow][nextCol].isWall
-          ) {
-            const edgeWeight = cleanGrid[nextRow][nextCol].weight
-            const newDist = distances[currKey] + edgeWeight
+          if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
+            const neighbor = currentGrid[nr][nc]
+            if (neighbor.isWall) continue
 
-            if (newDist < distances[nextKey]) {
-              distances[nextKey] = newDist
-              parentMap[nextKey] = [currRow, currCol]
-              pq.push({ row: nextRow, col: nextCol, dist: newDist })
+            const alt = distances[currKey] + neighbor.weight
+            const neighborKey = `${nr}-${nc}`
+
+            if (alt < distances[neighborKey]) {
+              distances[neighborKey] = alt
+              parentMap[neighborKey] = { row: currRow, col: currCol }
+              pq.push({ row: nr, col: nc, dist: alt })
             }
           }
         }
       }
+    } else if (algorithm === 'bellmanford') {
+      const distances = {}
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          distances[`${r}-${c}`] = Infinity
+        }
+      }
+      distances[`${START_ROW}-${START_COL}`] = 0
+
+      for (let i = 0; i < ROWS * COLS - 1; i++) {
+        let changed = false
+        let batchVisits = []
+
+        for (let r = 0; r < ROWS; r++) {
+          for (let c = 0; c < COLS; c++) {
+            const currKey = `${r}-${c}`
+            if (distances[currKey] === Infinity) continue
+
+            const directions = [
+              [-1, 0],
+              [1, 0],
+              [0, -1],
+              [0, 1],
+            ]
+            for (const [dr, dc] of directions) {
+              const nr = r + dr
+              const nc = c + dc
+
+              if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
+                const neighbor = currentGrid[nr][nc]
+                if (neighbor.isWall) continue
+
+                const neighborKey = `${nr}-${nc}`
+                const alt = distances[currKey] + neighbor.weight
+
+                if (alt < distances[neighborKey]) {
+                  distances[neighborKey] = alt
+                  parentMap[neighborKey] = { row: r, col: c }
+                  changed = true
+
+                  if (
+                    !(nr === TARGET_ROW && nc === TARGET_COL) &&
+                    !(nr === START_ROW && nc === START_COL)
+                  ) {
+                    batchVisits.push({ row: nr, col: nc })
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        if (batchVisits.length > 0) {
+          visitedNodesInOrder.push(...batchVisits)
+        }
+        if (!changed) break
+      }
+      if (distances[`${TARGET_ROW}-${TARGET_COL}`] !== Infinity) {
+        foundTarget = true
+      }
+    }
+
+    for (const node of visitedNodesInOrder) {
+      setGrid((prev) => {
+        const next = prev.map((r) => r.map((c) => ({ ...c })))
+        next[node.row][node.col].isVisited = true
+        return next
+      })
+      await sleep(delay)
     }
 
     if (foundTarget) {
       const path = []
-      let currKey = `${TARGET_ROW}-${TARGET_COL}`
-      while (parentMap[currKey]) {
-        const [pRow, pCol] = parentMap[currKey]
-        if (pRow === START_ROW && pCol === START_COL) break
-        path.push([pRow, pCol])
-        currKey = `${pRow}-${pCol}`
+      let currentKey = `${TARGET_ROW}-${TARGET_COL}`
+      while (parentMap[currentKey]) {
+        const parent = parentMap[currentKey]
+        if (!(parent.row === START_ROW && parent.col === START_COL)) {
+          path.unshift(parent)
+        }
+        currentKey = `${parent.row}-${parent.col}`
       }
 
-      path.reverse()
-      for (const [pRow, pCol] of path) {
+      for (const node of path) {
         setGrid((prev) => {
-          const updated = prev.map((r) => r.map((c) => ({ ...c })))
-          updated[pRow][pCol].isShortestPath = true
-          return updated
+          const next = prev.map((r) => r.map((c) => ({ ...c })))
+          next[node.row][node.col].isShortestPath = true
+          return next
         })
         await sleep(delay * 2)
       }
@@ -296,114 +310,110 @@ export const GridVisualizer = ({ algorithm, speed }) => {
   }
 
   return (
-    <div
-      className="flex flex-col items-center p-4 bg-slate-950 w-full overflow-auto select-none"
-      onMouseLeave={handleMouseUp}
-    >
-      <div className="flex flex-wrap gap-4 mb-4 justify-center items-center">
-        <div className="p-1 bg-slate-900 rounded-lg border border-white/10 flex gap-1">
+    <div className="p-4 flex flex-col items-center bg-slate-950 text-white rounded-xl select-none">
+      <div className="flex flex-wrap gap-3 mb-4 justify-center items-center">
+        <div className="flex bg-slate-900 p-1 border border-white/10 rounded-xl">
           <button
             onClick={() => setToolMode('wall')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-md transition ${
+            disabled={isVisualizing}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               toolMode === 'wall'
-                ? 'bg-cyan-500 text-slate-950 font-bold'
+                ? 'bg-orange-500 text-slate-950 shadow'
                 : 'text-slate-400 hover:text-white'
-            }`}
+            } disabled:opacity-50`}
           >
             Wall Tool (🧱)
           </button>
           <button
-            onClick={() => setToolMode('weight')}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-md transition ${
-              toolMode === 'weight'
-                ? 'bg-emerald-500 text-slate-950 font-bold'
+            onClick={() => setToolMode('swamp')}
+            disabled={isVisualizing}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              toolMode === 'swamp'
+                ? 'bg-emerald-500 text-slate-950 shadow'
                 : 'text-slate-400 hover:text-white'
-            }`}
+            } disabled:opacity-50`}
           >
-            Swamp Weight Tool (🌊 Cost: 5)
+            Swamp Weight Tool (🦠 Cost: 5)
           </button>
         </div>
 
         <button
-          onClick={handleClearGrid}
+          onClick={clearBoard}
           disabled={isVisualizing}
-          className="px-4 py-2 text-xs font-semibold rounded-lg bg-slate-800 text-slate-200 border border-white/10 hover:bg-slate-700 transition disabled:opacity-50"
+          className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-xs font-bold rounded-xl border border-white/10 transition"
         >
           Clear Board
         </button>
+
         <button
-          onClick={handleGenerateMaze}
+          onClick={generateWeightedMaze}
           disabled={isVisualizing}
-          className="px-4 py-2 text-xs font-semibold rounded-lg bg-slate-800 text-cyan-400 border border-cyan-500/20 hover:bg-slate-800/80 transition disabled:opacity-50"
+          className="px-4 py-1.5 bg-cyan-950/40 border border-cyan-500/30 hover:bg-cyan-950/80 disabled:opacity-40 text-xs font-bold text-cyan-400 rounded-xl transition"
         >
           Generate Weighted Maze
         </button>
+
         <button
           onClick={runPathfinding}
-          disabled={isVisualizing}
-          className="px-4 py-2 text-xs rounded-lg bg-cyan-500 text-slate-950 shadow-md font-bold hover:bg-cyan-400 transition disabled:opacity-50"
+          disabled={isVisualizing || !algorithm}
+          className="px-5 py-1.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 disabled:bg-slate-800 disabled:text-slate-500 text-xs font-extrabold rounded-xl shadow-lg shadow-cyan-500/10 transition"
         >
-          {isVisualizing ? 'Calculating Path...' : 'Run Pathfinding'}
+          {isVisualizing ? 'Visualizing...' : 'Run Pathfinding'}
         </button>
       </div>
 
-      <div
-        className="grid bg-slate-900 p-2 rounded-xl border border-white/5"
-        style={{ gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))` }}
-      >
-        {grid.map((row) =>
-          row.map((cell) => {
-            const {
-              row,
-              col,
-              isStart,
-              isTarget,
-              isWall,
-              weight,
-              isVisited,
-              isShortestPath,
-            } = cell
+      <div className="p-2 bg-slate-900 border border-white/5 rounded-xl shadow-inner max-w-full overflow-auto">
+        <div
+          className="grid gap-[1px] bg-slate-800 border border-slate-800"
+          style={{ gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))` }}
+        >
+          {grid.map((row, rIdx) =>
+            row.map((cell, cIdx) => {
+              let bgClass = 'bg-slate-950 hover:bg-slate-900'
+              if (cell.isStart) bgClass = 'bg-emerald-500 animate-pulse'
+              else if (cell.isTarget) bgClass = 'bg-rose-500 animate-pulse'
+              else if (cell.isWall) bgClass = 'bg-slate-700'
+              else if (cell.isShortestPath)
+                bgClass = 'bg-amber-400 shadow-lg shadow-amber-400/20'
+              else if (cell.isVisited) {
+                bgClass =
+                  cell.weight === 5 ? 'bg-teal-900/90' : 'bg-cyan-600/40'
+              } else if (cell.weight === 5) {
+                bgClass =
+                  'bg-emerald-950/80 hover:bg-emerald-900/50 text-emerald-400/60'
+              }
 
-            let bgClass =
-              'bg-slate-950 border-slate-800/40 focus:ring-2 focus:ring-cyan-500 focus:outline-none'
-            if (isStart)
-              bgClass =
-                'bg-emerald-500 border-emerald-400 focus:ring-2 focus:ring-emerald-400 focus:outline-none'
-            else if (isTarget)
-              bgClass =
-                'bg-rose-500 border-rose-400 focus:ring-2 focus:ring-rose-400 focus:outline-none'
-            else if (isWall) bgClass = 'bg-slate-700 border-slate-600'
-            else if (isShortestPath) bgClass = 'bg-yellow-400 border-yellow-300'
-            else if (weight > 1)
-              bgClass = 'bg-emerald-950 border-emerald-800 text-emerald-400/70'
-            else if (isVisited) bgClass = 'bg-cyan-500/20 border-cyan-500/40'
+              let cellLabel = 'Empty space'
+              if (cell.isStart) cellLabel = 'Start node'
+              else if (cell.isTarget) cellLabel = 'Target node'
+              else if (cell.isWall) cellLabel = 'Wall obstruction'
+              else if (cell.weight === 5)
+                cellLabel = 'Swamp terrain, movement cost five'
 
-            let cellLabel = `Cell at row ${row}, column ${col}.`
-            if (isStart) cellLabel += ' Start node.'
-            else if (isTarget) cellLabel += ' Target node.'
-            else if (isWall) cellLabel += ' Wall node.'
-            else if (weight > 1)
-              cellLabel += ` Weighted node with cost ${weight}.`
-            if (isShortestPath) cellLabel += ' Part of the shortest path.'
-            else if (isVisited) cellLabel += ' Visited node.'
-
-            return (
-              <div
-                key={`${row}-${col}`}
-                role="button"
-                tabIndex={0}
-                aria-label={cellLabel}
-                onMouseDown={() => handleMouseDown(row, col)}
-                onMouseEnter={() => handleMouseEnter(row, col)}
-                onMouseUp={handleMouseUp}
-                onKeyDown={(e) => handleKeyDown(e, row, col)}
-                className={`w-6 h-6 border cursor-crosshair transition-all duration-100 flex items-center justify-center text-[9px] font-bold ${bgClass}`}
-              >
-                {weight > 1 && !isShortestPath && !isVisited && !isWall && '5'}
-              </div>
-            )
-          })
-        )}
+              return (
+                <div
+                  key={`${rIdx}-${cIdx}`}
+                  role="button"
+                  tabIndex={isVisualizing ? -1 : 0}
+                  aria-disabled={isVisualizing}
+                  aria-label={cellLabel}
+                  onMouseDown={() => handleMouseDown(rIdx, cIdx)}
+                  onMouseEnter={() => handleMouseEnter(rIdx, cIdx)}
+                  onMouseUp={handleMouseUp}
+                  onKeyDown={(e) => handleKeyDown(e, rIdx, cIdx)}
+                  className={`w-6 h-6 border border-slate-900/30 transition-all duration-100 flex items-center justify-center text-[9px] font-bold ${
+                    isVisualizing ? 'cursor-not-allowed' : 'cursor-crosshair'
+                  } ${bgClass}`}
+                >
+                  {!cell.isStart &&
+                    !cell.isTarget &&
+                    !cell.isWall &&
+                    cell.weight > 1 && <span>{cell.weight}</span>}
+                </div>
+              )
+            })
+          )}
+        </div>
       </div>
     </div>
   )

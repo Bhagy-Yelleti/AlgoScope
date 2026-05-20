@@ -9,6 +9,7 @@ import { motion } from 'framer-motion'
 import SpeedSlider from '../SpeedSlider'
 import { shortestPathSources } from '../../algorithms/searching/shortestPathSources'
 import ComplexityCard from '../ComplexityCard'
+import ComparisonMode from './ComparisonMode'
 
 const GRID_ALGORITHMS = new Set(['dijkstra', 'bellmanford'])
 
@@ -149,7 +150,9 @@ export const ShortestPathPage = () => {
 
       <div className="w-full lg:w-3/4 xl:w-4/5 mt-4 lg:mt-0 lg:ml-6 flex flex-col gap-6">
         <div className="rounded-xl overflow-hidden border border-white/10 shadow-lg bg-slate-950">
-          {viewMode === 'network' ? (
+          {mode === 'compare' ? (
+            <ComparisonMode setMode={setMode} />
+          ) : viewMode === 'network' ? (
             <CanvasShortestPath
               algorithm={algorithm}
               source={source}
