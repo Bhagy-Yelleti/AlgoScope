@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { CanvasShortestPath } from './CanvasShortestPath'
+import { GridVisualizer } from './GridVisualizer'
 import CodePanel from '../visualizer/CodePanel'
 import { MenuSelectNodesShortestPath } from './MenuSelectNodesShortestPath'
 import { MenuSetAlgoShortestPath } from './MenuSetAlgoShortestPath'
@@ -9,6 +10,7 @@ import { shortestPathSources } from '../../algorithms/searching/shortestPathSour
 import ComplexityCard from '../ComplexityCard'
 
 export const ShortestPathPage = () => {
+  const [viewMode, setViewMode] = useState('network')
   const [algorithm, setAlgorithm] = useState(null)
   const [source, setSource] = useState(null)
   const [target, setTarget] = useState(null)
@@ -42,6 +44,8 @@ export const ShortestPathPage = () => {
       dijkstra: "Dijkstra's",
       bellmanford: 'Bellman-Ford',
       floydwarshall: 'Floyd-Warshall',
+      bfs: 'BFS',
+      dfs: 'DFS',
     }
     return names[algo] || algo
   }
@@ -53,17 +57,53 @@ export const ShortestPathPage = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, ease: 'easeInOut' }}
     >
-      <div className="w-full lg:w-1/4 xl:w-1/5 p-4 flex flex-col justify-between bg-slate-900/80 shadow-xl rounded-xl border border-white/5 backdrop-blur-sm">
-        <h2 className="text-2xl font-bold text-center text-white border-b border-white/10 pb-4 tracking-tight">
-          Controls
-        </h2>
-        <MenuSetAlgoShortestPath setAlgorithm={setAlgorithm} />
-        <MenuSelectNodesShortestPath
-          setSource={setSource}
-          setTarget={setTarget}
-          onReset={handleResetNodes}
+      <div className="w-full lg:w-1/4 xl:w-1/5 p-4 flex flex-col justify-between bg-slate-900/80 shadow-xl rounded-xl border border-white/5 backdrop-blur-sm gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-center text-white border-b border-white/10 pb-4 tracking-tight">
+            Controls
+          </h2>
+
+          <div className="mt-4 p-1 bg-slate-950 rounded-xl border border-white/10 flex">
+            <button
+              onClick={() => setViewMode('network')}
+              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
+                viewMode === 'network'
+                  ? 'bg-cyan-500 text-slate-950 shadow-md'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Network Mode
+            </button>
+            <button
+              onClick={() => {
+                setViewMode('grid')
+                handleResetNodes()
+              }}
+              className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
+                viewMode === 'grid'
+                  ? 'bg-cyan-500 text-slate-950 shadow-md'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              Grid Map Mode
+            </button>
+          </div>
+        </div>
+
+        <MenuSetAlgoShortestPath
+          setAlgorithm={setAlgorithm}
+          viewMode={viewMode}
         />
-        <div className="m-auto w-full">
+
+        {viewMode === 'network' && (
+          <MenuSelectNodesShortestPath
+            setSource={setSource}
+            setTarget={setTarget}
+            onReset={handleResetNodes}
+          />
+        )}
+
+        <div className="w-full">
           <SpeedSlider value={speed} onChange={handleSpeedChange} />
         </div>
 
@@ -89,13 +129,17 @@ export const ShortestPathPage = () => {
       </div>
 
       <div className="w-full lg:w-3/4 xl:w-4/5 mt-4 lg:mt-0 lg:ml-6 flex flex-col gap-6">
-        <div className="rounded-xl overflow-hidden border border-white/10 shadow-lg">
-          <CanvasShortestPath
-            algorithm={algorithm}
-            source={source}
-            target={target}
-            speed={speed}
-          />
+        <div className="rounded-xl overflow-hidden border border-white/10 shadow-lg bg-slate-950">
+          {viewMode === 'network' ? (
+            <CanvasShortestPath
+              algorithm={algorithm}
+              source={source}
+              target={target}
+              speed={speed}
+            />
+          ) : (
+            <GridVisualizer algorithm={algorithm} speed={speed} />
+          )}
         </div>
         <div className="w-full">
           <CodePanel
@@ -105,8 +149,7 @@ export const ShortestPathPage = () => {
                 : 'Code Viewer'
             }
             code={
-              currentSource ||
-              '// Select an algorithm and nodes to see implementation'
+              currentSource || '// Select an algorithm to see implementation'
             }
             language={language}
           />
