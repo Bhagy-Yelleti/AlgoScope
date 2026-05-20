@@ -43,6 +43,16 @@ const pageMetadata = {
     description:
       'Practice algorithms directly in the browser with a multi-language code editor and instant feedback inside AlgoScope.',
   },
+  '/kadane': {
+    title: 'Kadane Algorithm | AlgoScope',
+    description:
+      'Visualize Kadane’s algorithm step by step to understand maximum subarray sums with interactive animations and synchronized code.',
+  },
+  '/moore-voting': {
+    title: "Moore's Voting Algorithm | AlgoScope",
+    description:
+      "Visualize Moore's voting algorithm step by step to understand how it finds the majority element in an array with interactive animations and synchronized code.",
+  },
   '/about': {
     title: 'About AlgoScope',
     description:
@@ -90,9 +100,42 @@ export default function SeoHead() {
     }
 
     let { title, description } = baseMetadata
+    const mode = searchParams.get('mode')
 
-    // Algorithm-specific logic
-    if (algo) {
+    // Comparison Mode logic
+    if (mode === 'compare') {
+      if (pathname === '/sort') {
+        title = 'Sorting Algorithms Comparison | AlgoScope'
+        description =
+          'Compare multiple sorting algorithms side-by-side. Analyze performance metrics, comparisons, and swaps in real-time to find the most efficient sort.'
+      } else if (pathname === '/search') {
+        title = 'Graph Search Comparison (BFS vs DFS) | AlgoScope'
+        description =
+          'See the difference between Breadth-First Search and Depth-First Search. Compare traversal order and node exploration patterns in real-time.'
+      } else if (pathname === '/spath') {
+        title = 'Shortest Path Algorithms Comparison | AlgoScope'
+        description =
+          'Compare Dijkstra, Bellman-Ford, and Floyd-Warshall side-by-side. Watch how different algorithms find the most efficient route through a graph.'
+      } else if (pathname === '/ldssearch') {
+        title = 'Linear vs Binary Search Comparison | AlgoScope'
+        description =
+          'Visualize the performance gap between Linear and Binary search. Compare step counts and search patterns on arrays in real-time.'
+      } else if (pathname === '/adt') {
+        const formattedType = type
+          ? type.charAt(0).toUpperCase() + type.slice(1)
+          : 'Data Structure'
+
+        title = `${formattedType} Comparison | AlgoScope`
+
+        description = `Compare different operations and implementation patterns for ${
+          formattedType === 'Data Structure' ? 'various' : formattedType
+        } data structures side-by-side.`
+        title = `${formattedType} Comparison | AlgoScope`
+        description = `Compare different operations and implementation patterns for ${formattedType === 'Data Structure' ? 'various' : formattedType} data structures side-by-side.`
+      }
+    }
+    // Algorithm-specific logic (Solo Mode or specific algo)
+    else if (algo) {
       const formattedAlgo = algo
         .split('-')
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))

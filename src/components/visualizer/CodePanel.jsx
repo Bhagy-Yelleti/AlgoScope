@@ -7,6 +7,7 @@ const CodePanel = memo(function CodePanel({
   code,
   language = 'javascript',
   activeLine,
+  onLanguageChange,
 }) {
   const scrollContainerRef = useRef(null)
   const [theme, setTheme] = useState('vscDarkPlus')
@@ -48,6 +49,41 @@ const CodePanel = memo(function CodePanel({
     }
   }
 
+  const handleDownload = () => {
+    const extensions = {
+      javascript: 'js',
+      cpp: 'cpp',
+      c: 'c',
+      python: 'py',
+      java: 'java',
+      go: 'go',
+      rust: 'rs',
+    }
+    const ext = extensions[language?.toLowerCase()] || 'txt'
+
+    const cleanTitle = title?.replace(/[^a-zA-Z0-9\s]/g, '') || 'algorithm'
+    const words = cleanTitle.trim().split(/\s+/)
+    const algoName =
+      words.length === 1
+        ? words[0].toLowerCase()
+        : words[0].toLowerCase() +
+          words
+            .slice(1)
+            .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+            .join('')
+
+    const blob = new Blob([code], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `${algoName || 'code'}.${ext}`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <div className="rounded-xl border border-slate-700/80 bg-slate-950/90 shadow-[0_18px_56px_rgba(15,23,42,0.38)] backdrop-blur-xl">
       <div className="flex flex-col gap-3 border-b border-slate-800 px-4 py-3">
@@ -64,9 +100,22 @@ const CodePanel = memo(function CodePanel({
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-slate-300">
-            {language}
-          </div>
+          {onLanguageChange ? (
+            <select
+              value={language}
+              onChange={(e) => onLanguageChange(e.target.value)}
+              className="rounded-xl border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-slate-100 transition focus:border-cyan-500 focus:outline-none"
+            >
+              <option value="javascript">JavaScript</option>
+              <option value="python">Python</option>
+              <option value="cpp">C++</option>
+              <option value="java">Java</option>
+            </select>
+          ) : (
+            <div className="rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-slate-300">
+              {language}
+            </div>
+          )}
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <select
@@ -80,6 +129,14 @@ const CodePanel = memo(function CodePanel({
               <option value="coldarkDark">Coldark Dark</option>
               <option value="materialDark">Material Dark</option>
             </select>
+
+            <button
+              type="button"
+              onClick={handleDownload}
+              className="rounded-xl border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-medium text-slate-100 transition hover:border-cyan-500 hover:text-cyan-200"
+            >
+              Download
+            </button>
 
             <button
               type="button"

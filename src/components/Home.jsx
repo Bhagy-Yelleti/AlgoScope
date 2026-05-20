@@ -4,6 +4,9 @@ import SortingImg from '../assets/new-home-images/array.png'
 import SearchingImg from '../assets/new-home-images/traversal.png'
 import LinearSearchImg from '../assets/new-home-images/search.png'
 import GraphAlgoImg from '../assets/new-home-images/shortestPath.png'
+import KadaneImg from '../assets/new-home-images/KadaneImg.png'
+import MooreVotingImg from '../assets/new-home-images/MooreVoting.png'
+import { MathSoloVisualizer } from './MathTheory/MathSoloVisualizer'
 import adt from '../assets/new-home-images/adt.png'
 import { motion } from 'framer-motion'
 
@@ -21,7 +24,7 @@ const containerVariants = {
 const ALGORITHMS = [
   {
     title: 'Sorting',
-    description: 'Visualizing Bubble, Merge, Quick, and Heap Sort.',
+    description: 'Visualizing Bubble, Merge, Quick, Heap, and Shell Sort.',
     color: 'bg-slate-900/50 border-blue-500/30 hover:border-blue-400',
     link: '/sort',
     image: SortingImg,
@@ -53,11 +56,40 @@ const ALGORITHMS = [
   },
   {
     title: 'Abstract Data Types',
-    description: 'Stacks, Queues, Linked Lists (Beta).',
+    description:
+      'Stacks, Queues, Binary Trees, Binary Heaps, and Priority Queues.',
     color: 'bg-slate-900/50 border-emerald-500/30 hover:border-emerald-400',
     link: '/adt',
     image: adt,
-    imageAlt: 'Stack, queue, and linked list data structure visualization',
+    imageAlt:
+      'Stacks, Queues, Binary Trees, Binary Heaps, and Priority Queues data structures',
+  },
+  {
+    title: 'Kadane Algorithm',
+    description: 'Visualize Maximum Subarray Sum using Kadane’s Algorithm.',
+    color: 'bg-slate-900/50 border-pink-500/30 hover:border-pink-400',
+    link: '/kadane',
+    image: KadaneImg,
+    imageAlt: 'Kadane algorithm visualization for maximum subarray sum',
+  },
+  {
+    title: "Moore's Voting Algorithm",
+    description:
+      "Visualize the Moore's Voting Algorithm for finding the majority element.",
+    color: 'bg-slate-900/50 border-green-500/30 hover:border-green-400',
+    link: '/moore-voting',
+    image: MooreVotingImg,
+    imageAlt:
+      "Moore's Voting algorithm visualization for finding the majority element",
+  },
+  {
+    title: 'Math Theory',
+    description:
+      'Visualize GCD, Fast Exponentiation, and Bit Manipulation step-by-step.',
+    color: 'bg-slate-900/50 border-indigo-500/30 hover:border-indigo-400',
+    link: '/math-theory',
+    image: KadaneImg, // or create/import a proper Math image if you have one
+    imageAlt: 'Mathematical algorithms visualization',
   },
 ]
 
@@ -81,11 +113,11 @@ export const Home = () => {
         >
           <div className="inline-flex items-center justify-center px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 backdrop-blur-sm mb-4">
             <span className="text-xs font-mono text-cyan-400 tracking-wider uppercase">
-              v1.2.0
+              v1.5.0
             </span>
           </div>
 
-          <h1 className="text-6xl md:text-8xl font-black tracking-tighter">
+          <h1 className="text-6xl md:text-8xl font-black tracking-tighter logo-font">
             <span className="bg-clip-text text-transparent bg-gradient-to-br from-white via-white to-gray-500">
               Algo
             </span>
@@ -104,7 +136,7 @@ export const Home = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
-            className="pt-8"
+            className="pt-8 flex flex-wrap items-center justify-center gap-4"
           >
             <a
               href="#explore"
@@ -117,6 +149,12 @@ export const Home = () => {
               className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-200 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:scale-105 hover:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
             >
               Start Exploring
+            </a>
+            <a
+              href="/practice"
+              className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-emerald-300 transition-all duration-200 bg-emerald-500/[0.06] border border-emerald-400/30 rounded-lg backdrop-blur-md hover:text-emerald-100 hover:bg-emerald-500/10 hover:border-emerald-400/60 hover:scale-105 hover:shadow-[0_0_20px_rgba(52,211,153,0.15)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+            >
+              Practice
             </a>
           </motion.div>
         </motion.div>

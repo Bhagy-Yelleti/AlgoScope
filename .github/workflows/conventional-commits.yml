@@ -1,0 +1,29 @@
+name: 'Conventional Commits'
+
+# release-please categorizes changes based on the Conventional Commits prefix in commit messages (e.g., feat:, fix:, docs:, chore:)
+
+on:
+  pull_request_target:
+    types: [opened, edited, synchronize]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # Customise the types you want to allow (release-please uses these by default)
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+            revert

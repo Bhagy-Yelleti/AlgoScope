@@ -1,0 +1,54 @@
+name: Feature request
+description: Suggest an improvement or new capability for AlgoScope
+title: '[Feature]: '
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or limitation
+      description: What is missing or inconvenient today?
+      placeholder: It is difficult to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the change you want to see
+      placeholder: AlgoScope should support...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Describe any other approaches you considered
+      placeholder: Another possible approach would be...
+    validations:
+      required: false
+
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use case
+      description: Explain how this would help in real usage
+      placeholder: This would help when...
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      placeholder: Mockups, examples, references, related tools, etc.
+    validations:
+      required: false

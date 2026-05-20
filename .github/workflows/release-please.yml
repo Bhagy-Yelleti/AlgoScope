@@ -1,0 +1,54 @@
+name: Release & Custom Changelog
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: google-github-actions/release-please-action@v4
+        id: release
+        with:
+          release-type: simple
+
+  rebuild-changelog:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository with full history
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Rebuild CHANGELOG.md
+        run: node scripts/append-file-tree.cjs ${{ needs.release-please.outputs.tag_name }}
+
+      - name: Create Pull Request for Changelog
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'docs: rebuild CHANGELOG.md with proper ordering and file trees [skip ci]'
+          title: 'docs: update CHANGELOG.md for new release'
+          branch: 'bot/update-changelog'
+          body: 'Automated `CHANGELOG.md` rebuild triggered by the latest release. Please review and merge to keep the changelog up to date.'
+          base: main

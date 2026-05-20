@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react'
 import AppLayout from './components/AppLayout'
 
 // Lazy load pages for better performance
@@ -12,6 +13,12 @@ const SortingVisualizerPage = lazy(
 const VisualizerPage = lazy(() =>
   import('./components/searchAlgo/VisualizerPage').then((module) => ({
     default: module.VisualizerPage,
+  }))
+)
+
+const MathTheory = lazy(() =>
+  import('./components/MathTheory/MathSoloVisualizer').then((module) => ({
+    default: module.MathSoloVisualizer,
   }))
 )
 const ShortestPathPage = lazy(() =>
@@ -27,6 +34,15 @@ const DSLayout = lazy(() =>
 const ArrayVisualizerPage = lazy(
   () => import('./components/arraySearch/VisualizerPage')
 )
+
+const KadaneVisualizerPage = lazy(
+  () => import('./components/kadaneAlgo/VisualizerPage')
+)
+
+const MooreVotingVisualizerPage = lazy(
+  () => import('./components/mooreVotingAlgo/VisualizerPage')
+)
+
 const PracticePage = lazy(() => import('./components/PracticePage'))
 const AboutAlgoScope = lazy(() => import('./components/about/About'))
 const NotFound = lazy(() => import('./components/PageNotFound'))
@@ -61,6 +77,16 @@ function App() {
       ),
     },
     {
+      path: '/math-theory',
+      element: (
+        <Suspense fallback={<PageLoader />}>
+          <AppLayout>
+            <MathTheory />
+          </AppLayout>
+        </Suspense>
+      ),
+    },
+    {
       path: '/spath',
       element: (
         <Suspense fallback={<PageLoader />}>
@@ -75,7 +101,12 @@ function App() {
       element: (
         <Suspense fallback={<PageLoader />}>
           <AppLayout>
-            <PracticePage />
+            <SignedIn>
+              <PracticePage />
+            </SignedIn>
+            <SignedOut>
+              <RedirectToSignIn />
+            </SignedOut>
           </AppLayout>
         </Suspense>
       ),
@@ -116,6 +147,26 @@ function App() {
         <Suspense fallback={<PageLoader />}>
           <AppLayout>
             <DSLayout />
+          </AppLayout>
+        </Suspense>
+      ),
+    },
+    {
+      path: '/kadane',
+      element: (
+        <Suspense fallback={<PageLoader />}>
+          <AppLayout>
+            <KadaneVisualizerPage />
+          </AppLayout>
+        </Suspense>
+      ),
+    },
+    {
+      path: '/moore-voting',
+      element: (
+        <Suspense fallback={<PageLoader />}>
+          <AppLayout>
+            <MooreVotingVisualizerPage />
           </AppLayout>
         </Suspense>
       ),

@@ -567,4 +567,304 @@ queue = queue[1:]`,
 }`,
     },
   },
+  heap: {
+    'binary heap': {
+      javascript: `class BinaryHeap {
+  constructor(compareFn = (a, b) => a > b) {
+    this.data = [];
+    this.compare = compareFn;
+  }
+  
+  insert(val) {
+    this.data.push(val);
+    this.up(this.data.length - 1);
+  }
+  
+  extract() {
+    if (this.data.length === 0) return null;
+    const top = this.data[0];
+    const bottom = this.data.pop();
+    if (this.data.length > 0) {
+      this.data[0] = bottom;
+      this.down(0);
+    }
+    return top;
+  }
+  
+  up(i) {
+    while (i > 0) {
+      const p = Math.floor((i - 1) / 2);
+      if (!this.compare(this.data[i], this.data[p])) break;
+      [this.data[i], this.data[p]] = [this.data[p], this.data[i]];
+      i = p;
+    }
+  }
+  
+  down(i) {
+    const len = this.data.length;
+    while (2 * i + 1 < len) {
+      let child = 2 * i + 1;
+      if (child + 1 < len && this.compare(this.data[child + 1], this.data[child])) {
+        child++;
+      }
+      if (!this.compare(this.data[child], this.data[i])) break;
+      [this.data[i], this.data[child]] = [this.data[child], this.data[i]];
+      i = child;
+    }
+  }
+}`,
+      python: `import heapq
+
+# Python's built-in heapq is a min-heap by default
+heap = []
+heapq.heappush(heap, element)
+peak = heapq.heappop(heap)`,
+      cpp: `#include <queue>
+#include <vector>
+
+// C++ std::priority_queue is a max-heap by default
+std::priority_queue<int> maxHeap;
+maxHeap.push(10);
+int maxVal = maxHeap.top();
+maxHeap.pop();
+
+// Min-heap declaration
+std::priority_queue<int, std::vector<int>, std::greater<int>> minHeap;`,
+      java: `import java.util.PriorityQueue;
+
+// Java PriorityQueue is a min-heap by default
+PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+minHeap.add(10);
+int minVal = minHeap.poll();`,
+      c: `#define MAX 100
+int heap[MAX];
+int size = 0;
+
+void heapifyUp(int i) {
+    while (i > 0 && heap[i] > heap[(i - 1) / 2]) {
+        int temp = heap[i];
+        heap[i] = heap[(i - 1) / 2];
+        heap[(i - 1) / 2] = temp;
+        i = (i - 1) / 2;
+    }
+}`,
+      rust: `use std::collections::BinaryHeap;
+
+// Rust BinaryHeap is a Max-Heap by default
+let mut heap = BinaryHeap::new();
+heap.push(10);
+let max_val = heap.pop();`,
+      go: `package main
+
+import (
+	"container/heap"
+	"fmt"
+)
+
+// IntHeap is a min-heap of ints.
+type IntHeap []int
+
+func (h IntHeap) Len() int           { return len(h) }
+func (h IntHeap) Less(i, j int) bool { return h[i] < h[j] }
+func (h IntHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+
+func (h *IntHeap) Push(x interface{}) {
+	*h = append(*h, x.(int))
+}
+
+func (h *IntHeap) Pop() interface{} {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
+}
+
+func main() {
+	h := &IntHeap{2, 1, 5}
+	heap.Init(h)
+	heap.Push(h, 3)
+	fmt.Printf("minimum: %d\n", (*h)[0])
+	for h.Len() > 0 {
+		fmt.Printf("%d ", heap.Pop(h))
+	}
+}`,
+    },
+  },
+  priorityQueue: {
+    'priority queue': {
+      javascript: `class PriorityQueue {
+  constructor() {
+    this.heap = [];
+  }
+  
+  enqueue(value, priority) {
+    this.heap.push({ value, priority });
+    this.bubbleUp(this.heap.length - 1);
+  }
+  
+  dequeue() {
+    if (this.heap.length === 0) return null;
+    const peak = this.heap[0];
+    const bottom = this.heap.pop();
+    if (this.heap.length > 0) {
+      this.heap[0] = bottom;
+      this.bubbleDown(0);
+    }
+    return peak;
+  }
+  
+  bubbleUp(i) {
+    while (i > 0) {
+      const p = Math.floor((i - 1) / 2);
+      if (this.heap[i].priority >= this.heap[p].priority) break;
+      [this.heap[i], this.heap[p]] = [this.heap[p], this.heap[i]];
+      i = p;
+    }
+  }
+  
+  bubbleDown(i) {
+    const len = this.heap.length;
+    while (2 * i + 1 < len) {
+      let child = 2 * i + 1;
+      if (child + 1 < len && this.heap[child + 1].priority < this.heap[child].priority) {
+        child++;
+      }
+      if (this.heap[i].priority <= this.heap[child].priority) break;
+      [this.heap[i], this.heap[child]] = [this.heap[child], this.heap[i]];
+      i = child;
+    }
+  }
+}`,
+      python: `import heapq
+
+# Priority Queue using tuple (priority, item) in heapq
+pq = []
+heapq.heappush(pq, (3, "Task A"))
+heapq.heappush(pq, (1, "Task B"))
+prio, task = heapq.heappop(pq) # yields Task B first`,
+      cpp: `#include <queue>
+#include <string>
+
+struct Task {
+    int priority;
+    std::string name;
+    bool operator<(const Task& other) const {
+        return priority < other.priority; // max-priority
+    }
+};
+
+std::priority_queue<Task> pq;
+pq.push({5, "Process A"});`,
+      java: `import java.util.PriorityQueue;
+
+class Task implements Comparable<Task> {
+    String name;
+    int priority;
+    
+    public int compareTo(Task other) {
+        return Integer.compare(this.priority, other.priority);
+    }
+}
+
+PriorityQueue<Task> pq = new PriorityQueue<>();`,
+      c: `#include <stdio.h>
+#include <string.h>
+
+struct Element {
+    char value[20];
+    int priority;
+};
+
+struct Element pq[100];
+int size = 0;
+
+void enqueue(char* val, int prio) {
+    int i = size - 1;
+    struct Element newElem;
+    strcpy(newElem.value, val);
+    newElem.priority = prio;
+    
+    // Position by shifting lower priority elements
+    while (i >= 0 && pq[i].priority > prio) {
+        pq[i + 1] = pq[i];
+        i--;
+    }
+    pq[i + 1] = newElem;
+    size++;
+}
+
+struct Element dequeue() {
+    struct Element first = pq[0];
+    for (int i = 1; i < size; i++) {
+        pq[i - 1] = pq[i];
+    }
+    size--;
+    return first;
+}`,
+      rust: `use std::collections::BinaryHeap;
+use std::cmp::Ordering;
+
+#[derive(Eq, PartialEq)]
+struct Task {
+    priority: i32,
+    name: String,
+}
+
+impl Ord for Task {
+    fn cmp(&self, other: &Self) -> Ordering {
+        other.priority.cmp(&self.priority) // min-priority
+    }
+}
+
+impl PartialOrd for Task {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}`,
+      go: `package main
+
+import (
+	"container/heap"
+	"fmt"
+)
+
+type Item struct {
+	value    string
+	priority int
+	index    int
+}
+
+type PriorityQueue []*Item
+
+func (pq PriorityQueue) Len() int           { return len(pq) }
+func (pq PriorityQueue) Less(i, j int) bool { return pq[i].priority < pq[j].priority }
+func (pq PriorityQueue) Swap(i, j int)      { pq[i], pq[j] = pq[j], pq[i] }
+
+func (pq *PriorityQueue) Push(x interface{}) {
+	item := x.(*Item)
+	item.index = len(*pq)
+	*pq = append(*pq, item)
+}
+
+func (pq *PriorityQueue) Pop() interface{} {
+	old := *pq
+	n := len(old)
+	item := old[n-1]
+	old[n-1] = nil
+	*pq = old[0 : n-1]
+	return item
+}
+
+func main() {
+	pq := make(PriorityQueue, 0)
+	heap.Init(&pq)
+	heap.Push(&pq, &Item{value: "Task A", priority: 3})
+	heap.Push(&pq, &Item{value: "Task B", priority: 1})
+	
+	popped := heap.Pop(&pq).(*Item)
+	fmt.Printf("Popped: %s (priority %d)\\n", popped.value, popped.priority)
+}`,
+    },
+  },
 }

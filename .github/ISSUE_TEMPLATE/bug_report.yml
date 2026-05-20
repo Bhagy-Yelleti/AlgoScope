@@ -1,0 +1,89 @@
+name: Bug report
+description: Report a bug or regression in AlgoScope
+title: '[Bug]: '
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a problem.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Briefly describe the bug
+      placeholder: AlgoScope crashes when...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Give clear steps so the issue can be reproduced
+      placeholder: |
+        1. Open AlgoScope
+        2. Navigate to ...
+        3. Press ...
+        4. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: Describe what should have happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      placeholder: Describe what actually happened
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: Ubuntu 24.04, Arch Linux, macOS 14
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      placeholder: Chrome, Firefox, Safari
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: AlgoScope version
+      placeholder: Output of npm run version or version from package.json
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs, screenshots, or terminal output
+      description: Paste any useful output or attach screenshots
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      placeholder: Add anything else that may help
+    validations:
+      required: false

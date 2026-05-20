@@ -21,10 +21,14 @@ export default function AppLayout({ children, showBackground = true }) {
       transition={{ duration: 0.5 }}
     >
       <SeoHead />
+
       {showBackground && <Background />}
+
       <div className="flex-1 flex flex-col gap-4 p-2 sm:p-4 z-10">
         <Navbar />
-        {children}
+
+        <div className="flex-1">{children}</div>
+
         <Footer />
       </div>
     </motion.div>

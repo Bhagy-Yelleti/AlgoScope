@@ -1,29 +1,112 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Visualizer from './Visualizer'
-import { motion } from 'framer-motion'
+import ComparisonMode from './ComparisonMode'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useSearchParams } from 'react-router-dom'
 
 export default function VisualizerPage() {
-  const [algorithmType, setAlgorithmType] = useState('simple')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const activeTab = searchParams.get('mode') === 'compare' ? 'compare' : 'solo'
+
+  const setActiveTab = (tab) => {
+    const newParams = new URLSearchParams(searchParams)
+    if (tab === 'compare') {
+      newParams.set('mode', 'compare')
+    } else {
+      newParams.delete('mode')
+    }
+    setSearchParams(newParams)
+  }
 
   return (
     <motion.div
-      className="lg:w-full w-full bg-slate-950/50 mx-auto min-h-screen shadow-2xl rounded-xl sm:rounded-2xl border border-white/10 backdrop-blur-xl"
-      initial={{ opacity: 0, y: 20 }} // Start: invisible and 20px down
-      animate={{ opacity: 1, y: 0 }} // End: fully visible at original position
-      transition={{ duration: 1, ease: 'easeInOut' }} // Animation settings
+      className="w-full bg-slate-950/50 mx-auto min-h-screen shadow-2xl rounded-xl sm:rounded-2xl border border-white/10 backdrop-blur-xl"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1, ease: 'easeInOut' }}
     >
-      <div className="flex justify-center p-4 sm:p-6 border-b border-white/5">
-        <select
-          value={algorithmType}
-          onChange={(e) => setAlgorithmType(e.target.value)}
-          className="w-full max-w-xs bg-slate-900 text-slate-200 text-sm border border-slate-700 rounded-xl pl-4 pr-10 py-3 transition duration-300 focus:outline-none focus:border-cyan-500 hover:border-slate-600 shadow-lg focus:shadow-cyan-500/20 appearance-none cursor-pointer"
+      {/* Header with tabs */}
+      <div className="px-4 sm:px-6 pt-4 sm:pt-6 pb-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
+          Sorting Visualizer
+        </p>
+
+        {/* Tab switcher */}
+        <div
+          className="flex rounded-xl p-1 gap-1 self-start sm:self-auto"
+          style={{
+            background: 'rgba(15,23,42,0.8)',
+            border: '1px solid rgba(51,65,85,0.6)',
+          }}
         >
-          <option value="simple">Simple Sorts</option>
-          <option value="complex">Complex Sorts</option>
-          <option value="integer">Integer Sorts</option>
-        </select>
+          <button
+            onClick={() => setActiveTab('solo')}
+            className="relative px-4 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200"
+            style={{ color: activeTab === 'solo' ? '#fff' : '#64748b' }}
+          >
+            {activeTab === 'solo' && (
+              <motion.div
+                layoutId="tab-bg"
+                className="absolute inset-0 rounded-lg"
+                style={{
+                  background: 'rgba(6,182,212,0.2)',
+                  border: '1px solid rgba(6,182,212,0.4)',
+                }}
+                transition={{ type: 'spring', bounce: 0.2, duration: 0.4 }}
+              />
+            )}
+            <span className="relative">Solo Mode</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('compare')}
+            className="relative px-4 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-1.5"
+            style={{ color: activeTab === 'compare' ? '#fff' : '#64748b' }}
+          >
+            {activeTab === 'compare' && (
+              <motion.div
+                layoutId="tab-bg"
+                className="absolute inset-0 rounded-lg"
+                style={{
+                  background: 'rgba(6,182,212,0.2)',
+                  border: '1px solid rgba(6,182,212,0.4)',
+                }}
+                transition={{ type: 'spring', bounce: 0.2, duration: 0.4 }}
+              />
+            )}
+            <span className="relative">⚡ Compare</span>
+            <span
+              className="relative text-[9px] font-bold px-1.5 py-0.5 rounded-md"
+              style={{ background: 'rgba(6,182,212,0.25)', color: '#22d3ee' }}
+            >
+              NEW
+            </span>
+          </button>
+        </div>
       </div>
-      <Visualizer algorithmType={algorithmType} />
+
+      <AnimatePresence mode="wait">
+        {activeTab === 'solo' ? (
+          <motion.div
+            key="solo"
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 10 }}
+            transition={{ duration: 0.22 }}
+          >
+            <Visualizer />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="compare"
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            transition={{ duration: 0.22 }}
+          >
+            <ComparisonMode />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }
