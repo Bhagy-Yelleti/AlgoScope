@@ -98,16 +98,6 @@ export const GridVisualizer = ({ algorithm, speed }) => {
     }
   }
 
-  useEffect(() => {
-    window.addEventListener('mouseup', handleMouseUp)
-    return () => window.removeEventListener('mouseup', handleMouseUp)
-  }, [])
-
-  const clearBoard = () => {
-    if (isVisualizing) return
-    setGrid(createInitialGrid())
-  }
-
   const generateWeightedMaze = () => {
     if (isVisualizing) return
     setGrid((prevGrid) => {
@@ -137,6 +127,16 @@ export const GridVisualizer = ({ algorithm, speed }) => {
         })
       )
     })
+  }
+
+  useEffect(() => {
+    window.addEventListener('mouseup', handleMouseUp)
+    return () => window.removeEventListener('mouseup', handleMouseUp)
+  }, [])
+
+  const clearBoard = () => {
+    if (isVisualizing) return
+    setGrid(createInitialGrid())
   }
 
   const runPathfinding = async () => {
@@ -257,6 +257,13 @@ export const GridVisualizer = ({ algorithm, speed }) => {
           Clear Board
         </button>
         <button
+          onClick={generateWeightedMaze}
+          disabled={isVisualizing}
+          className="px-4 py-1.5 bg-purple-700 rounded-xl text-xs font-bold"
+        >
+          Maze
+        </button>
+        <button
           onClick={runPathfinding}
           disabled={isVisualizing || !algorithm}
           className="px-5 py-1.5 bg-cyan-500 text-slate-950 text-xs font-extrabold rounded-xl"
@@ -279,6 +286,7 @@ export const GridVisualizer = ({ algorithm, speed }) => {
                 onMouseDown={() => handleMouseDown(rIdx, cIdx)}
                 onMouseEnter={() => handleMouseEnter(rIdx, cIdx)}
                 onMouseUp={handleMouseUp}
+                onKeyDown={(e) => handleKeyDown(e, rIdx, cIdx)}
                 className={`w-6 h-6 border ${cell.isStart ? 'bg-emerald-500' : cell.isTarget ? 'bg-rose-500' : cell.isWall ? 'bg-slate-700' : cell.isShortestPath ? 'bg-amber-400' : cell.isVisited ? 'bg-cyan-600/40' : 'bg-slate-950'}`}
               ></div>
             ))
