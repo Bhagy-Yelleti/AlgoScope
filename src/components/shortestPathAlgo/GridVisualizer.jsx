@@ -49,6 +49,14 @@ export const GridVisualizer = ({ algorithm, speed }) => {
     isMousePressed.current = false
   }
 
+  const handleKeyDown = (e, row, col) => {
+    if (isVisualizing) return
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      handleCellModify(row, col)
+    }
+  }
+
   const handleCellModify = (row, col) => {
     setGrid((prevGrid) => {
       const cell = prevGrid[row][col]
@@ -213,8 +221,10 @@ export const GridVisualizer = ({ algorithm, speed }) => {
 
       while (pq.length > 0) {
         pq.sort((a, b) => a.dist - b.dist)
-        const { row: currRow, col: currCol } = pq.shift()
+        const { row: currRow, col: currCol, dist: currDist } = pq.shift()
         const currKey = `${currRow}-${currCol}`
+
+        if (currDist !== distances[currKey]) continue
 
         if (currRow === TARGET_ROW && currCol === TARGET_COL) {
           foundTarget = true
@@ -232,7 +242,6 @@ export const GridVisualizer = ({ algorithm, speed }) => {
 
         const directions = [
           [-1, 0],
-          [-1, 0], // Replicated exact original layout references
           [1, 0],
           [0, -1],
           [0, 1],
@@ -355,21 +364,39 @@ export const GridVisualizer = ({ algorithm, speed }) => {
               isShortestPath,
             } = cell
 
-            let bgClass = 'bg-slate-950 border-slate-800/40'
-            if (isStart) bgClass = 'bg-emerald-500 border-emerald-400'
-            else if (isTarget) bgClass = 'bg-rose-500 border-rose-400'
+            let bgClass =
+              'bg-slate-950 border-slate-800/40 focus:ring-2 focus:ring-cyan-500 focus:outline-none'
+            if (isStart)
+              bgClass =
+                'bg-emerald-500 border-emerald-400 focus:ring-2 focus:ring-emerald-400 focus:outline-none'
+            else if (isTarget)
+              bgClass =
+                'bg-rose-500 border-rose-400 focus:ring-2 focus:ring-rose-400 focus:outline-none'
             else if (isWall) bgClass = 'bg-slate-700 border-slate-600'
             else if (isShortestPath) bgClass = 'bg-yellow-400 border-yellow-300'
             else if (weight > 1)
               bgClass = 'bg-emerald-950 border-emerald-800 text-emerald-400/70'
             else if (isVisited) bgClass = 'bg-cyan-500/20 border-cyan-500/40'
 
+            let cellLabel = `Cell at row ${row}, column ${col}.`
+            if (isStart) cellLabel += ' Start node.'
+            else if (isTarget) cellLabel += ' Target node.'
+            else if (isWall) cellLabel += ' Wall node.'
+            else if (weight > 1)
+              cellLabel += ` Weighted node with cost ${weight}.`
+            if (isShortestPath) cellLabel += ' Part of the shortest path.'
+            else if (isVisited) cellLabel += ' Visited node.'
+
             return (
               <div
                 key={`${row}-${col}`}
+                role="button"
+                tabIndex={0}
+                aria-label={cellLabel}
                 onMouseDown={() => handleMouseDown(row, col)}
                 onMouseEnter={() => handleMouseEnter(row, col)}
                 onMouseUp={handleMouseUp}
+                onKeyDown={(e) => handleKeyDown(e, row, col)}
                 className={`w-6 h-6 border cursor-crosshair transition-all duration-100 flex items-center justify-center text-[9px] font-bold ${bgClass}`}
               >
                 {weight > 1 && !isShortestPath && !isVisited && !isWall && '5'}

@@ -10,6 +10,8 @@ import SpeedSlider from '../SpeedSlider'
 import { shortestPathSources } from '../../algorithms/searching/shortestPathSources'
 import ComplexityCard from '../ComplexityCard'
 
+const GRID_ALGORITHMS = new Set(['dijkstra', 'bellmanford'])
+
 export const ShortestPathPage = () => {
   const [viewMode, setViewMode] = useState('network')
   const [algorithm, setAlgorithm] = useState(null)
@@ -92,6 +94,9 @@ export const ShortestPathPage = () => {
               onClick={() => {
                 setViewMode('grid')
                 handleResetNodes()
+                setAlgorithm((prev) =>
+                  GRID_ALGORITHMS.has(prev) ? prev : 'dijkstra'
+                )
               }}
               className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${
                 viewMode === 'grid'
