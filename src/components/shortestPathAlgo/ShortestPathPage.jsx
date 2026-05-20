@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { CanvasShortestPath } from './CanvasShortestPath'
 import { GridVisualizer } from './GridVisualizer'
 import CodePanel from '../visualizer/CodePanel'
@@ -16,6 +17,19 @@ export const ShortestPathPage = () => {
   const [target, setTarget] = useState(null)
   const [speed, setSpeed] = useState(1.0)
   const [language, setLanguage] = useState('javascript')
+
+  const [searchParams, setSearchParams] = useSearchParams()
+  const mode = searchParams.get('mode') === 'compare' ? 'compare' : 'solo'
+
+  const setMode = (newMode) => {
+    const newParams = new URLSearchParams(searchParams)
+    if (newMode === 'compare') {
+      newParams.set('mode', 'compare')
+    } else {
+      newParams.delete('mode')
+    }
+    setSearchParams(newParams)
+  }
 
   const handleSpeedChange = (event, newValue) => {
     setSpeed(newValue)
