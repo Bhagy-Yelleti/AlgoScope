@@ -142,11 +142,9 @@ func dijkstra(n int, adj [][]struct{to, w int}, start int) []int {
     grid: {
       javascript: {
         code: `function dijkstra(grid, start) {
-  if (!Array.isArray(grid) || grid.length === 0 || !Array.isArray(grid[0]) || grid[0].length === 0) {
-    return [];
-  }
-  const R = grid.length;
-  const C = grid[0].length;
+  if (!Array.isArray(grid) || grid.length === 0 || !Array.isArray(grid[0]) || grid[0].length === 0) return [];
+  const R = grid.length, C = grid[0].length;
+  if (!start || start.r < 0 || start.r >= R || start.c < 0 || start.c >= C || grid[start.r][start.c] === 1) return [];
   const dist = Array.from({ length: R }, () => Array(C).fill(Infinity));
   const pq = new MinPriorityQueue();
   dist[start.r][start.c] = 0;
@@ -171,13 +169,14 @@ func dijkstra(n int, adj [][]struct{to, w int}, start int) []int {
 def dijkstra(grid, start):
     if not grid or not grid[0]: return []
     R, C = len(grid), len(grid[0])
+    if start[0] < 0 or start[0] >= R or start[1] < 0 or start[1] >= C or grid[start[0]][start[1]] == 1: return []
     dists = [[float('inf')] * C for _ in range(R)]
     dists[start[0]][start[1]] = 0
     pq = [(0, start[0], start[1])]
     while pq:
         d, r, c = heapq.heappop(pq)
         if d > dists[r][c]: continue
-        for dr, dc in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+        for dr, dc in [[0, 1], [0, -1], [1, 0], [-1, 0]]:
             nr, nc = r + dr, c + dc
             if 0 <= nr < R and 0 <= nc < C and grid[nr][nc] != 1 and d + 1 < dists[nr][nc]:
                 dists[nr][nc] = d + 1
@@ -191,6 +190,7 @@ using namespace std;
 vector<vector<int>> dijkstra(vector<vector<int>>& grid, pair<int, int> start) {
     if (grid.empty() || grid[0].empty()) return {};
     int R = grid.size(), C = grid[0].size();
+    if (start.first < 0 || start.first >= R || start.second < 0 || start.second >= C || grid[start.first][start.second] == 1) return {};
     vector<vector<int>> dist(R, vector<int>(C, 1e9));
     priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<>> pq;
     dist[start.first][start.second] = 0; pq.push({0, start});
@@ -213,6 +213,7 @@ vector<vector<int>> dijkstra(vector<vector<int>>& grid, pair<int, int> start) {
 public int[][] dijkstra(int[][] grid, int[] start) {
     if (grid == null || grid.length == 0 || grid[0].length == 0) return new int[0][0];
     int R = grid.length, C = grid[0].length;
+    if (start[0] < 0 || start[0] >= R || start[1] < 0 || start[1] >= C || grid[start[0]][start[1]] == 1) return new int[0][0];
     int[][] dist = new int[R][C]; for (int[] row : dist) Arrays.fill(row, 1000000000);
     PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
     dist[start[0]][start[1]] = 0; pq.add(new int[]{0, start[0], start[1]});
@@ -231,7 +232,7 @@ public int[][] dijkstra(int[][] grid, int[] start) {
       },
       c: {
         code: `void dijkstra(int R, int C, int grid[100][100], int startR, int startC, int dist[100][100]) {
-    if (R <= 0 || C <= 0) return;
+    if (R <= 0 || C <= 0 || startR < 0 || startR >= R || startC < 0 || startC >= C || grid[startR][startC] == 1) return;
     for (int i = 0; i < R; i++) for (int j = 0; j < C; j++) dist[i][j] = 1e9;
     dist[startR][startC] = 0;
     for (int k = 0; k < R * C; k++) {
@@ -252,6 +253,7 @@ public int[][] dijkstra(int[][] grid, int[] start) {
 fn dijkstra(grid: &Vec<Vec<i32>>, start: (usize, usize)) -> Vec<Vec<i32>> {
     if grid.is_empty() || grid[0].is_empty() { return vec![]; }
     let (R, C) = (grid.len(), grid[0].len());
+    if start.0 >= R || start.1 >= C || grid[start.0][start.1] == 1 { return vec![]; }
     let mut dist = vec![vec![i32::MAX; C]; R];
     let mut pq = BinaryHeap::new();
     dist[start.0][start.1] = 0; pq.push((0, start.0, start.1));
@@ -278,10 +280,13 @@ func (pq *GridPQ) Push(x interface{}) { *pq = append(*pq, x.(*GridItem)) }
 func (pq *GridPQ) Pop() interface{} { old := *pq; n := len(old); item := old[n-1]; *pq = old[0:n-1]; return item }
 func dijkstra(grid [][]int, start [2]int) [][]int {
     if len(grid) == 0 || len(grid[0]) == 0 { return [][]int{} }
-    R, C := len(grid), len(grid[0]); dist := make([][]int, R); for i := range dist { dist[i] = make([]int, C); for j := range dist[i] { dist[i][j] = 1e9 } }; dist[start[0]][start[1]] = 0
+    R, C := len(grid), len(grid[0])
+    if start[0] < 0 || start[0] >= R || start[1] < 0 || start[1] >= C || grid[start[0]][start[1]] == 1 { return [][]int{} }
+    dist := make([][]int, R); for i := range dist { dist[i] = make([]int, C); for j := range dist[i] { dist[i][j] = 1e9 } }; dist[start[0]][start[1]] = 0
     pq := &GridPQ{{start[0], start[1], 0}}; heap.Init(pq)
     for pq.Len() > 0 {
         curr := heap.Pop(pq).(*GridItem)
+        if curr.dist != dist[curr.r][curr.c] { continue }
         for _, d := range [][2]int{{0, 1}, {0, -1}, {1, 0}, {-1, 0}} {
             nr, nc := curr.r+d[0], curr.c+d[1]
             if nr >= 0 && nr < R && nc >= 0 && nc < C && grid[nr][nc] != 1 && dist[curr.r][curr.c]+1 < dist[nr][nc] {
@@ -392,10 +397,9 @@ public int[] bellmanFord(int V, int[][] edges, int src) {
     grid: {
       javascript: {
         code: `function bellmanFord(grid, start) {
-  if (!Array.isArray(grid) || grid.length === 0 || !Array.isArray(grid[0]) || grid[0].length === 0) {
-    return [];
-  }
+  if (!Array.isArray(grid) || grid.length === 0 || !Array.isArray(grid[0]) || grid[0].length === 0) return [];
   const R = grid.length, C = grid[0].length;
+  if (!start || start.r < 0 || start.r >= R || start.c < 0 || start.c >= C || grid[start.r][start.c] === 1) return [];
   const dist = Array.from({ length: R }, () => Array(C).fill(Infinity));
   dist[start.r][start.c] = 0;
   for (let k = 0; k < R * C; k++) {
@@ -408,13 +412,6 @@ public int[] bellmanFord(int V, int[][] edges, int src) {
       });
     }
   }
-  for (let r = 0; r < R; r++) for (let c = 0; c < C; c++) {
-      if (grid[r][c] === 1 || dist[r][c] === Infinity) continue;
-      for (const [dr, dc] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) {
-          const nr = r + dr, nc = c + dc;
-          if (nr >= 0 && nr < R && nc >= 0 && nc < C && grid[nr][nc] !== 1 && dist[r][c] + 1 < dist[nr][nc]) return null;
-      }
-  }
   return dist;
 }`,
       },
@@ -422,22 +419,17 @@ public int[] bellmanFord(int V, int[][] edges, int src) {
         code: `def bellman_ford(grid, start):
     if not grid or not grid[0]: return []
     R, C = len(grid), len(grid[0])
+    if start[0] < 0 or start[0] >= R or start[1] < 0 or start[1] >= C or grid[start[0]][start[1]] == 1: return []
     dist = [[float('inf')] * C for _ in range(R)]
     dist[start[0]][start[1]] = 0
     for _ in range(R * C):
         for r in range(R):
             for c in range(C):
                 if grid[r][c] == 1 or dist[r][c] == float('inf'): continue
-                for dr, dc in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+                for dr, dc in [[0, 1], [0, -1], [1, 0], [-1, 0]]:
                     nr, nc = r + dr, c + dc
                     if 0 <= nr < R and 0 <= nc < C and grid[nr][nc] != 1 and dist[r][c] + 1 < dist[nr][nc]:
                         dist[nr][nc] = dist[r][c] + 1
-    for r in range(R):
-        for c in range(C):
-            if grid[r][c] == 1 or dist[r][c] == float('inf'): continue
-            for dr, dc in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-                nr, nc = r + dr, c + dc
-                if 0 <= nr < R and 0 <= nc < C and grid[nr][nc] != 1 and dist[r][c] + 1 < dist[nr][nc]: return None
     return dist`,
       },
       cpp: {
@@ -446,6 +438,7 @@ using namespace std;
 vector<vector<int>> bellman_ford(vector<vector<int>>& grid, pair<int, int> start) {
     if (grid.empty() || grid[0].empty()) return {};
     int R = grid.size(), C = grid[0].size();
+    if (start.first < 0 || start.first >= R || start.second < 0 || start.second >= C || grid[start.first][start.second] == 1) return {};
     vector<vector<int>> dist(R, vector<int>(C, 1e9)); dist[start.first][start.second] = 0;
     for (int k = 0; k < R * C; k++)
         for (int r = 0; r < R; r++) for (int c = 0; c < C; c++)
@@ -455,12 +448,6 @@ vector<vector<int>> bellman_ford(vector<vector<int>>& grid, pair<int, int> start
                     if (nr >= 0 && nr < R && nc >= 0 && nc < C && grid[nr][nc] != 1 && dist[r][c] + 1 < dist[nr][nc])
                         dist[nr][nc] = dist[r][c] + 1;
                 }
-    for (int r = 0; r < R; r++) for (int c = 0; c < C; c++)
-        if (grid[r][c] != 1 && dist[r][c] != 1e9)
-            for (auto [dr, dc] : vector<pair<int, int>>{{0, 1}, {0, -1}, {1, 0}, {-1, 0}}) {
-                int nr = r + dr, nc = c + dc;
-                if (nr >= 0 && nr < R && nc >= 0 && nc < C && grid[nr][nc] != 1 && dist[r][c] + 1 < dist[nr][nc]) return {};
-            }
     return dist;
 }`,
       },
@@ -468,6 +455,7 @@ vector<vector<int>> bellman_ford(vector<vector<int>>& grid, pair<int, int> start
         code: `public int[][] bellmanFord(int[][] grid, int[] start) {
     if (grid == null || grid.length == 0 || grid[0].length == 0) return new int[0][0];
     int R = grid.length, C = grid[0].length;
+    if (start[0] < 0 || start[0] >= R || start[1] < 0 || start[1] >= C || grid[start[0]][start[1]] == 1) return new int[0][0];
     int[][] dist = new int[R][C]; for (int[] row : dist) Arrays.fill(row, 1000000000);
     dist[start[0]][start[1]] = 0;
     for (int k = 0; k < R * C; k++)
@@ -478,18 +466,12 @@ vector<vector<int>> bellman_ford(vector<vector<int>>& grid, pair<int, int> start
                     if (nr >= 0 && nr < R && nc >= 0 && nc < C && grid[nr][nc] != 1 && dist[r][c] + 1 < dist[nr][nc])
                         dist[nr][nc] = dist[r][c] + 1;
                 }
-    for (int r = 0; r < R; r++) for (int c = 0; c < C; c++)
-        if (grid[r][c] != 1 && dist[r][c] != 1000000000)
-            for (int[] d : new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}}) {
-                int nr = r + d[0], nc = c + d[1];
-                if (nr >= 0 && nr < R && nc >= 0 && nc < C && grid[nr][nc] != 1 && dist[r][c] + 1 < dist[nr][nc]) return null;
-            }
     return dist;
 }`,
       },
       c: {
         code: `int** bellman_ford(int R, int C, int grid[100][100], int startR, int startC) {
-    if (R <= 0 || C <= 0) return NULL;
+    if (R <= 0 || C <= 0 || startR < 0 || startR >= R || startC < 0 || startC >= C || grid[startR][startC] == 1) return NULL;
     int** dist = malloc(R * sizeof(int*));
     for (int i = 0; i < R; i++) { dist[i] = malloc(C * sizeof(int)); for (int j = 0; j < C; j++) dist[i][j] = 1e9; }
     dist[startR][startC] = 0;
@@ -502,14 +484,6 @@ vector<vector<int>> bellman_ford(vector<vector<int>>& grid, pair<int, int> start
                 dist[nr][nc] = dist[r][c] + 1;
         }
     }
-    for (int r = 0; r < R; r++) for (int c = 0; c < C; c++) {
-        if (grid[r][c] == 1 || dist[r][c] == 1e9) continue;
-        int dr[] = {0, 0, 1, -1}, dc[] = {1, -1, 0, 0};
-        for (int i = 0; i < 4; i++) {
-            int nr = r + dr[i], nc = c + dc[i];
-            if (nr >= 0 && nr < R && nc >= 0 && nc < C && grid[nr][nc] != 1 && dist[r][c] + 1 < dist[nr][nc]) return NULL;
-        }
-    }
     return dist;
 }`,
       },
@@ -517,6 +491,7 @@ vector<vector<int>> bellman_ford(vector<vector<int>>& grid, pair<int, int> start
         code: `fn bellman_ford(grid: &Vec<Vec<i32>>, start: (usize, usize)) -> Option<Vec<Vec<i32>>> {
     if grid.is_empty() || grid[0].is_empty() { return None; }
     let (R, C) = (grid.len(), grid[0].len());
+    if start.0 >= R || start.1 >= C || grid[start.0][start.1] == 1 { return None; }
     let mut dist = vec![vec![1000000; C]; R]; dist[start.0][start.1] = 0;
     for _ in 0..R * C { for r in 0..R { for c in 0..C {
         if grid[r][c] == 1 || dist[r][c] == 1000000 { continue; }
@@ -527,20 +502,15 @@ vector<vector<int>> bellman_ford(vector<vector<int>>& grid, pair<int, int> start
             }
         }
     }}}
-    for r in 0..R { for c in 0..C {
-        if grid[r][c] == 1 || dist[r][c] == 1000000 { continue; }
-        for (dr, dc) in [(0, 1), (0, -1), (1, 0), (-1, 0)] {
-            let (nr, nc) = (r as i32 + dr, c as i32 + dc);
-            if nr >= 0 && nr < R as i32 && nc >= 0 && nc < C as i32 && grid[nr as usize][nc as usize] != 1 && dist[r][c] + 1 < dist[nr as usize][nc as usize] { return None; }
-        }
-    }}
     Some(dist)
 }`,
       },
       go: {
         code: `func bellmanFord(grid [][]int, start [2]int) [][]int {
     if len(grid) == 0 || len(grid[0]) == 0 { return nil }
-    R, C := len(grid), len(grid[0]); dist := make([][]int, R); for i := range dist { dist[i] = make([]int, C); for j := range dist[i] { dist[i][j] = 1e9 } }; dist[start[0]][start[1]] = 0
+    R, C := len(grid), len(grid[0])
+    if start[0] < 0 || start[0] >= R || start[1] < 0 || start[1] >= C || grid[start[0]][start[1]] == 1 { return nil }
+    dist := make([][]int, R); for i := range dist { dist[i] = make([]int, C); for j := range dist[i] { dist[i][j] = 1e9 } }; dist[start[0]][start[1]] = 0
     for k := 0; k < R * C; k++ { for r := 0; r < R; r++ { for c := 0; c < C; c++ {
         if grid[r][c] == 1 || dist[r][c] == 1e9 { continue };
         for _, d := range [][2]int{{0, 1}, {0, -1}, {1, 0}, {-1, 0}} {
@@ -548,13 +518,6 @@ vector<vector<int>> bellman_ford(vector<vector<int>>& grid, pair<int, int> start
             if nr >= 0 && nr < R && nc >= 0 && nc < C && grid[nr][nc] != 1 && dist[r][c] + 1 < dist[nr][nc] { dist[nr][nc] = dist[r][c] + 1 }
         }
     }}}
-    for r := 0; r < R; r++ { for c := 0; c < C; c++ {
-        if grid[r][c] == 1 || dist[r][c] == 1e9 { continue };
-        for _, d := range [][2]int{{0, 1}, {0, -1}, {1, 0}, {-1, 0}} {
-            nr, nc := r+d[0], c+d[1]
-            if nr >= 0 && nr < R && nc >= 0 && nc < C && grid[nr][nc] != 1 && dist[r][c] + 1 < dist[nr][nc] { return nil }
-        }
-    }}
     return dist
 }`,
       },
@@ -634,11 +597,10 @@ vector<vector<int>> floyd_warshall(int V, vector<vector<int>>& graph) {
     },
     grid: {
       javascript: {
-        code: `function floydWarshall(grid) {
-  if (!Array.isArray(grid) || grid.length === 0 || !Array.isArray(grid[0]) || grid[0].length === 0) {
-    return [];
-  }
+        code: `function floydWarshall(grid, start) {
+  if (!Array.isArray(grid) || grid.length === 0 || !Array.isArray(grid[0]) || grid[0].length === 0) return [];
   const R = grid.length, C = grid[0].length, N = R * C;
+  if (start && (start.r < 0 || start.r >= R || start.c < 0 || start.c >= C || grid[start.r][start.c] === 1)) return [];
   const dist = Array.from({ length: N }, () => Array(N).fill(Infinity));
   for (let r = 0; r < R; r++) for (let c = 0; c < C; c++) {
     if (grid[r][c] === 1) continue;
@@ -664,7 +626,7 @@ vector<vector<int>> floyd_warshall(int V, vector<vector<int>>& graph) {
         for c in range(C):
             if grid[r][c] == 1: continue
             dist[r * C + c][r * C + c] = 0
-            for dr, dc in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+            for dr, dc in [[0, 1], [0, -1], [1, 0], [-1, 0]]:
                 nr, nc = r + dr, c + dc
                 if 0 <= nr < R and 0 <= nc < C and grid[nr][nc] != 1: dist[r * C + c][nr * C + nc] = 1
     for k in range(N):
@@ -732,7 +694,7 @@ void floyd_warshall(int R, int C, int grid[100][100], int** dist) {
     for (int k = 0; k < N; k++) for (int i = 0; i < N; i++) for (int j = 0; j < N; j++)
         if (d[i][k] != 1e9 && d[k][j] != 1e9 && d[i][k] + d[k][j] < d[i][j]) d[i][j] = d[i][k] + d[k][j];
     for (int i = 0; i < N; i++) for (int j = 0; j < N; j++) dist[i][j] = d[i][j];
-    for(int i = 0; i < N; i++) {
+    for (int i = 0; i < N; i++) {
         free(d[i]);
     }
     free(d);
