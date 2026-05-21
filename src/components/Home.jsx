@@ -163,14 +163,14 @@ export const Home = () => {
         <div id="explore" className="w-full max-w-7xl mx-auto mt-32 px-4">
           <div className="flex items-center gap-4 mb-12">
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-700 to-transparent"></div>
-            <span className="text-slate-500 font-mono text-sm uppercase tracking-widest">
+            <span className="text-neutral-400 font-mono text-sm uppercase tracking-[0.3em]">
               Algorithms
             </span>
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-700 to-transparent"></div>
           </div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
