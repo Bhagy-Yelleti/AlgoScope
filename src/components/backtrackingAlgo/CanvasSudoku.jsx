@@ -16,6 +16,8 @@ export const DEFAULT_PUZZLE = [
 
 const MAX_FRAMES = 800
 
+// Returns { frames, solved } so the caller knows whether the solver actually
+// completed — independently of whether the solution frame was captured.
 function generateSudokuFrames(puzzle) {
   const board = puzzle.map((row) => [...row])
   const given = puzzle.map((row) => row.map((c) => c !== '.'))
@@ -36,6 +38,8 @@ function generateSudokuFrames(puzzle) {
     return true
   }
 
+  // snap() silently skips when the cap is hit — this must never affect the
+  // boolean return value of solve().
   function snap(type, r, c, message) {
     if (frames.length >= MAX_FRAMES) return
     frames.push({
@@ -69,12 +73,14 @@ function generateSudokuFrames(puzzle) {
         }
       }
     }
+    // Genuinely solved — snap may or may not capture this frame depending on
+    // the cap, but solve() always returns true when the board is complete.
     snap('solution', -1, -1, '✓ Sudoku solved!')
     return true
   }
 
-  solve()
-  return frames
+  const solved = solve()
+  return { frames, solved }
 }
 
 export const CanvasSudoku = ({ speed = 1, trigger = 0 }) => {
@@ -84,12 +90,13 @@ export const CanvasSudoku = ({ speed = 1, trigger = 0 }) => {
   const [backCount, setBackCount] = useState(0)
   const [done, setDone]           = useState(false)
   const [isRunning, setIsRunning] = useState(false)
-  const timersRef = useRef([])
+  const timerRef  = useRef(null)
+  const framesRef = useRef([])
   const lockedRef = useRef(DEFAULT_PUZZLE.map(r => r.map(c => c !== '.')))
 
   useEffect(() => {
-    timersRef.current.forEach(clearTimeout)
-    timersRef.current = []
+    clearTimeout(timerRef.current)
+    framesRef.current = []
     setFrame(null)
     setTryCount(0)
     setBackCount(0)
@@ -101,22 +108,33 @@ export const CanvasSudoku = ({ speed = 1, trigger = 0 }) => {
     lockedRef.current = grid.map(r => r.map(c => c !== '.'))
     setIsRunning(true)
 
-    const frames = generateSudokuFrames(grid)
+    const { frames, solved } = generateSudokuFrames(grid)
+    framesRef.current = frames
+    const total = frames.length
+    const delay = calculateStepDelay(80, speed)
 
-    frames.forEach((f, i) => {
-      const t = setTimeout(() => {
+    function scheduleNext(i) {
+      if (i >= total) return
+      timerRef.current = setTimeout(() => {
+        const f = framesRef.current[i]
         setFrame(f)
         setTryCount(f.tries)
         setBackCount(f.backtracks)
-        if (i === frames.length - 1) {
-          setDone(true)
+        if (i === total - 1) {
+          // Only declare done when the solver genuinely found a solution.
+          // If MAX_FRAMES truncated the run, solved is false and we don't
+          // show the "Solved!" banner.
+          if (solved) setDone(true)
           setIsRunning(false)
+        } else {
+          scheduleNext(i + 1)
         }
-      }, i * calculateStepDelay(80, speed))
-      timersRef.current.push(t)
-    })
+      }, delay)
+    }
 
-    return () => timersRef.current.forEach(clearTimeout)
+    scheduleNext(0)
+
+    return () => clearTimeout(timerRef.current)
   }, [trigger, speed])
 
   const handleCellChange = (r, c, val) => {
@@ -130,7 +148,7 @@ export const CanvasSudoku = ({ speed = 1, trigger = 0 }) => {
   }
 
   const handleLoadDefault = () => {
-    timersRef.current.forEach(clearTimeout)
+    clearTimeout(timerRef.current)
     setGrid(DEFAULT_PUZZLE.map(r => [...r]))
     setFrame(null)
     setTryCount(0)
@@ -140,7 +158,7 @@ export const CanvasSudoku = ({ speed = 1, trigger = 0 }) => {
   }
 
   const handleClear = () => {
-    timersRef.current.forEach(clearTimeout)
+    clearTimeout(timerRef.current)
     setGrid(Array.from({ length: 9 }, () => Array(9).fill('.')))
     setFrame(null)
     setTryCount(0)
