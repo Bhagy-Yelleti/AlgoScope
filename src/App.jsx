@@ -175,7 +175,7 @@ function App() {
         </Suspense>
       ),
     },
-     {
+    {
       path: '/backtracking',
       element: (
         <Suspense fallback={<PageLoader />}>

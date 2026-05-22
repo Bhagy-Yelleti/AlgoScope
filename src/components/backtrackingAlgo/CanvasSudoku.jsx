@@ -1,143 +1,62 @@
 import React, { useEffect, useRef, useState } from 'react'
 import StatusDisplay from '../StatusDisplay'
 import { calculateStepDelay } from '../../lib/utils'
-
-export const DEFAULT_PUZZLE = [
-  ['5','3','.','.','7','.','.','.','.'],
-  ['6','.','.','1','9','5','.','.','.'],
-  ['.','9','8','.','.','.','.','6','.'],
-  ['8','.','.','.','6','.','.','.','3'],
-  ['4','.','.','8','.','3','.','.','1'],
-  ['7','.','.','.','2','.','.','.','6'],
-  ['.','6','.','.','.','.','2','8','.'],
-  ['.','.','.','4','1','9','.','.','5'],
-  ['.','.','.','.','8','.','.','7','9'],
-]
-
-const MAX_FRAMES = 800
-
-function generateSudokuFrames(puzzle) {
-  const board = puzzle.map((row) => [...row])
-  const given = puzzle.map((row) => row.map((c) => c !== '.'))
-  const frames = []
-  let tries = 0
-  let backtracks = 0
-
-  function isValid(r, c, num) {
-    const ch = String(num)
-
-    for (let i = 0; i < 9; i++) {
-      if (board[r][i] === ch || board[i][c] === ch) return false
-    }
-
-    const br = Math.floor(r / 3) * 3
-    const bc = Math.floor(c / 3) * 3
-
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        if (board[br + i][bc + j] === ch) return false
-      }
-    }
-
-    return true
-  }
-
-  function snap(type, r, c, message) {
-    if (frames.length >= MAX_FRAMES) return
-
-    frames.push({
-      board: board.map((row) => [...row]),
-      given,
-      activeR: r,
-      activeC: c,
-      type,
-      message,
-      tries,
-      backtracks,
-    })
-  }
-
-  function solve() {
-    for (let r = 0; r < 9; r++) {
-      for (let c = 0; c < 9; c++) {
-        if (board[r][c] === '.') {
-          for (let n = 1; n <= 9; n++) {
-            tries++
-
-            if (isValid(r, c, n)) {
-              board[r][c] = String(n)
-
-              snap('place', r, c, `(${r + 1},${c + 1}): placed ${n}`)
-
-              if (solve()) return true
-
-              board[r][c] = '.'
-              backtracks++
-
-              snap('backtrack', r, c, `(${r + 1},${c + 1}): backtrack`)
-            }
-          }
-
-          return false
-        }
-      }
-    }
-
-    snap('solution', -1, -1, '✓ Sudoku solved!')
-    return true
-  }
-
-  solve()
-
-  return frames
-}
+import { DEFAULT_PUZZLE, generateSudokuFrames } from './sudokuUtils'
 
 export const CanvasSudoku = ({ speed = 1, trigger = 0 }) => {
-  const [grid, setGrid] = useState(DEFAULT_PUZZLE.map(r => [...r]))
+  const [grid, setGrid] = useState(DEFAULT_PUZZLE.map((r) => [...r]))
   const [frame, setFrame] = useState(null)
   const [tryCount, setTryCount] = useState(0)
   const [backCount, setBackCount] = useState(0)
   const [done, setDone] = useState(false)
   const [isRunning, setIsRunning] = useState(false)
+  const [locked, setLocked] = useState(
+    DEFAULT_PUZZLE.map((r) => r.map((c) => c !== '.'))
+  )
+  const [prevTrigger, setPrevTrigger] = useState(trigger)
+
+  const frames = React.useMemo(() => {
+    if (trigger === 0) return []
+    return generateSudokuFrames(grid)
+  }, [trigger, grid])
+
+  if (trigger !== prevTrigger) {
+    setPrevTrigger(trigger)
+    setFrame(null)
+    setTryCount(0)
+    setBackCount(0)
+    setDone(false)
+
+    if (trigger === 0 || frames.length === 0) {
+      setIsRunning(false)
+    } else {
+      setIsRunning(true)
+      setLocked(grid.map((r) => r.map((c) => c !== '.')))
+    }
+  }
 
   const timersRef = useRef([])
-  const lockedRef = useRef(DEFAULT_PUZZLE.map(r => r.map(c => c !== '.')))
 
   useEffect(() => {
     timersRef.current.forEach(clearTimeout)
     timersRef.current = []
 
-    setFrame(null)
-    setTryCount(0)
-    setBackCount(0)
-    setDone(false)
-    setIsRunning(false)
-
-    if (trigger === 0) return
-
-    lockedRef.current = grid.map(r => r.map(c => c !== '.'))
-
-    setIsRunning(true)
-
-    const frames = generateSudokuFrames(grid)
-
-    // FIX: prevent UI from getting stuck when no frames are generated
-    if (frames.length === 0) {
-      setIsRunning(false)
-      return
-    }
+    if (trigger === 0 || frames.length === 0) return
 
     frames.forEach((f, i) => {
-      const t = setTimeout(() => {
-        setFrame(f)
-        setTryCount(f.tries)
-        setBackCount(f.backtracks)
+      const t = setTimeout(
+        () => {
+          setFrame(f)
+          setTryCount(f.tries)
+          setBackCount(f.backtracks)
 
-        if (i === frames.length - 1) {
-          setDone(true)
-          setIsRunning(false)
-        }
-      }, i * calculateStepDelay(80, speed))
+          if (i === frames.length - 1) {
+            setDone(true)
+            setIsRunning(false)
+          }
+        },
+        i * calculateStepDelay(80, speed)
+      )
 
       timersRef.current.push(t)
     })
@@ -145,14 +64,14 @@ export const CanvasSudoku = ({ speed = 1, trigger = 0 }) => {
     return () => {
       timersRef.current.forEach(clearTimeout)
     }
-  }, [trigger, speed])
+  }, [trigger, speed, frames])
 
   const handleCellChange = (r, c, val) => {
     if (isRunning) return
 
     const digit = val.replace(/[^1-9]/g, '').slice(-1)
 
-    const next = grid.map(row => [...row])
+    const next = grid.map((row) => [...row])
     next[r][c] = digit === '' ? '.' : digit
 
     setGrid(next)
@@ -163,7 +82,7 @@ export const CanvasSudoku = ({ speed = 1, trigger = 0 }) => {
   const handleLoadDefault = () => {
     timersRef.current.forEach(clearTimeout)
 
-    setGrid(DEFAULT_PUZZLE.map(r => [...r]))
+    setGrid(DEFAULT_PUZZLE.map((r) => [...r]))
     setFrame(null)
     setTryCount(0)
     setBackCount(0)
@@ -183,13 +102,11 @@ export const CanvasSudoku = ({ speed = 1, trigger = 0 }) => {
   }
 
   const displayBoard = frame?.board ?? grid
-  const locked = lockedRef.current
 
   const cellClass = (r, c) => {
     const isActive = frame?.activeR === r && frame?.activeC === c
     const isLocked = isRunning && locked[r]?.[c]
-    const boxShade =
-      (Math.floor(r / 3) + Math.floor(c / 3)) % 2 === 0
+    const boxShade = (Math.floor(r / 3) + Math.floor(c / 3)) % 2 === 0
 
     if (isActive && frame?.type === 'backtrack') {
       return 'bg-orange-400/70 text-white border-orange-400'
@@ -233,7 +150,6 @@ export const CanvasSudoku = ({ speed = 1, trigger = 0 }) => {
   return (
     <div className="w-full">
       <div className="rounded-xl border border-white/10 bg-slate-900/50 p-6 shadow-lg min-h-[350px] flex flex-col items-center justify-center gap-5">
-
         {/* 9x9 grid — editable before run, animated during run */}
         <div className="border-2 border-slate-400 rounded-lg overflow-hidden">
           {displayBoard.map((row, r) => (
@@ -253,9 +169,7 @@ export const CanvasSudoku = ({ speed = 1, trigger = 0 }) => {
                       inputMode="numeric"
                       maxLength={1}
                       value={grid[r][c] !== '.' ? grid[r][c] : ''}
-                      onChange={(e) =>
-                        handleCellChange(r, c, e.target.value)
-                      }
+                      onChange={(e) => handleCellChange(r, c, e.target.value)}
                       className="absolute inset-0 w-full h-full text-center text-sm font-bold bg-transparent outline-none caret-cyan-400"
                     />
                   )}

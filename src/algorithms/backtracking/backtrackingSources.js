@@ -453,4 +453,5 @@ func solve(board [][]byte) bool {
 }
 
 export const getBacktrackingSource = (algo, language) =>
-  backtrackingSources[algo]?.[language]?.code ?? '// No implementation available'
+  backtrackingSources[algo]?.[language]?.code ??
+  '// No implementation available'

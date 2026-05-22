@@ -170,10 +170,7 @@ function SoloMode() {
         />
 
         <div className="mt-6">
-          <SpeedSlider
-            value={speed}
-            onChange={(e, v) => setSpeed(v)}
-          />
+          <SpeedSlider value={speed} onChange={(e, v) => setSpeed(v)} />
         </div>
 
         <div className="pt-4 border-t border-white/5">
@@ -202,16 +199,9 @@ function SoloMode() {
       {/* Canvas + Code Panel */}
       <div className="w-full lg:w-3/4 xl:w-4/5 flex flex-col gap-6">
         {algo === 'nqueens' ? (
-          <CanvasNQueens
-            n={boardSize}
-            speed={speed}
-            trigger={trigger}
-          />
+          <CanvasNQueens n={boardSize} speed={speed} trigger={trigger} />
         ) : (
-          <CanvasSudoku
-            speed={speed}
-            trigger={trigger}
-          />
+          <CanvasSudoku speed={speed} trigger={trigger} />
         )}
 
         <CodePanel

@@ -19,7 +19,7 @@ function streamNQueensFrames(n, onFrame) {
   function snapshot(type, row, col, message) {
     onFrame({
       board: board.map((r) => [...r]),
-      type,   // 'try' | 'conflict' | 'place' | 'backtrack' | 'solution'
+      type, // 'try' | 'conflict' | 'place' | 'backtrack' | 'solution'
       activeRow: row,
       activeCol: col,
       message,
@@ -38,16 +38,31 @@ function streamNQueensFrames(n, onFrame) {
       snapshot('try', row, col, `Row ${row + 1}: trying column ${col + 1}…`)
 
       if (!isSafe(row, col)) {
-        snapshot('conflict', row, col, `Row ${row + 1}, col ${col + 1}: conflict — backtracking`)
+        snapshot(
+          'conflict',
+          row,
+          col,
+          `Row ${row + 1}, col ${col + 1}: conflict — backtracking`
+        )
         continue
       }
 
       board[row][col] = 'Q'
-      snapshot('place', row, col, `Row ${row + 1}: placed queen at column ${col + 1}`)
+      snapshot(
+        'place',
+        row,
+        col,
+        `Row ${row + 1}: placed queen at column ${col + 1}`
+      )
       solve(row + 1)
 
       board[row][col] = ''
-      snapshot('backtrack', row, col, `Row ${row + 1}: removed queen from col ${col + 1} (backtrack)`)
+      snapshot(
+        'backtrack',
+        row,
+        col,
+        `Row ${row + 1}: removed queen from col ${col + 1} (backtrack)`
+      )
     }
   }
 
@@ -55,39 +70,43 @@ function streamNQueensFrames(n, onFrame) {
 }
 
 export const CanvasNQueens = ({ n = 4, speed = 1, trigger = 0 }) => {
-  const [frame, setFrame]           = useState(null)
-  const [solutions, setSolutions]   = useState(0)
+  const [frame, setFrame] = useState(null)
+  const [solutions, setSolutions] = useState(0)
   const [backtracks, setBacktracks] = useState(0)
-  const [done, setDone]             = useState(false)
-  // Single live timer handle instead of an array of O(totalFrames) handles.
-  const timerRef   = useRef(null)
-  const framesRef  = useRef([])   // small ring-buffer: holds only pending frames
-  const indexRef   = useRef(0)
+  const [done, setDone] = useState(false)
+  const frames = React.useMemo(() => {
+    if (trigger === 0) return []
+    const f = []
+    streamNQueensFrames(n, (frame) => f.push(frame))
+    return f
+  }, [trigger, n])
 
-  useEffect(() => {
-    clearTimeout(timerRef.current)
-    framesRef.current = []
-    indexRef.current  = 0
+  const [prevTrigger, setPrevTrigger] = useState(trigger)
+
+  // Adjust state during rendering if trigger changes
+  if (trigger !== prevTrigger) {
+    setPrevTrigger(trigger)
     setFrame(null)
     setSolutions(0)
     setBacktracks(0)
     setDone(false)
+  }
 
-    if (trigger === 0) return
+  // Single live timer handle instead of an array of O(totalFrames) handles.
+  const timerRef = useRef(null)
 
-    // Collect all frames synchronously into the ref buffer.
-    // The solve() call itself is still synchronous (same algorithmic work),
-    // but timer scheduling is now O(1) at any point in time — only the next
-    // frame's timer is ever outstanding.
-    streamNQueensFrames(n, (f) => framesRef.current.push(f))
+  useEffect(() => {
+    clearTimeout(timerRef.current)
 
-    const total = framesRef.current.length
+    if (trigger === 0 || frames.length === 0) return
+
+    const total = frames.length
     const delay = calculateStepDelay(120, speed)
 
     function scheduleNext(i) {
       if (i >= total) return
       timerRef.current = setTimeout(() => {
-        const f = framesRef.current[i]
+        const f = frames[i]
         setFrame(f)
         if (f.type === 'solution') setSolutions((s) => s + 1)
         if (f.type === 'backtrack') setBacktracks((b) => b + 1)
@@ -102,15 +121,16 @@ export const CanvasNQueens = ({ n = 4, speed = 1, trigger = 0 }) => {
     scheduleNext(0)
 
     return () => clearTimeout(timerRef.current)
-  }, [trigger, n, speed])
+  }, [trigger, n, speed, frames])
 
-  const board  = frame?.board ?? Array.from({ length: n }, () => Array(n).fill(''))
+  const board =
+    frame?.board ?? Array.from({ length: n }, () => Array(n).fill(''))
   const cellPx = Math.min(56, Math.floor(380 / n))
 
   const cellStyle = (r, c) => {
     const hasQueen = board[r]?.[c] === 'Q'
     const isActive = frame?.activeRow === r && frame?.activeCol === c
-    const isLight  = (r + c) % 2 === 0
+    const isLight = (r + c) % 2 === 0
 
     if (isActive && frame?.type === 'conflict')
       return 'bg-red-500/70 border-red-400 scale-105 shadow-[0_0_10px_rgba(239,68,68,0.6)]'
@@ -122,7 +142,9 @@ export const CanvasNQueens = ({ n = 4, speed = 1, trigger = 0 }) => {
       return 'bg-emerald-500 border-emerald-300 scale-105 shadow-[0_0_10px_rgba(52,211,153,0.6)]'
     if (hasQueen)
       return 'bg-cyan-500 border-white scale-105 shadow-[0_0_10px_rgba(6,182,212,0.5)]'
-    return isLight ? 'bg-slate-700 border-slate-600' : 'bg-slate-800 border-slate-700'
+    return isLight
+      ? 'bg-slate-700 border-slate-600'
+      : 'bg-slate-800 border-slate-700'
   }
 
   const status = frame?.message ?? 'Set board size and click Visualize.'
@@ -152,21 +174,28 @@ export const CanvasNQueens = ({ n = 4, speed = 1, trigger = 0 }) => {
         <div className="grid grid-cols-3 gap-4 w-full max-w-sm">
           <div className="rounded-xl bg-slate-800/60 p-4 border border-slate-700 text-center">
             <p className="text-slate-400 text-xs">Board</p>
-            <h2 className="text-2xl font-bold text-cyan-400 mt-1">{n}×{n}</h2>
+            <h2 className="text-2xl font-bold text-cyan-400 mt-1">
+              {n}×{n}
+            </h2>
           </div>
           <div className="rounded-xl bg-slate-800/60 p-4 border border-slate-700 text-center">
             <p className="text-slate-400 text-xs">Solutions</p>
-            <h2 className="text-2xl font-bold text-emerald-400 mt-1">{solutions}</h2>
+            <h2 className="text-2xl font-bold text-emerald-400 mt-1">
+              {solutions}
+            </h2>
           </div>
           <div className="rounded-xl bg-slate-800/60 p-4 border border-slate-700 text-center">
             <p className="text-slate-400 text-xs">Backtracks</p>
-            <h2 className="text-2xl font-bold text-orange-400 mt-1">{backtracks}</h2>
+            <h2 className="text-2xl font-bold text-orange-400 mt-1">
+              {backtracks}
+            </h2>
           </div>
         </div>
 
         {done && (
           <p className="text-emerald-400 font-bold text-sm">
-            ✓ Complete — {solutions} solution{solutions !== 1 ? 's' : ''} found, {backtracks} backtracks
+            ✓ Complete — {solutions} solution{solutions !== 1 ? 's' : ''} found,{' '}
+            {backtracks} backtracks
           </p>
         )}
       </div>

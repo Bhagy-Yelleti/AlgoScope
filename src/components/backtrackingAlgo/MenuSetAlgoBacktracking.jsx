@@ -74,9 +74,7 @@ export const MenuSetAlgoBacktracking = ({
             className="w-full"
           >
             <div className="rounded-xl border border-slate-700 bg-slate-800/70 p-4">
-              <p className="text-sm font-semibold text-cyan-400">
-                Sudoku Mode
-              </p>
+              <p className="text-sm font-semibold text-cyan-400">Sudoku Mode</p>
 
               <p className="mt-2 text-xs leading-relaxed text-slate-400">
                 Enter digits directly into the board, then click{' '}
