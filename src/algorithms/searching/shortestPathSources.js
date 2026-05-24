@@ -745,34 +745,33 @@ void floyd_warshall(int R, int C, int grid[100][100], int** dist) {
         code: `function primMST(graph) {
   const parent = {};
   const key = {};
-  const mstSet = {};
+  const inMST = new Set();
+  const heap = new MinHeap((a, b) => a.weight < b.weight);
   const nodes = Object.keys(graph);
   if (nodes.length === 0) return { parent, key };
   for (const node of nodes) {
     key[node] = Infinity;
-    mstSet[node] = false;
   }
+
   const start = nodes[0];
   key[start] = 0;
   parent[start] = null;
+  heap.push({ node: start, weight: 0 });
 
-  for (let i = 0; i < nodes.length - 1; i++) {
-    let minKey = Infinity, u = null;
-    for (const node of nodes) {
-      if (!mstSet[node] && key[node] < minKey) {
-        minKey = key[node];
-        u = node;
-      }
-    }
-    if (u === null) break;
-    mstSet[u] = true;
+  while (!heap.isEmpty() && inMST.size < nodes.length) {
+    const { node: u } = heap.pop();
+    if (inMST.has(u)) continue;
+    inMST.add(u);
+
     for (const [v, weight] of Object.entries(graph[u])) {
-      if (mstSet[v] === false && weight < key[v]) {
+      if (!inMST.has(v) && weight < key[v]) {
         parent[v] = u;
         key[v] = weight;
+        heap.push({ node: v, weight });
       }
     }
   }
+
   return { parent, key };
 }`,
       },

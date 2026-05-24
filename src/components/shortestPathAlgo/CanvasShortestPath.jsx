@@ -182,6 +182,10 @@ export const CanvasShortestPath = ({
     nodeIds.forEach((id) => {
       adj[id] = []
     })
+    const mstAdj = {}
+    nodeIds.forEach((id) => {
+      mstAdj[id] = []
+    })
     edges.get().forEach((e) => {
       const edgeId = e.id
       const w =
@@ -189,6 +193,10 @@ export const CanvasShortestPath = ({
       if (!Number.isFinite(w)) return
       if (!adj[e.from]) adj[e.from] = []
       adj[e.from].push({ to: e.to, w, edgeId })
+      if (!mstAdj[e.from]) mstAdj[e.from] = []
+      if (!mstAdj[e.to]) mstAdj[e.to] = []
+      mstAdj[e.from].push({ to: e.to, w, edgeId })
+      mstAdj[e.to].push({ to: e.from, w, edgeId })
     })
 
     const src = source ? parseInt(source) : null
@@ -373,55 +381,100 @@ export const CanvasShortestPath = ({
 
     const runPrim = () => {
       setStatus(`Running Prim's MST algorithm starting from node ${src}...`)
-      const visited = new Set([src])
+      const inMST = new Set()
       const mstEdges = []
-      const mstNodes = [src]
+      const mstNodes = []
       const n = nodeIds.length
+      const bestWeight = {}
+
+      nodeIds.forEach((id) => {
+        bestWeight[id] = Infinity
+      })
+      bestWeight[src] = 0
+
+      const minHeap = []
+
+      const heapPush = (item) => {
+        minHeap.push(item)
+        let index = minHeap.length - 1
+
+        while (index > 0) {
+          const parent = Math.floor((index - 1) / 2)
+          if (minHeap[parent].weight <= minHeap[index].weight) break
+          ;[minHeap[parent], minHeap[index]] = [minHeap[index], minHeap[parent]]
+          index = parent
+        }
+      }
+
+      const heapPop = () => {
+        if (minHeap.length === 0) return null
+        const min = minHeap[0]
+        const last = minHeap.pop()
+
+        if (minHeap.length > 0) {
+          minHeap[0] = last
+          let index = 0
+
+          while (true) {
+            const left = index * 2 + 1
+            const right = index * 2 + 2
+            let smallest = index
+
+            if (
+              left < minHeap.length &&
+              minHeap[left].weight < minHeap[smallest].weight
+            ) {
+              smallest = left
+            }
+
+            if (
+              right < minHeap.length &&
+              minHeap[right].weight < minHeap[smallest].weight
+            ) {
+              smallest = right
+            }
+
+            if (smallest === index) break
+            ;[minHeap[index], minHeap[smallest]] = [
+              minHeap[smallest],
+              minHeap[index],
+            ]
+            index = smallest
+          }
+        }
+
+        return min
+      }
 
       let delay = 0
+      heapPush({ node: src, weight: 0, edgeId: null })
 
-      // Animate starting node
-      visitLaterNode(src, delay)
-      delay += 800 / speed
+      while (minHeap.length > 0 && mstNodes.length < n) {
+        const current = heapPop()
+        if (!current || inMST.has(current.node)) continue
 
-      for (let step = 0; step < n - 1; step++) {
-        let minWeight = Infinity
-        let minEdge = null // { from, to, edgeId }
+        inMST.add(current.node)
+        mstNodes.push(current.node)
 
-        edges.get().forEach((e) => {
-          const w =
-            typeof e.weight === 'number' ? e.weight : parseFloat(e.label ?? '1')
-          if (!Number.isFinite(w)) return
-          const u = e.from
-          const v = e.to
+        if (current.edgeId !== null) {
+          mstEdges.push(current.edgeId)
+          visitLaterEdge(current.edgeId, delay)
+          delay += 400 / speed
+        }
 
-          if (visited.has(u) && !visited.has(v)) {
-            if (w < minWeight) {
-              minWeight = w
-              minEdge = { from: u, to: v, edgeId: e.id }
-            }
-          } else if (visited.has(v) && !visited.has(u)) {
-            if (w < minWeight) {
-              minWeight = w
-              minEdge = { from: v, to: u, edgeId: e.id }
-            }
-          }
-        })
-
-        if (!minEdge) break
-
-        const { to, edgeId } = minEdge
-        visited.add(to)
-        mstEdges.push(edgeId)
-        mstNodes.push(to)
-
-        const currentEdgeId = edgeId
-        const currentNodeId = to
-
-        visitLaterEdge(currentEdgeId, delay)
-        delay += 400 / speed
-        visitLaterNode(currentNodeId, delay)
+        visitLaterNode(current.node, delay)
         delay += 800 / speed
+
+        for (const edge of mstAdj[current.node] || []) {
+          if (!inMST.has(edge.to) && edge.w < bestWeight[edge.to]) {
+            bestWeight[edge.to] = edge.w
+            heapPush({
+              node: edge.to,
+              weight: edge.w,
+              edgeId: edge.edgeId,
+            })
+          }
+        }
       }
 
       const t = setTimeout(
