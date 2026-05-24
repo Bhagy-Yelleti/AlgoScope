@@ -5,6 +5,7 @@ import CodePanel from '../visualizer/CodePanel'
 import { useStepPlayback } from '../visualizer/useStepPlayback'
 import ComplexityCard from '../ComplexityCard'
 import Tooltip from '../Tooltip'
+import TestCaseManager from '../testCaseManager/TestCaseManager'
 
 import * as bubble from '../../algorithms/sorting/bubbleSortSteps'
 import * as selection from '../../algorithms/sorting/selectionSortSteps'
@@ -39,6 +40,60 @@ const createRandomArray = () =>
     { length: DEFAULT_ARRAY_SIZE },
     () => Math.floor(Math.random() * (RANDOM_MAX - RANDOM_MIN)) + RANDOM_MIN
   )
+
+const parseStoredArray = (value) =>
+  value
+    .split(/[,\s]+/)
+    .map((item) => Number(item.trim()))
+    .filter((item) => !Number.isNaN(item))
+
+const validateParsedNumbers = (parsedNumbers, selectedAlgorithm) => {
+  if (parsedNumbers.length > MAX_CUSTOM_INPUT_SIZE) {
+    return 'Please enter 100 numbers or fewer.'
+  }
+
+  if (['counting', 'radix'].includes(selectedAlgorithm)) {
+    if (parsedNumbers.some((n) => n < 0 || !Number.isInteger(n))) {
+      return 'Counting Sort and Radix Sort only support non-negative integers.'
+    }
+  }
+
+  return ''
+}
+
+const applyParsedNumbers = (
+  parsedNumbers,
+  selectedAlgorithm,
+  setBaseArray,
+  clearPlayback,
+  setCustomInput,
+  setInputError,
+  customInputValue
+) => {
+  const validationError = validateParsedNumbers(
+    parsedNumbers,
+    selectedAlgorithm
+  )
+  if (validationError) {
+    setInputError(validationError)
+    return false
+  }
+
+  clearPlayback()
+  setBaseArray(parsedNumbers)
+  setCustomInput(customInputValue)
+  setInputError('')
+  return true
+}
+
+const buildSortSampleCases = (algorithm) => [
+  {
+    name: 'Nearly Sorted Array',
+    algorithm,
+    input: '12, 18, 21, 25, 19, 29, 34, 41',
+    description: 'A small array with one out-of-place element.',
+  },
+]
 
 const STATE_COLORS = {
   compare: { bg: '#2563eb', border: '#60a5fa' },
@@ -113,6 +168,11 @@ export default function Visualizer() {
   const algoFromUrl = searchParams.get('algo')
   const selectedAlgorithm =
     algoFromUrl && algoMap[algoFromUrl] ? algoFromUrl : ''
+  const testCaseAlgorithm = selectedAlgorithm || algorithmType
+  const sortSampleCases = useMemo(
+    () => buildSortSampleCases(testCaseAlgorithm),
+    [testCaseAlgorithm]
+  )
 
   const {
     currentStep,
@@ -178,25 +238,15 @@ export default function Visualizer() {
       return
     }
 
-    if (parsedNumbers.length > MAX_CUSTOM_INPUT_SIZE) {
-      setInputError('Please enter 100 numbers or fewer.')
-      return
-    }
-
-    // Constraint check for non-comparative sorts
-    if (['counting', 'radix'].includes(selectedAlgorithm)) {
-      if (parsedNumbers.some((n) => n < 0 || !Number.isInteger(n))) {
-        setInputError(
-          'Counting Sort and Radix Sort only support non-negative integers.'
-        )
-        return
-      }
-    }
-
-    clearPlayback()
-    setBaseArray(parsedNumbers)
-    setCustomInput('')
-    setInputError('')
+    applyParsedNumbers(
+      parsedNumbers,
+      selectedAlgorithm,
+      setBaseArray,
+      clearPlayback,
+      setCustomInput,
+      setInputError,
+      ''
+    )
   }
 
   const isRunning = isPlaying
@@ -434,6 +484,26 @@ export default function Visualizer() {
 
               <div className="rounded-2xl border border-slate-700/80 bg-slate-900/60 p-4 shadow-xl">
                 <div className="space-y-4">
+                  <TestCaseManager
+                    algorithm={testCaseAlgorithm}
+                    currentInput={baseArray.join(',')}
+                    sampleCases={sortSampleCases}
+                    onLoad={(input) => {
+                      const parsed = parseStoredArray(input)
+                      if (!parsed.length) return
+
+                      applyParsedNumbers(
+                        parsed,
+                        selectedAlgorithm,
+                        setBaseArray,
+                        clearPlayback,
+                        setCustomInput,
+                        setInputError,
+                        parsed.join(', ')
+                      )
+                    }}
+                  />
+
                   <div>
                     <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
                       Sort Category
