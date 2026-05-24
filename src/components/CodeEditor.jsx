@@ -94,10 +94,10 @@ const CodeEditor = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <button
             onClick={handleCopy}
-            className={`px-4 py-2 text-sm font-bold transition-all duration-300 rounded-xl flex items-center gap-2 ${
+            className={`px-3 py-2 text-sm font-bold transition-all duration-300 rounded-xl flex items-center gap-2 ${
               copied
                 ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-500/50'
                 : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700/50'
@@ -145,7 +145,7 @@ const CodeEditor = ({
           {/* NEW: Download Button */}
           <button
             onClick={handleDownload}
-            className="px-4 py-2 text-sm font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700/50 rounded-xl transition-all duration-300"
+            className="px-3 py-2 text-sm font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700/50 rounded-xl transition-all duration-300"
           >
             Download
           </button>
