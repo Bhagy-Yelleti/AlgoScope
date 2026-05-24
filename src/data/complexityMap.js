@@ -153,4 +153,24 @@ export const complexityMap = {
     worst: 'O(2^N)',
     space: 'O(N)',
   },
+  kmp: {
+    best: 'O(n + m)',
+    average: 'O(n + m)',
+    worst: 'O(n + m)',
+    space: 'O(m)',
+  },
+
+  rabinkarp: {
+    best: 'O(n + m)',
+    average: 'O(n + m)',
+    worst: 'O(n * m)',
+    space: 'O(1)',
+  },
+
+  zalgorithm: {
+    best: 'O(n + m)',
+    average: 'O(n + m)',
+    worst: 'O(n + m)',
+    space: 'O(n + m)',
+  },
 }

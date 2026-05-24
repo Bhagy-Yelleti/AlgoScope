@@ -48,6 +48,9 @@ const MooreVotingVisualizerPage = lazy(
 const BacktrackingVisualizerPage = lazy(
   () => import('./components/backtrackingAlgo/VisualizerPage')
 )
+const StringAlgoVisualizerPage = lazy(
+  () => import('./components/stringAlgo/VisualizerPage')
+)
 
 const PracticePage = lazy(() => import('./components/PracticePage'))
 const AboutAlgoScope = lazy(() => import('./components/about/About'))
@@ -193,6 +196,16 @@ function App() {
         <Suspense fallback={<PageLoader />}>
           <AppLayout>
             <BacktrackingVisualizerPage />
+          </AppLayout>
+        </Suspense>
+      ),
+    },
+    {
+      path: '/string-algorithms',
+      element: (
+        <Suspense fallback={<PageLoader />}>
+          <AppLayout>
+            <StringAlgoVisualizerPage />
           </AppLayout>
         </Suspense>
       ),
