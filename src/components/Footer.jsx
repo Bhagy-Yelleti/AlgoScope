@@ -27,6 +27,13 @@ const Footer = () => {
       color: 'hover:border-purple-500/30 text-purple-400 bg-purple-500/5',
     },
     {
+      name: 'Backtracking',
+      path: '/backtracking',
+      desc: 'N-Queens, Sudoku solver & more',
+      complexity: 'O(N!)',
+      color: 'hover:border-rose-500/30 text-rose-400 bg-rose-500/5',
+    },
+    {
       name: 'Arrays',
       path: '/ldssearch',
       desc: 'Kadane, Moore, sliding windows', // Fixed typo here

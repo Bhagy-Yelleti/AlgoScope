@@ -73,6 +73,13 @@ const ALGORITHMS = [
     color: 'theme-card border-rose-500/30 hover:border-rose-400',
     link: '/backtracking',
   },
+  {
+    title: 'String Algorithms',
+    description:
+      'KMP, Rabin-Karp, and Z-Algorithm — pattern matching visualized step by step.',
+    color: 'theme-card border-violet-500/30 hover:border-violet-400',
+    link: '/string-algorithms',
+  },
 ]
 
 export const Home = () => {

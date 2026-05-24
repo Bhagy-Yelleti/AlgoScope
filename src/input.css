@@ -341,3 +341,45 @@
 *::-webkit-scrollbar-thumb:hover {
   background-color: #7c3aed;
 }
+
+/* Clerk UserProfile - photo upload button color */
+.cl-avatarImageActionsUpload {
+  color: #8b5cf6 !important; /* Purple to match  theme */
+}
+.cl-avatarImageActionsUpload:hover {
+  color: #7c3aed !important; /* Slightly darker on hover */
+}
+
+/* Clerk UserProfile - Primary badge color (next to email only) */
+.cl-profileSection__emailAddresses .cl-badge {
+  color: #a78bfa !important; /* Light purple for readability */
+  border-color: #7c3aed !important; /* Purple border */
+  background: rgba(
+    139,
+    92,
+    246,
+    0.15
+  ) !important; /* Subtle purple background */
+}
+
+/* Clerk UserProfile - "This device" badge color (Security page only) */
+.cl-profileSection__activeDevices .cl-badge {
+  color: #a78bfa !important; /* Light purple for readability */
+  border-color: #7c3aed !important; /* Purple border */
+  background: rgba(
+    139,
+    92,
+    246,
+    0.15
+  ) !important; /* Subtle purple background */
+}
+
+/* Clerk UserProfile - three dots menu button visibility in dark mode */
+.cl-profileSection__emailAddresses .cl-menuButton,
+.cl-profileSection__connectedAccounts .cl-menuButton {
+  color: #8b5cf6 !important; /* Purple to match theme */
+}
+.cl-profileSection__emailAddresses .cl-menuButton:hover,
+.cl-profileSection__connectedAccounts .cl-menuButton:hover {
+  color: #a78bfa !important; /* Lighter purple on hover */
+}
