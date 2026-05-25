@@ -77,7 +77,6 @@ export const MenuSelectNodesShortestPath = ({
                 {algorithm === 'prim' ? 'Choose Start Node' : 'Choose Source'}
               </option>
               {nodeOptions.map((n) => (
-              
                 <option key={n} value={n}>
                   {n}
                 </option>
