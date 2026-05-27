@@ -178,7 +178,14 @@ export default function StackIV({ onStepChange }) {
     if (onStepChange) onStepChange(1)
     for (const char of inputValue.split('')) {
       if (onStepChange) onStepChange(6)
-      await pushItem(char)
+      const pushed = await pushItem(char)
+      if (!pushed) {
+        setConsoleOutput(`Error: stack overflow pushing '${char}'.`)
+        await sleep(SLEEP_MS / 2)
+        setIsRunning(false)
+        if (onStepChange) onStepChange(null)
+        return
+      }
       await sleep(SLEEP_MS / 2)
     }
 
@@ -207,11 +214,18 @@ export default function StackIV({ onStepChange }) {
     const openMap = { '(': ')', '{': '}', '[': ']' }
     const closeMap = { ')': '(', '}': '{', ']': '[' }
     let isValid = true
+    let overflowMessage = ''
 
     for (const char of inputValue.split('')) {
       if (openMap[char]) {
         if (onStepChange) onStepChange(6)
-        await pushItem(char)
+        const pushed = await pushItem(char)
+        if (!pushed) {
+          overflowMessage = `Error: stack overflow pushing '${char}'.`
+          setConsoleOutput(overflowMessage)
+          isValid = false
+          break
+        }
         setConsoleOutput(`Found opener '${char}'. Pushed.`)
       } else if (closeMap[char]) {
         if (onStepChange) onStepChange(10)
@@ -230,7 +244,9 @@ export default function StackIV({ onStepChange }) {
       await sleep(SLEEP_MS)
     }
 
-    if (isValid && stackRef.current.length === 0) {
+    if (overflowMessage) {
+      setConsoleOutput(`${overflowMessage}\nResult: UNBALANCED ❌`)
+    } else if (isValid && stackRef.current.length === 0) {
       setConsoleOutput('Result: BALANCED ✅')
     } else if (isValid && stackRef.current.length > 0) {
       setConsoleOutput('Result: UNBALANCED (Stack not empty) ❌')
@@ -253,7 +269,13 @@ export default function StackIV({ onStepChange }) {
       if (!isNaN(token)) {
         setConsoleOutput(`Pushing number: ${token}`)
         if (onStepChange) onStepChange(6)
-        await pushItem(Number(token))
+        const pushed = await pushItem(Number(token))
+        if (!pushed) {
+          setConsoleOutput(`Error: stack overflow pushing number ${token}.`)
+          setIsRunning(false)
+          if (onStepChange) onStepChange(null)
+          return
+        }
       } else {
         setConsoleOutput(`Operator '${token}' found. Popping 2 operands...`)
         if (onStepChange) onStepChange(10)
@@ -288,7 +310,13 @@ export default function StackIV({ onStepChange }) {
         setConsoleOutput(`${val1} ${token} ${val2} = ${res}. Pushing result.`)
         await sleep(SLEEP_MS)
         if (onStepChange) onStepChange(6)
-        await pushItem(res)
+        const pushed = await pushItem(res)
+        if (!pushed) {
+          setConsoleOutput(`Error: stack overflow pushing result ${res}.`)
+          setIsRunning(false)
+          if (onStepChange) onStepChange(null)
+          return
+        }
       }
       await sleep(SLEEP_MS)
     }
@@ -298,7 +326,15 @@ export default function StackIV({ onStepChange }) {
     if (stackRef.current.length === 0) {
       setConsoleOutput(`Final Result: ${finalResult} 🎉`)
       if (onStepChange) onStepChange(6)
-      await pushItem(finalResult)
+      const pushed = await pushItem(finalResult)
+      if (!pushed) {
+        setConsoleOutput(
+          `Error: stack overflow restoring final result ${finalResult}.`
+        )
+        setIsRunning(false)
+        if (onStepChange) onStepChange(null)
+        return
+      }
     } else {
       setConsoleOutput('Error: Stack not empty after evaluation.')
     }
