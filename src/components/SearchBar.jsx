@@ -244,8 +244,10 @@ const SearchBar = () => {
   const fuse = useMemo(() => {
     return new Fuse(ALGORITHMS, {
       keys: ['name', 'category', 'keywords'],
-      threshold: 0.4,
+      threshold: 0.3,
       includeMatches: true,
+      includeScore: true,
+      minMatchCharLength: 2,
     })
   }, [])
 
@@ -258,8 +260,16 @@ const SearchBar = () => {
       return
     }
 
-    const searchResults = fuse.search(val)
+    const searchResults = fuse.search(val).filter((result) => {
+      const searchText = val.toLowerCase()
 
+      return (
+        result.item.name.toLowerCase().includes(searchText) ||
+        result.item.keywords?.some((keyword) =>
+          keyword.toLowerCase().includes(searchText)
+        )
+      )
+    })
     const sortedResults = [...searchResults].sort((a, b) => {
       if (sortBy === 'name') {
         return a.item.name.localeCompare(b.item.name)
