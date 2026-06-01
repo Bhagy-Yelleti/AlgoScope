@@ -86,220 +86,239 @@ const PageLoader = () => (
 )
 
 function App() {
-  const route = createBrowserRouter([
-    {
-      path: '/',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout showBackground={false}>
-            <Home />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/search',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <VisualizerPage />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/math-theory',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <MathTheory />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/spath',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <ShortestPathPage />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/practice',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            {HAS_CLERK ? (
-              <>
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout showBackground={false}>
+          <Home />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/search',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <VisualizerPage />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/math-theory',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <MathTheory />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/spath',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <ShortestPathPage />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/practice',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          {HAS_CLERK ? (
+            <>
+              <SignedIn>
                 <PracticePage />
-              </>
-            ) : import.meta.env.DEV ? (
-              // Allow access to PracticePage only in development when Clerk is not configured
-              <PracticePage />
-            ) : (
-              // In non-dev environments without Clerk, redirect to home (or show unauthorized)
-              <Navigate to="/" replace />
-            )}
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/about',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <AboutAlgoScope />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/sort',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <SortingVisualizerPage />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/ldssearch',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <ArrayVisualizerPage />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/adt',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <DSLayout />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/avl',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <AVLTreePage />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/trie',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <TriePage />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/segment',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <SegmentTreePage />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/advanced-trees',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <AdvancedTreesPage />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/binary-tree-trie',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <BinaryTreeTriePage />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/moore-voting',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <MooreVotingVisualizerPage />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/backtracking',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <BacktrackingVisualizerPage />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/dynamic-programming',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <DPVisualizerPage />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/challenge',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <ChallengePage />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '/string-algorithms',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <StringAlgoVisualizerPage />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-    {
-      path: '*',
-      element: (
-        <Suspense fallback={<PageLoader />}>
-          <AppLayout>
-            <NotFound />
-          </AppLayout>
-        </Suspense>
-      ),
-    },
-  ])
+              </SignedIn>
+              <SignedOut>
+                <RedirectToSignIn />
+              </SignedOut>
+            </>
+          ) : import.meta.env.DEV ? (
+            <PracticePage />
+          ) : (
+            <Navigate to="/" replace />
+          )}
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/about',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <AboutAlgoScope />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/sort',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <SortingVisualizerPage />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/ldssearch',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <ArrayVisualizerPage />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/adt',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <DSLayout />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
 
-  return <RouterProvider router={route} />
+  // Kadane (from main)
+  {
+    path: '/kadane',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <KadaneVisualizerPage />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+
+  // Advanced Trees (from feature/advanced-trees)
+  {
+    path: '/avl',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <AVLTreePage />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/trie',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <TriePage />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/segment',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <SegmentTreePage />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/advanced-trees',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <AdvancedTreesPage />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/binary-tree-trie',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <BinaryTreeTriePage />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+
+  {
+    path: '/moore-voting',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <MooreVotingVisualizerPage />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/backtracking',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <BacktrackingVisualizerPage />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/dynamic-programming',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <DPVisualizerPage />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/challenge',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <ChallengePage />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '/string-algorithms',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <StringAlgoVisualizerPage />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+  {
+    path: '*',
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <AppLayout>
+          <NotFound />
+        </AppLayout>
+      </Suspense>
+    ),
+  },
+])
+
+function App() {
+  return <RouterProvider router={router} />
 }
 
 export default App
