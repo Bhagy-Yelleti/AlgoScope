@@ -6,6 +6,7 @@ import QueueIV from './queueIV'
 import TreeIV from './treeIV'
 import BinaryHeapIV from './binaryHeapIV'
 import PriorityQueueIV from './priorityQueueIV'
+import DSUIV from './dsuIV'
 import CodePanel from '../visualizer/CodePanel'
 import { adtSources } from './adtSources'
 import ComparisonMode from './ComparisonMode'
@@ -16,6 +17,7 @@ const tabs = [
   { id: 'tree', label: 'Binary Tree' },
   { id: 'heap', label: 'Binary Heap' },
   { id: 'priority-queue', label: 'Priority Queue' },
+  { id: 'dsu', label: 'Disjoint Set Union' },
   { id: 'graph', label: 'Graph Builder' },
 ]
 
@@ -45,7 +47,7 @@ export const DSLayout = () => {
   const setActiveTab = (tabId) => {
     const newParams = new URLSearchParams(searchParams)
     newParams.set('type', tabId)
-    newParams.delete('mode') // reset mode when switching tab
+    newParams.delete('mode')
     setSearchParams(newParams)
   }
 
@@ -94,6 +96,10 @@ export const DSLayout = () => {
   const activeCode = useMemo(() => {
     if (activeTab === 'graph') return ''
 
+    if (activeTab === 'dsu') {
+      return adtSources.dsu['union find']?.[selectedLang] || ''
+    }
+
     if (activeTab === 'stack') {
       const modeData =
         adtSources.stack[stackMode] || adtSources.stack['standard stack']
@@ -127,6 +133,7 @@ export const DSLayout = () => {
       return `Binary Tree (${treeTraversal.toUpperCase()})`
     if (activeTab === 'heap') return 'Binary Heap'
     if (activeTab === 'priority-queue') return 'Priority Queue'
+    if (activeTab === 'dsu') return 'Disjoint Set Union'
     return 'Queue'
   }
 
@@ -203,6 +210,8 @@ export const DSLayout = () => {
         {activeTab === 'priority-queue' && mode === 'solo' && (
           <PriorityQueueIV />
         )}
+
+        {activeTab === 'dsu' && mode === 'solo' && <DSUIV />}
 
         {activeTab === 'graph' && (
           <div className="flex items-center justify-center min-h-[300px] text-slate-500">
