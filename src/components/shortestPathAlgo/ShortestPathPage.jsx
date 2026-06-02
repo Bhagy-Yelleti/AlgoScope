@@ -11,6 +11,8 @@ import SpeedSlider from '../SpeedSlider'
 import { shortestPathSources } from '../../algorithms/searching/shortestPathSources'
 import ComplexityCard from '../ComplexityCard'
 import ComparisonMode from './ComparisonMode'
+import { useKeyboardShortcuts } from '../visualizer/useKeyboardShortcuts'
+
 
 export const ShortestPathPage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -86,6 +88,16 @@ export const ShortestPathPage = () => {
         : algorithm === 'prim'
           ? !!algorithm && !!source
           : !!algorithm && !!source && !!target
+
+  useKeyboardShortcuts({
+    onPlayPause: () => {
+      if (canRun) handleRun()
+    },
+    onReset: handleReset,
+    onSpeedUp: () => setSpeed((s) => Math.min(3, +(s + 0.25).toFixed(2))),
+    onSlowDown: () => setSpeed((s) => Math.max(0.25, +(s - 0.25).toFixed(2))),
+  })
+
 
   const currentSource = useMemo(() => {
     if (!algorithm) return ''
