@@ -433,6 +433,7 @@ export const Navbar = () => {
 
             <motion.button
               type="button"
+              data-tour="mobile-menu-btn"
               aria-label="Toggle menu"
               aria-expanded={open}
               onClick={() => setOpen((o) => !o)}

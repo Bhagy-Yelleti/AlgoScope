@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronRight, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { tourSteps } from '../data/tourSteps'
 
 export const GuidedTour = () => {
@@ -13,6 +13,22 @@ export const GuidedTour = () => {
 
   const padding = 8
   const spacing = 12
+
+  // Helper to find the first visible element matching step selectors
+  const getVisibleElement = (selectors) => {
+    if (!selectors) return null
+    const selectorList = Array.isArray(selectors) ? selectors : [selectors]
+    for (const selector of selectorList) {
+      const element = document.querySelector(selector)
+      if (element) {
+        const bounding = element.getBoundingClientRect()
+        if (bounding.width > 0 && bounding.height > 0) {
+          return element
+        }
+      }
+    }
+    return null
+  }
 
   // Track window resizing for responsive layout
   useEffect(() => {
@@ -39,7 +55,7 @@ export const GuidedTour = () => {
     const updateRect = () => {
       const step = tourSteps[currentStep]
       if (!step) return
-      const element = document.querySelector(step.selector)
+      const element = getVisibleElement(step.selector)
       if (element) {
         setRect(element.getBoundingClientRect())
       } else {
@@ -50,7 +66,7 @@ export const GuidedTour = () => {
     // Scroll element into view smoothly
     const step = tourSteps[currentStep]
     if (step) {
-      const element = document.querySelector(step.selector)
+      const element = getVisibleElement(step.selector)
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'center' })
       }
@@ -78,6 +94,12 @@ export const GuidedTour = () => {
       setCurrentStep((prev) => prev + 1)
     } else {
       handleComplete()
+    }
+  }
+
+  const handlePrev = () => {
+    if (currentStep > 0) {
+      setCurrentStep((prev) => prev - 1)
     }
   }
 
@@ -244,6 +266,9 @@ export const GuidedTour = () => {
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2 }}
             style={popoverData.style}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="tour-step-title"
             className="theme-card border border-[var(--theme-border)] rounded-2xl p-4.5 shadow-2xl backdrop-blur-xl flex flex-col gap-3 selection:bg-cyan-500/30"
           >
             {/* Popover Arrow */}
@@ -254,11 +279,15 @@ export const GuidedTour = () => {
 
             {/* Header */}
             <div className="flex justify-between items-start gap-4">
-              <h3 className="font-bold text-[13px] tracking-tight theme-text-strong font-mono uppercase">
+              <h3
+                id="tour-step-title"
+                className="font-bold text-[13px] tracking-tight theme-text-strong font-mono uppercase"
+              >
                 {currentStepData.title}
               </h3>
               <button
                 onClick={handleComplete}
+                aria-label="Close tour"
                 className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-0.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
               >
                 <X className="w-4 h-4" />
@@ -285,6 +314,16 @@ export const GuidedTour = () => {
                 >
                   Skip
                 </button>
+
+                {currentStep > 0 && (
+                  <button
+                    onClick={handlePrev}
+                    className="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-[var(--theme-border)] hover:bg-[var(--theme-button-secondary-hover)] transition-all flex items-center gap-0.5 theme-text-strong cursor-pointer"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                    Previous
+                  </button>
+                )}
 
                 <button
                   onClick={handleNext}
