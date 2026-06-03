@@ -12,6 +12,12 @@ const ALGORITHMS = [
     route: '/sort?algo=bubble',
   },
   {
+    id: 'SortingAlgo',
+    name: 'Sorting Algorithms',
+    category: 'Sort',
+    route: '/sort',
+  },
+  {
     id: 'selection',
     name: 'Selection Sort',
     category: 'Sorting',
@@ -61,6 +67,12 @@ const ALGORITHMS = [
   },
   // Searching (Graph)
   {
+    id: 'searchAlgo',
+    name: 'Search Algorithms',
+    category: 'Searching',
+    route: '/search',
+  },
+  {
     id: 'bfs',
     name: 'BFS (Breadth First Search)',
     category: 'Searching',
@@ -74,6 +86,12 @@ const ALGORITHMS = [
   },
   // Shortest Path
   {
+    id: 'graphAlgo',
+    name: 'Graph Algorithms',
+    category: 'Graph',
+    route: '/spath',
+  },
+  {
     id: 'dijkstra',
     name: 'Dijkstra',
     category: 'Shortest Path',
@@ -84,6 +102,12 @@ const ALGORITHMS = [
     name: 'Floyd-Warshall',
     category: 'Shortest Path',
     route: '/spath?algo=floydwarshall',
+  },
+  {
+    id: 'bellman',
+    name: 'Bellman-Ford',
+    category: 'Shortest Path',
+    route: '/spath?algo=bellmanford',
   },
   // MST
   {
@@ -107,6 +131,12 @@ const ALGORITHMS = [
     ],
   },
   // Array Search
+  {
+    id: 'arraysearchAlgo',
+    name: 'Array Search',
+    category: 'Array Search',
+    route: '/ldssearch',
+  },
   {
     id: 'linear',
     name: 'Linear Search',
@@ -164,6 +194,12 @@ const ALGORITHMS = [
   },
   // ADTs
   {
+    id: 'adt',
+    name: 'Abstract Data Types',
+    category: 'Data Structures',
+    route: '/adt',
+  },
+  {
     id: 'stack',
     name: 'Stack',
     category: 'Data Structures',
@@ -181,6 +217,18 @@ const ALGORITHMS = [
     category: 'Data Structures',
     route: '/adt?type=tree',
   },
+  {
+    id: 'bheap',
+    name: 'Binary Heap',
+    category: 'Data Structures',
+    route: '/adt?type=heap',
+  },
+  {
+    id: 'priority-queue',
+    name: 'Priority Queue',
+    category: 'Data Structures',
+    route: '/adt?type=priority-queue',
+  },
   // General
   {
     id: 'about',
@@ -190,12 +238,13 @@ const ALGORITHMS = [
   },
   // Backtracking
   {
-    id: 'nqueens',
+    id: 'backtrack',
     name: 'Backtracking',
     category: 'Backtracking',
     route: '/backtracking?algo=nqueens',
     keywords: [
       'backtracking',
+      'n-queens',
       'n queens',
       'nqueens',
       'sudoku',
@@ -251,6 +300,12 @@ const ALGORITHMS = [
     route: '/math-theory?algo=fibonacci',
     keywords: ['fibonacci', 'recursion', 'sequence', 'math'],
   },
+  {
+    id: 'fft',
+    name: 'Fast Fourier Transform',
+    category: 'Math Theory',
+    route: '/math-theory?algo=fft',
+  },
   // Games & Challenges
   {
     id: 'challenge',
@@ -258,6 +313,14 @@ const ALGORITHMS = [
     category: 'Games',
     route: '/challenge',
     keywords: ['game', 'challenge', 'guess the algorithm', 'quiz', 'play'],
+  },
+  //Dynamic-Programming
+  {
+    id: 'dynamic-prog',
+    name: 'Dynamic Programming',
+    category: 'Dynamic Programming',
+    route: '/dynamic-programming',
+    keywords: ['lcs', 'knapsack', 'Coin Change', 'LIS'],
   },
 ]
 
