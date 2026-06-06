@@ -5,6 +5,64 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.0](https://github.com/algoscope-hq/AlgoScope/compare/v1.9.0...v1.10.0) (2026-06-06)
+
+
+### Features
+
+* add aria-label to LinkedIn icon buttons for accessibility ([38d08c1](https://github.com/algoscope-hq/AlgoScope/commit/38d08c1a67321159c50e23bb5d1524d5678cae9c))
+* add disjoint set union visualizer ([2888149](https://github.com/algoscope-hq/AlgoScope/commit/2888149dfa88719e416c179b6c876e96b39ededa))
+* Add DP Optimization Journey visualizer with recursion tree and space complexity analysis ([849fa1c](https://github.com/algoscope-hq/AlgoScope/commit/849fa1caf8d8a4198b5075a1346d09c0c7e3ceb8))
+* add FFT algorithm visualization ([85c4709](https://github.com/algoscope-hq/AlgoScope/commit/85c47096d792fbd0112581f4459ce6074f08fb66))
+* add graph coloring visualizer ([e348876](https://github.com/algoscope-hq/AlgoScope/commit/e3488769a6539c3a0843ce6a929cd9803814ce36))
+* add LinkedIn icons for both maintainers to footer social links ([e7f34f5](https://github.com/algoscope-hq/AlgoScope/commit/e7f34f5ead4306d116222d0d8788bc58c3d84c0e))
+* add math theory deep links ([1a0cd3a](https://github.com/algoscope-hq/AlgoScope/commit/1a0cd3ad526907c6e8f8a5407db617294f2b4a16))
+* add operating systems section and category page ([0b84962](https://github.com/algoscope-hq/AlgoScope/commit/0b84962456d00f579c8d09667bd5314de9414c1a))
+* add reset all functionality to grid visualizer ([ef7b230](https://github.com/algoscope-hq/AlgoScope/commit/ef7b230559edf275ddff331478c0e20e08298133))
+* add scroll-to-bottom button alongside scroll-to-top ([c5ef1d0](https://github.com/algoscope-hq/AlgoScope/commit/c5ef1d0ef0e9d44262f86448ef54c24de42f39b6))
+* centralize app version from package.json and display dynamically across UI ([42822b8](https://github.com/algoscope-hq/AlgoScope/commit/42822b85d5588d9505f1b4d22ae566415e65ec21))
+* implement guided onboarding tour spotlight on home page ([f9ae74a](https://github.com/algoscope-hq/AlgoScope/commit/f9ae74ad5165a8fffaae07168c5fd2502816e430))
+* improve onboarding tour accessibility, restore previous button, and add mobile selector fallbacks ([64914b2](https://github.com/algoscope-hq/AlgoScope/commit/64914b2bf4ddaa09ff9950b856e2f590844a9423))
+* updated search and explore bar ([649e921](https://github.com/algoscope-hq/AlgoScope/commit/649e9219d86683e4381042c3c1f5f2d918432593))
+* updated the searchbar with dsu and dp-journey ([a34188a](https://github.com/algoscope-hq/AlgoScope/commit/a34188ad71e6e69a399403f2a50dfee8121619f4))
+
+
+### Bug Fixes
+
+* add CORS restrictions, Helmet, rate limiting, and body size limit ([670659c](https://github.com/algoscope-hq/AlgoScope/commit/670659c6fa213d31dcff120e513b06ff84750198)), closes [#551](https://github.com/algoscope-hq/AlgoScope/issues/551)
+* add tooltip and clearer terminal text for non-JS languages in Practice Sandbox ([afa2709](https://github.com/algoscope-hq/AlgoScope/commit/afa2709610921ca366a17724c000a1b39dd82bb5))
+* added code highlighting to Dynamic Programming ([973adec](https://github.com/algoscope-hq/AlgoScope/commit/973adeccaf3e72c7f5729ee00e87818ec24e7c69))
+* address CodeRabbit review comments ([70360c8](https://github.com/algoscope-hq/AlgoScope/commit/70360c8899513fb95eb25c1c9f3fbf5e77fbe912))
+* address review comments ([1b4c9b0](https://github.com/algoscope-hq/AlgoScope/commit/1b4c9b041ba7a4cdc681c4aae90e89ac4e8a174b))
+* AlgoCard vanish issue ([ec5da92](https://github.com/algoscope-hq/AlgoScope/commit/ec5da926c88d43df5b7137b2d7ea27f1f4caeab1))
+* align footer array search card copy ([6f1b839](https://github.com/algoscope-hq/AlgoScope/commit/6f1b839861c0c752365ba22a786bbea5c5d65fdb))
+* clamp oversized FFT inputs to maximum supported size ([972324c](https://github.com/algoscope-hq/AlgoScope/commit/972324cd5b0a2d62758d9195d85239653d821f7a))
+* enhance hero meta items with icons and background tags for better visual hierarchy ([5454150](https://github.com/algoscope-hq/AlgoScope/commit/545415077bfe2376f748af5582a1967845bbdaa1))
+* filter test case seeding check to current algorithm instead of global db emptiness ([c822edc](https://github.com/algoscope-hq/AlgoScope/commit/c822edcf70b873294dc0ad4e55f1af8283a87cd8))
+* Fixed the Algo Card ([230fd25](https://github.com/algoscope-hq/AlgoScope/commit/230fd251f9a8e0cb9a2b0a64ec053fe9eca7705c))
+* format ([5bdd124](https://github.com/algoscope-hq/AlgoScope/commit/5bdd12404514e922cc10140287ec6290607dac9f))
+* format App.jsx router setup ([e3cf0ab](https://github.com/algoscope-hq/AlgoScope/commit/e3cf0ab96acbcc445ed45c1bc90d7c950cab0e14))
+* format code with prettier ([3d7c770](https://github.com/algoscope-hq/AlgoScope/commit/3d7c770968b607aaf5f3b9cef5eea2511b874055))
+* hide scroll buttons on non-scrollable pages ([1617f79](https://github.com/algoscope-hq/AlgoScope/commit/1617f7957f348ff6e93e90f00a451432f81b936f))
+* improve Light Mode text and code readability ([e2825ee](https://github.com/algoscope-hq/AlgoScope/commit/e2825ee47e6acc00813ffaeccd155d970883bd43))
+* improve search modal focus management ([ce9465d](https://github.com/algoscope-hq/AlgoScope/commit/ce9465d42146f657ef18959fb9985faa906bba5d))
+* Improve the sign in button visibility ([6f4d212](https://github.com/algoscope-hq/AlgoScope/commit/6f4d2123aded96174ae77dee2757f0839f55ca17))
+* integrate useKeyboardShortcuts into Sorting, Shortest Path, and Backtracking visualizers ([f4c941c](https://github.com/algoscope-hq/AlgoScope/commit/f4c941c468846682dd6369acd5567e9e8789f528))
+* lint & format ([897aa59](https://github.com/algoscope-hq/AlgoScope/commit/897aa5980b92e234c27d3cb741ffefb52f439d43))
+* lint & format ([9e3552c](https://github.com/algoscope-hq/AlgoScope/commit/9e3552c98ccd72655af25564bfb36b9ee29d7dc5))
+* lint & format ([536e09b](https://github.com/algoscope-hq/AlgoScope/commit/536e09b890830b4345f4f2230843d1a46ac36d69))
+* make explore dropdown keyboard accessible ([cde006a](https://github.com/algoscope-hq/AlgoScope/commit/cde006a99ddc34478ccfdc62b0f288927145dea3))
+* MCQ quiz ends early after answering last question ([ae6c067](https://github.com/algoscope-hq/AlgoScope/commit/ae6c0676e20bddcda5bb7b94f2e6edf51614de57))
+* **metadata:** update repository and issue tracker URLs ([a749433](https://github.com/algoscope-hq/AlgoScope/commit/a7494330db88aae85555bbc50c637f1c850f57b9))
+* Navbar Practice and Challenge links now highlight on active route ([a6c5d15](https://github.com/algoscope-hq/AlgoScope/commit/a6c5d15115584633d4d496f8af0b58c351f4822e))
+* resolve stale visualizer states and router recreation ([3a2f051](https://github.com/algoscope-hq/AlgoScope/commit/3a2f051a3e92ca56f6088096bc39fefc5b33f257))
+* resolve synchronous state updates in visualizer useEffect hooks ([8905bd9](https://github.com/algoscope-hq/AlgoScope/commit/8905bd9e5c7e90e924c78da1a500200cfc772278))
+* resolve unreachable path bug when source and target are the same node ([#496](https://github.com/algoscope-hq/AlgoScope/issues/496)) ([fee2f07](https://github.com/algoscope-hq/AlgoScope/commit/fee2f072fc962deccc88944dd9c41577df9e38ee))
+* Sieve of Eratosthenes visualizer crashes on decimal inputs ([d7b6596](https://github.com/algoscope-hq/AlgoScope/commit/d7b6596bec82e9bcba8c7550dfa461cb648c3413))
+* Stale path highlights persist when modifying grid after algorithm execution ([d37d004](https://github.com/algoscope-hq/AlgoScope/commit/d37d00408fe8967d72fb53845b790de0afc9d24f))
+* **testcases:** preserve IndexedDB identities during backup imports ([#321](https://github.com/algoscope-hq/AlgoScope/issues/321)) ([a70c1e3](https://github.com/algoscope-hq/AlgoScope/commit/a70c1e3355c3672253f5c6de8507303e9025ea61))
+* validate dynamic programming inputs ([34d2b47](https://github.com/algoscope-hq/AlgoScope/commit/34d2b47022e0587ae1105925665521d18c6d1798))
+
 ## [1.9.0] - 2026-05-29
 
 ### Added
