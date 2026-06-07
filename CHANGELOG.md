@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.11.0](https://github.com/algoscope-hq/AlgoScope/compare/v1.10.0...v1.11.0) (2026-06-07)
+
+
+### Features
+
+* add algorithm notes and annotations feature ([65019e0](https://github.com/algoscope-hq/AlgoScope/commit/65019e067fbdc003587b6a1920c3c6146c2e237f))
+* format & lint ([0703453](https://github.com/algoscope-hq/AlgoScope/commit/07034532f0a66ef2e444c0730a57fc3b9149b76c))
+* format & lint ([d1b3f4a](https://github.com/algoscope-hq/AlgoScope/commit/d1b3f4a472920aefe917c311b8eb3f2fefc8255c))
+
+
+### Bug Fixes
+
+* correct formFieldLabel layout on signup form ([359a58e](https://github.com/algoscope-hq/AlgoScope/commit/359a58ebe97be01c378fe91da6655245a573aae3))
+* format & lint ([080063b](https://github.com/algoscope-hq/AlgoScope/commit/080063b7b51e219b93a59fa31e3107ea1507bdc0))
+* remove deprecated 'node' npm package from dependencies ([505db17](https://github.com/algoscope-hq/AlgoScope/commit/505db17000f5f12ca24cbb5c4bcda2cd80afb760)), closes [#552](https://github.com/algoscope-hq/AlgoScope/issues/552)
+
 ## [1.10.0] - 2026-06-06
 
 ### Added
