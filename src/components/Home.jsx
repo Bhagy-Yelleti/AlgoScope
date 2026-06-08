@@ -141,13 +141,7 @@ const OPERATING_SYSTEMS = [
     link: '/operating-systems',
     difficulty: 'Intermediate',
   },
-  {
-    title: 'Sliding Window',
-    description:
-      'Visualize the sliding window algorithm use to optimally solve problems on substrings and subarrays.',
-    color: 'theme-card border-rose-500/30 hover:border-rose-400',
-    link: '/sliding-window',
-  },
+  
 ]
 
 export const Home = () => {
