@@ -509,7 +509,6 @@ const ARRAYS = {
    ARRAY VISUALIZATION
    ═══════════════════════════════════════════ */
 function ArrayViz({ step, pk }) {
-
   if (pk === 'twoSum') {
     const { arr, L, R, found } = step
     return (
