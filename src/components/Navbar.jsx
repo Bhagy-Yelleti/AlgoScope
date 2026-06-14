@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import {
   SignedIn,
@@ -180,10 +180,10 @@ export const Navbar = () => {
     localStorage.setItem('algo-history', JSON.stringify(history))
   }, [history])
 
-  const closeExploreMenu = () => {
-    setExploreOpen(false)
-    setHoveredTab((current) => (current === 'explore' ? null : current))
-  }
+  const closeExploreMenu = useCallback(() => {
+  setExploreOpen(false)
+  setHoveredTab((current) => (current === 'explore' ? null : current))
+  }, [])
 
   const handleExploreKeyDown = (event) => {
     if (event.key === 'Enter' || event.key === ' ') {
