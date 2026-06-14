@@ -72,7 +72,7 @@ const ALGORITHMS = [
       "Visualize the Moore's Voting Algorithm for finding the majority element.",
     color: 'theme-card border-green-500/30 hover:border-green-400',
     link: '/moore-voting',
-    difficulty: 'Intermediate',
+    difficulty: 'Beginner',
   },
   {
     id: 'math-theory',
@@ -100,7 +100,7 @@ const ALGORITHMS = [
     path: '/dynamic-programming',
     color: 'theme-card border-rose-500/30 hover:border-rose-400',
     link: '/dynamic-programming',
-    difficulty: 'Advanced',
+    difficulty: 'Intermediate',
   },
   {
     id: 'dp-optimization-journey',
@@ -169,15 +169,33 @@ const OPERATING_SYSTEMS = [
 export const Home = () => {
   const [filter, setFilter] = useState('All')
 
-  const filteredAlgos =
+  const difficultyWeight = {
+    Beginner: 1,
+    Intermediate: 2,
+    Advanced: 3,
+  }
+
+  const sortItems = (a, b) => {
+    const weightA = difficultyWeight[a.difficulty]
+    const weightB = difficultyWeight[b.difficulty]
+
+    if (weightA !== weightB) {
+      return weightA - weightB
+    }
+    return a.title.localeCompare(b.title)
+  }
+
+  const filteredAlgos = (
     filter === 'All'
       ? ALGORITHMS
       : ALGORITHMS.filter((algo) => algo.difficulty === filter)
+  ).sort(sortItems)
 
-  const filteredOS =
+  const filteredOS = (
     filter === 'All'
       ? OPERATING_SYSTEMS
       : OPERATING_SYSTEMS.filter((os) => os.difficulty === filter)
+  ).sort(sortItems)
 
   return (
     <div className="theme-home relative min-h-screen w-full overflow-x-hidden selection:bg-cyan-500/30">
