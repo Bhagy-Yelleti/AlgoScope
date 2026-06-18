@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-// Placeholder auth components (Clerk disabled)
-const SignedIn = ({ children }) => <>{children}</>
-const SignedOut = ({ children }) => <>{children}</>
-const SignInButton = ({ children }) => <>{children}</>
-const UserButton = () => null
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from '@clerk/clerk-react'
 import { X } from 'lucide-react'
 
 const HAS_CLERK = Boolean(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY)
@@ -123,11 +124,6 @@ const algorithmLinks = [
     href: '/dp-journey',
     difficulty: 'Advanced',
   },
-  {
-    name: 'Greedy Algorithms',
-    href: '/greedy',
-    difficulty: 'Intermediate',
-  },
   { name: 'Practice Sandbox', href: '/practice', difficulty: 'Intermediate' },
   {
     name: 'Guess the Algorithm',
@@ -140,8 +136,8 @@ const algorithmLinks = [
     difficulty: 'Advanced',
   },
   {
-    name: 'Advanced Trees',
-    href: '/advanced-trees',
+    name: 'Two Pointer Approach',
+    href: '/two-pointer',
     difficulty: 'Advanced',
   },
 ]

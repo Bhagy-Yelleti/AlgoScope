@@ -72,7 +72,7 @@ const ALGORITHMS = [
       "Visualize the Moore's Voting Algorithm for finding the majority element.",
     color: 'theme-card border-green-500/30 hover:border-green-400',
     link: '/moore-voting',
-    difficulty: 'Intermediate',
+    difficulty: 'Beginner',
   },
   {
     id: 'math-theory',
@@ -100,15 +100,15 @@ const ALGORITHMS = [
     path: '/dynamic-programming',
     color: 'theme-card border-rose-500/30 hover:border-rose-400',
     link: '/dynamic-programming',
-    difficulty: 'Advanced',
+    difficulty: 'Intermediate',
   },
   {
-    id: 'greedy',
-    title: 'Greedy Algorithms',
+    id: 'dp-optimization-journey',
+    title: 'DP Optimization Journey',
     description:
-      'Explore Huffman Coding and Fractional Knapsack visualizations.',
-    color: 'theme-card border-cyan-500/30 hover:border-cyan-400',
-    link: '/greedy',
+      'Visualize the progression from Recursion to Space Optimization.',
+    color: 'theme-card border-rose-500/30 hover:border-rose-400',
+    link: '/dp-journey',
     difficulty: 'Advanced',
   },
   {
@@ -126,7 +126,7 @@ const ALGORITHMS = [
       'Visualize the sliding window algorithm use to optimally solve problems on substrings and subarrays.',
     color: 'theme-card border-rose-500/30 hover:border-rose-400',
     link: '/sliding-window',
-    difficulty: 'Advanced',
+    difficulty: 'Intermediate',
   },
   {
     title: 'Two Pointer Approach',
@@ -134,7 +134,7 @@ const ALGORITHMS = [
       'Place two pointers at opposite ends and converge them inward — at each step, move the pointer that can not improve the answer, eliminating half the remaining pairs in O(n) instead of checking all pairs in O(n²).',
     color: 'theme-card border-rose-500/30 hover:border-rose-400',
     link: '/two-pointer',
-    difficulty: 'Advanced',
+    difficulty: 'Intermediate',
   },
 ]
 
@@ -164,27 +164,38 @@ const OPERATING_SYSTEMS = [
     link: '/operating-systems/disk-scheduling',
     difficulty: 'Intermediate',
   },
-  {
-    title: 'Advanced Trees',
-    description:
-      'Explore AVL, Trie, and Segment Tree visualizations in one place.',
-    color: 'theme-card border-indigo-500/30 hover:border-indigo-400',
-    link: '/advanced-trees',
-  },
 ]
 
 export const Home = () => {
   const [filter, setFilter] = useState('All')
 
-  const filteredAlgos =
+  const difficultyWeight = {
+    Beginner: 1,
+    Intermediate: 2,
+    Advanced: 3,
+  }
+
+  const sortItems = (a, b) => {
+    const weightA = difficultyWeight[a.difficulty]
+    const weightB = difficultyWeight[b.difficulty]
+
+    if (weightA !== weightB) {
+      return weightA - weightB
+    }
+    return a.title.localeCompare(b.title)
+  }
+
+  const filteredAlgos = (
     filter === 'All'
       ? ALGORITHMS
       : ALGORITHMS.filter((algo) => algo.difficulty === filter)
+  ).sort(sortItems)
 
-  const filteredOS =
+  const filteredOS = (
     filter === 'All'
       ? OPERATING_SYSTEMS
       : OPERATING_SYSTEMS.filter((os) => os.difficulty === filter)
+  ).sort(sortItems)
 
   return (
     <div className="theme-home relative min-h-screen w-full overflow-x-hidden selection:bg-cyan-500/30">

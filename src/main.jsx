@@ -1,18 +1,17 @@
-// src/main.jsx
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { ClerkProvider } from '@clerk/clerk-react'
+import { simple } from '@clerk/themes'
 import './input.css'
 import App from './App.jsx'
 import { ThemeProvider } from './context/ThemeProvider.jsx'
-import { ClerkProvider } from '@clerk/clerk-react'
-import { simple } from '@clerk/themes'
 
-const PUBLISHABLE_KEY = undefined // import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
 if (!PUBLISHABLE_KEY) {
   // Non-fatal: allow local/CI runs without Clerk configured
   console.warn(
-    'VITE_CLERK_PUBLISHABLE_KEY not set or disabled locally — running in unauthenticated dev mode'
+    'VITE_CLERK_PUBLISHABLE_KEY not set — running in unauthenticated dev mode'
   )
 }
 

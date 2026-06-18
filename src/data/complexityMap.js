@@ -199,16 +199,4 @@ export const complexityMap = {
     worst: 'O(n + m)',
     space: 'O(n + m)',
   },
-  huffman: {
-    best: 'O(N log N)',
-    average: 'O(N log N)',
-    worst: 'O(N log N)',
-    space: 'O(N)',
-  },
-  knapsack: {
-    best: 'O(N log N)',
-    average: 'O(N log N)',
-    worst: 'O(N log N)',
-    space: 'O(N)',
-  },
 }

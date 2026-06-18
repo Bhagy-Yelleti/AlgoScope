@@ -1,10 +1,4 @@
-import {
-  startTransition,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { startTransition, useEffect, useRef, useState } from 'react'
 import { calculateStepDelay } from '../../lib/utils'
 
 export function useStepPlayback({ speed = 1 }) {
@@ -23,12 +17,11 @@ export function useStepPlayback({ speed = 1 }) {
 
   useEffect(() => {
     if (!isPlaying || !hasSteps || currentStepIndex < 0) {
-      return
+      return undefined
     }
 
     if (currentStepIndex >= steps.length - 1) {
-      // End reached; separate effect will handle stopping playback
-      return
+      return undefined
     }
 
     // Now using the centralized utility function for calculation
@@ -36,9 +29,16 @@ export function useStepPlayback({ speed = 1 }) {
 
     timeoutRef.current = window.setTimeout(() => {
       startTransition(() => {
-        setCurrentStepIndex((index) =>
-          index < steps.length - 1 ? index + 1 : index
-        )
+        setCurrentStepIndex((index) => {
+          const nextIndex =
+            index < steps.length - 1 ? index + 1 : steps.length - 1
+
+          if (nextIndex >= steps.length - 1) {
+            setIsPlaying(false)
+          }
+
+          return nextIndex
+        })
       })
     }, delay)
 
@@ -47,73 +47,84 @@ export function useStepPlayback({ speed = 1 }) {
     }
   }, [currentStep, currentStepIndex, hasSteps, isPlaying, speed, steps.length])
 
-  // Separate effect to stop playback when last step is reached
-  useEffect(() => {
-    if (isPlaying && currentStepIndex >= steps.length - 1) {
-      startTransition(() => setIsPlaying(false))
-    }
-  }, [isPlaying, currentStepIndex, steps.length])
+  useEffect(
+    () => () => {
+      window.clearTimeout(timeoutRef.current)
+    },
+    []
+  )
 
-  const loadSteps = useCallback((nextSteps, options = {}) => {
+  const loadSteps = (nextSteps, options = {}) => {
     const { autoPlay = true } = options
 
     window.clearTimeout(timeoutRef.current)
     setSteps(nextSteps)
     setCurrentStepIndex(nextSteps.length > 0 ? 0 : -1)
     setIsPlaying(autoPlay && nextSteps.length > 1)
-  }, [])
+  }
 
-  const clear = useCallback(() => {
+  const clear = () => {
     window.clearTimeout(timeoutRef.current)
     setIsPlaying(false)
     setSteps([])
     setCurrentStepIndex(-1)
-  }, [])
+  }
 
-  const pause = useCallback(() => {
+  const pause = () => {
     setIsPlaying(false)
-  }, [])
+  }
 
-  const play = useCallback(() => {
-    setCurrentStepIndex((idx) => {
-      // Only start playing if we have steps and aren't at the end
-      // We read steps.length via a ref-like approach inside the callback
-      return idx // no-op, just to read state
-    })
-    // We need to check conditions before playing
+  const play = () => {
+    if (!hasSteps || currentStepIndex >= steps.length - 1) {
+      return
+    }
+
     setIsPlaying(true)
-  }, [])
+  }
 
-  const reset = useCallback(() => {
+  const reset = () => {
     window.clearTimeout(timeoutRef.current)
     setIsPlaying(false)
-    setCurrentStepIndex(0)
-  }, [])
+    setCurrentStepIndex(hasSteps ? 0 : -1)
+  }
 
-  const replay = useCallback(() => {
+  const replay = () => {
+    if (!hasSteps) {
+      return
+    }
+
     window.clearTimeout(timeoutRef.current)
     setCurrentStepIndex(0)
-    setIsPlaying(true)
-  }, [])
+    setIsPlaying(steps.length > 1)
+  }
 
-  const stepForward = useCallback(() => {
+  const stepForward = () => {
+    if (!hasSteps) {
+      return
+    }
+
     window.clearTimeout(timeoutRef.current)
     setIsPlaying(false)
     setCurrentStepIndex((index) => {
       if (index < 0) {
         return 0
       }
-      return index + 1
-    })
-  }, [])
 
-  const stepBackward = useCallback(() => {
+      return Math.min(index + 1, steps.length - 1)
+    })
+  }
+
+  const stepBackward = () => {
+    if (!hasSteps) {
+      return
+    }
+
     window.clearTimeout(timeoutRef.current)
     setIsPlaying(false)
     setCurrentStepIndex((index) => {
       return Math.max(index - 1, 0)
     })
-  }, [])
+  }
 
   return {
     steps,
